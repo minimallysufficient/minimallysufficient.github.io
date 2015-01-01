@@ -1,0 +1,10 @@
+# Site settings
+title: Minimally Sufficient
+email: minimallysufficient@gmail.com
+description: "Yet another blog about stats, math, and programming."
+baseurl: "" # the subpath of your site, e.g. /blog/
+url: "http://minimallysufficient.github.io"
+github_username: minimallysufficient
+
+# Build settings
+markdown: kramdown
