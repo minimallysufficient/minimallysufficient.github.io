@@ -66,17 +66,6 @@ the more likely you expect to be denied. Equipped with data, we can
 examine the veracity of this belief.
 </p>
 
-<pre class="example">
-   
-     A  I  O  R  W
-Apr  1  0  0  8  0
-Dec  6  0  0  0  0
-Feb 56  3  0 64  7
-Jan 23  3  0 18  1
-Mar 23  0  2 20  5
-May  1  0  0  0  0
-</pre>
-
 <p>
 As we see, if you're lucky enough to get a response in December
 you're sure to be admitted. January is still early and has more
@@ -115,7 +104,7 @@ only one school were denied.
 
 
 <div class="figure">
-<p><img src="/images/applications.png" alt="applications.png" />
+<p><img src="/assets/2015-02-08-gradcafe//applications.png" alt="applications.png" />
 </p>
 </div>
 
@@ -136,34 +125,6 @@ Since we're having fun, I'll fit a logistic regression to see how
 important grades and test scores. Don't put any stock into the
 statistical significance of GPA.
 </p>
-
-<pre class="example">
-Call:
-glm(formula = (decision == "A") ~ scale(gpa) + scale(gre_v) + 
-    scale(gre_q) + scale(gre_aw), family = binomial, data = dta)
-
-Deviance Residuals: 
-    Min       1Q   Median       3Q      Max  
--1.3622  -1.1073  -0.8778   1.1257   1.8833  
-
-Coefficients:
-              Estimate Std. Error z value Pr(&gt;|z|)  
-(Intercept)   -0.23289    0.14422  -1.615    0.106  
-scale(gpa)     0.32902    0.13909   2.366    0.018 *
-scale(gre_v)   0.31234    0.30018   1.041    0.298  
-scale(gre_q)   0.41855    0.40898   1.023    0.306  
-scale(gre_aw) -0.01137    0.37593  -0.030    0.976  
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-
-(Dispersion parameter for binomial family taken to be 1)
-
-    Null deviance: 332.26  on 240  degrees of freedom
-Residual deviance: 319.41  on 236  degrees of freedom
-AIC: 329.41
-
-Number of Fisher Scoring iterations: 6
-</pre>
 
 <p>
 I don't particularly like this model, specifically the linearity of
