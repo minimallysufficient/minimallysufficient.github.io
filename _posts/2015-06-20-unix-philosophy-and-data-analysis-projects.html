@@ -1,0 +1,309 @@
+---
+layout: post
+title: The Unix Philosophy and Data Analysis Projects
+---
+
+<p>
+At the halfway point of my ADA project I've been doing some reflection
+on my progress. One of things I've been most pleased with is the
+computational aspect. It definitely could have been a nightmare; I've
+got a large amount of data to process and more coming in every day,
+tempermental third-party software to accomodate, and a lot of
+nonstandard analyses to code up.. It's a minor miracle
+that I haven't had any real difficulties. I'd attribute my success to
+emulating the Unix philosophy as expressed below
+</p>
+
+<blockquote>
+<p>
+This is the Unix philosophy: Write programs that do one thing and do
+it well. Write programs to work together. Write programs to handle
+text streams, because that is a universal interface.  &#x2013; Doug McIlroy
+</p>
+</blockquote>
+
+<p>
+Let's break this down.
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Write programs that do one thing and do it well</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+The pitfall to avoid here is the monolithic script file. I see this
+as a TA in my students' projects, they have their entire project in
+one file: reading in the data, cleaning it, running some test
+analyses, and then making a few plots. For small-scale assignments
+this works, but it quickly falls apart for even slightly more
+complicated projects. Here's a few of the problems:
+</p>
+
+<ul class="org-ul">
+<li><b>It's a nightmare to collaborate:</b> I'm thinking mostly of people
+for whom the state-of-the-art in collaboration is emailing the
+script file back and forth. You have to read<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup> the entire
+file to find out what changed, and then copy and paste in your
+changes. If you use a version-control tool like git this isn't
+that bad. You might have to do manual merges more often, but
+that's not usually a problem. But your commit logs are terrible to
+walk through because you have to either trust the comments or
+actually look at the diffs.
+</li>
+<li><b>It's hard to cache intermediate results:</b> If you have a lot of
+preprocessing to do, you're going to want to avoid performing any
+redundant work. But the big script file will rerun that
+preprocessing every time. I've seen people write the results to a
+file and then comment out the relevent section of code, but that
+just seems like a sure recipe for headaches.
+</li>
+<li><b>It's not language agnostic:</b> This may or may not be a sticking
+point, but if you are familiar with several languages it's nice to
+be able to use the right tool for the job.
+<ul class="org-ul">
+<li>Want to compare your method against several standard
+classifiers? It's dead simple to write the relevant code in scikit-learn.
+</li>
+<li>Need to decompress your raw data files?  Just use your usual commandline tools
+</li>
+<li>Want to really impress your advisor? Code up a shiny app.
+</li>
+<li>Have somebody else's matlab code? Waste an afternoon trying to get
+matlab installed and running and eventually you can just "run
+it"<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>.
+</li>
+</ul>
+</li>
+</ul>
+
+<p>
+So if the monolithic script is a bad idea, what should we do
+instead? The obvious response is to write a bunch of small scripts
+which do one thing. So we have one script to clean the data, one to
+fit a model, a couple to make diagnostic plots, a knitr file with
+code for the final figures and tables. This is immensely better
+because it solves all of the problems we stated above.
+</p>
+
+<ul class="org-ul">
+<li><b>It's easy to collaborate:</b> You just work on different script
+files and if you're so inclined you can just email them back and
+completely replace your local file. For the more sophisticated
+users, your commit history becomes much more informative.
+</li>
+<li><b>It's easy to cache intermediate results:</b> Indeed you must save
+intermediate results if you decouple the data producing script
+from the data consuming script.
+</li>
+<li><b>It's easy to use different languages:</b> Everything is implemented
+separately, so the language doesn't matter.
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Write programs to work together</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+One objection to the above organizational scheme is that it's an
+ordeal to keep everything up-to-date. Suppose you changed the data
+cleaning script, did you then run it and cache the up-to-date
+version? If not your entire analysis is out-of-date. One thing you
+have to admit is that the monolithic script is easy to reproduce:
+just run it top to bottom.
+</p>
+
+<p>
+My alternative is to use a build system. These were originally
+developed to automate the process of compiling source code; if
+you've ever built something from source you almost surely used
+<i>make</i> or one of its derivatives.
+</p>
+
+<p>
+I use <i>rake</i> which is written in ruby and provides some features
+which make it more suitable for an analysis project than something
+like <i>make</i>. The basic idea is that you provide a dependency graph
+of your project. For each file you want to create you provide the
+files and the commands to create the file. So if I want to create
+"histogram.png" by running "code/plot-histogram.R" on the file
+"data/data-file.csv" I just write the following task in my Rakefile
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-ruby">file "figs/histogram.png" =&gt; ["code/plot-histogram.R", "data/data-file.csv"] do
+  sh "Rscript code/plot-histogram.R data/data-file.csv figs/histogram.png"
+end
+</pre>
+</div>
+
+<p>
+Then I run "rake figs/histogram.png" and it'll try to build my plot through the following process.
+</p>
+
+<ol class="org-ol">
+<li>First it'll look at the dependencies, "code/plot-histogram.R" and
+"data/data-files.csv". If either of them is missing <i>rake</i> will
+try to build the missing file by finding instructions elsewhere
+in the file. Thus if "data/data-files.csv" is an intermediate
+data file <i>rake</i> will run the appropriate commands to create it
+(and any dependencies it has).
+</li>
+<li>Once both dependencies exist <i>rake</i> will check if the histogram
+exists.
+<ul class="org-ul">
+<li>If the histogram is missing then the "Rscript &#x2026;"
+command will be run.
+</li>
+<li>If the histogram exists but has a earlier
+timestamp<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup> than any one of its dependencies then
+the "Rscript &#x2026;" command will be run.
+</li>
+<li>If the histogram exists but has a later timestamp
+than both of its dependencies then nothing will happen because
+the output wouldn't have changed.
+</li>
+</ul>
+</li>
+</ol>
+
+<p>
+This saves an amazing amount of time. A full build of my project
+would take a couple days, but I've only had to do that a few times
+(and that was in the early stages when I didn't have as much data so
+it only took a couple hours). Nowdays I only have a long build
+process when I get a new installment of data. But I always have the
+peace of mind that everything is up-to-date and completely
+reproducible.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Write programs to handle text streams, because that is a universal interface</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+If we're going to have programs working together we need to have
+some way of sharing data. I'm not going to advocate a UNIX piping
+scheme here. But if we use something like <i>rake</i> we can create a
+data processing pipeline which passes along intermediate data files.
+</p>
+
+<p>
+The typical approach is to just write CSV files, however I often
+don't data which is naturally expressed in a tabular form (though it
+could be done). I also try to keep things human readable, just so I
+can sanity check things.
+</p>
+
+<p>
+Thus I like passing around data in JSON or HDF5 formats. Every
+language I use has a straightforward means to load up either of
+these formats, so it's the most universal option.
+</p>
+
+<p>
+One unappreciated benefit of this approach is that you can create
+fake data. Suppose your collaborator is working on some MCMC code
+which will eventually output the posterior draws in "posterior.csv".
+If you want to make some visualizations based upon those draws you
+don't have to put your work on hold indefinitely for the MCMC code
+to be written and run, you can just simulate some data and save it
+as "posterior.csv". Now you code up your visualizations and get
+everything looking exactly like you want it. Then when the MCMC code
+is done, "posterior.csv" will be built which will trigger the
+building of your plot. 
+</p>
+
+<p>
+I find this particularly helpful for my Chromebook which is woefully
+outmatched by my ADA project. But I can store a very small subset of
+the real data and quickly simulate any outputs so that I can work on
+the project without lugging around my real laptop.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">Summary</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+If I had to concisely summary the benefit of this organizational
+choice it's that it allows me to focus exclusively on a well-defined
+task. If I thought about my entire project I'd quickly become
+overwhelmed. But I can easily write a script to make a certain plot.
+I can also easily write something to use some third-party code to
+solve one of my problems. Or I can implement my one algorithm. Soon
+these small, well-defined, easy tasks will add up to a finished
+product. Or at least I hope.
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+Or diff it, but I suppose that having the technical acumen
+to think of using diff would imply having the technical acumen to
+avoid getting in this position in the first place.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+For licensing reasons I can't forget to either be on the
+CMU network or connected to the VPN. Also if I abort in the middle
+the matlab process doesn't get killed and decides to eat up one of
+my processors until I manually terminate it. Add to the fact that
+the source code is unreadable (who uses a(3) to refer to indexing?)
+and I don't know why anyone uses matlab.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
+I disliked this early on because making a cosmetic
+change like adding comments to your data cleaning code can lead to a
+complete rebuild of your project. The way I've found to minimize
+this is see if the output has changed before doing my writes. For
+example in R I can structure things like this
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-R">fname &lt;- "perm.csv"
+
+perm &lt;- sample(1:100)
+
+## Saves everytime
+write(perm, fname)
+
+## Saves only if the data changed
+changed &lt;- TRUE
+if(file.exists(fname)) {
+    old &lt;- scan(fname)
+
+    if(length(old) == length(perm)) {
+	if(all(old == perm)) {
+	    changed &lt;- FALSE
+	}
+    }
+}
+
+if(changed) {
+    write(perm, fname)
+}
+</pre>
+</div>
+
+<p class="footpara">
+Thus in the worse case you only have to rerun a single step.
+</p>
+
+<p class="footpara">
+If I have some spare time I should wrap up these up in an R package. I
+haven't had any issues with HDF5, but text representations, especially
+of floating points, can get tricky.
+</p></div>
+
+
+</div>
+</div>
