@@ -8,3 +8,7 @@ github_username: minimallysufficient
 
 # Build settings
 markdown: kramdown
+
+# Gems
+gems:
+    - jekyll-feed
