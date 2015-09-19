@@ -1,0 +1,250 @@
+---
+layout: post
+title: Closed proprietary software ruined (a sizeable chunk of) my day
+---
+
+<p>
+I recently got a new data dump for my ADA project. To my slight
+annoyance the data came in a new file format .pl2. Things didn't get
+much better from then on.
+</p>
+
+<blockquote>
+<p>
+Attention Conservation Notice: Mostly a rant; perhaps some cogent
+points, but predominately just venting
+</p>
+</blockquote>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Incident Report</h2>
+<div class="outline-text-2" id="text-1">
+</div><div id="outline-container-sec-1-1" class="outline-3">
+<h3 id="sec-1-1">Closed proprietary data formats are terrible</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+I knew immediately how to open this file: ask Google. It turns out
+it's a proprietary data format. I'll save you a surprisingly long
+session of searching and tell you that it can only be opened by (1)
+their proprietary software (big surprise) and (2) (thankfully) a
+provided SDK (for free even).
+</p>
+
+<p>
+I just want to read this data and move onto real work. So I
+download the Matlab SDK.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-1-2" class="outline-3">
+<h3 id="sec-1-2">But closed proprietary programs are even worse</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+Ok, so I needed to use Matlab to open the files; at least I can rely
+upon Matlab being reliable, right? After all, people pay (an
+extortionate amount of) money for it.
+</p>
+
+<p>
+Turns out I broke Matlab. Not me personally, but a new release of
+ncurses. The newest version <i>ncurses 6.0</i> was released a few weeks
+ago so I get the following error message when firing up Matlab
+</p>
+
+<blockquote>
+<p>
+error while loading shared libraries: libncurses.so.5: cannot open shared object file: No such file or directory
+</p>
+</blockquote>
+
+<p>
+Not a great start. It was still looking for the old version. I try
+downgrading my ncurses version; no go since everything else depends
+upon the new version. Back to Google.
+</p>
+
+<p>
+I found a very helpful<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup> <a href="https://bbs.archlinux.org/viewtopic.php?id=202575">thread</a> about the problem. I
+download a package from the AUR and everything's good.
+</p>
+
+<p>
+Now that Matlab's fixed I actually have to code something in
+Matlab. This deserves a post by itself, but let's just mention the
+infuriating use of parentheses for indexing, insistence on single
+quotes, and the compulsion to print everything not ended with a
+semi-colon.
+</p>
+
+<p>
+But I finally got everything running. Time from start to finish,
+about 2 hours.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Assignment of Blame</h2>
+<div class="outline-text-2" id="text-2">
+</div><div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1">File Format: mostly harmless</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+The file format being closed actually doesn't bother me too much.
+Firstly they provide an SDK. There's even an option: C++ or Matlab.
+</p>
+
+<p>
+If I had the time I'd just use the C++ code. In the midst of my
+Googling I came across a press release that claimed the new format
+was orders of magnitude faster than the old. If they're doing
+something clever I'd rather they just give me the tools to read the
+data than have to figure it out myself. I can even write
+packages<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup> to read this data into all sorts of languages
+just using the FFI.  So they get passing marks here.
+</p>
+
+<p>
+There are potential problems however. If the company ever goes out
+of business your files are probably unreadable as the software
+which reads the format will vanish. This is actually an interesting
+problem that's not limited to closed proprietary data; it's just
+that open-source software has a very long half-life: as long as
+somebody has the source code it's just a visit to GitHub away.
+Anyways, there's some interesting stuff about Docker images being
+used to fix this problem.
+</p>
+
+<p>
+So in the end this is an inconvenience, but falls pretty far down
+the list of things that irk me.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2" class="outline-3">
+<h3 id="sec-2-2">Matlab: bane of my existence</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+In contrast, I currently am wishing I could go "Office Space" on
+the portion of my hard drive that contains Matlab.
+</p>
+
+<p>
+In a way, it's not their fault. Software updates are released all
+of the time and they can't be bothered to fix all of these issues.
+Besides, most people aren't on a rolling release distro, so they
+haven't updated ncurses yet.
+</p>
+
+<p>
+On the other hand, if the source code was available I'd be able to
+just rebuild against the new ncurses. I probably wouldn't even need
+to do it myself, the packagers for my distribution would do it for
+me. All I have to do is run <i>pacman -Syu</i> and everything works
+great, just like it did for every<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup> other program that
+depends upon ncurses.
+</p>
+
+<p>
+Before you conclude I'm over-reacting, I should also provide some
+context: Matlab has been a thorn in my side for a while now. Prior
+to this year the closest I had gotten to Matlab had been its
+open-source clone Octave<sup><a id="fnr.4" name="fnr.4" class="footref" href="#fn.4">4</a></sup> which I was required to use for
+a machine learning course.
+</p>
+
+<p>
+Then we started needing a method which is only implemented in
+Matlab; it can't even run in Octave. So I dutifully installed
+Matlab on my server (and it can't fit on my Chromebook which cramps
+my style).
+</p>
+
+<p>
+It turns out that you have to connected to the campus network to
+validate the license (because $$$). Thus I have to make sure the
+VPN is connected each time. This interferes with my ssh connection
+such that I cannot ssh into my server from campus (and only campus)
+when I'm on the VPN. I could probably fix this, but it's low on the
+list of tasks.
+</p>
+
+<p>
+Add on the fact that Matlab is a terrible language to read and
+write. See previous on my thoughts about punctuation, esp ", <b>(</b>,
+and <b>;</b>.
+</p>
+
+<p>
+But by far the most insidious part of Matlab is that it's
+contagious. Recall that my decision to use Matlab wasn't my idea; I
+was forced to use it because others used it. If I hadn't decided to
+use Matlab only to convert the data into an open format (HDF5),
+then anyone wishing to use my code would be forced to use Matlab
+too. I can cope, but those who aren't academics or whose
+institution doesn't shell out for a site license are effectively
+barred from using this method.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Solutions</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+So how do you fix this problem. One solution is to just use open
+source software. At the very least this makes your life easier and
+refrains from making the problem worse. However, there also needs to
+be some effort to fix others' behavior. 
+</p>
+
+<p>
+Unfortunately this seems to be a quixotic effort. Richard Stallman
+has been <a href="http://www.gnu.org/philosophy/no-word-attachments.html">railing</a> against Microsoft Word for years and last time I
+checked I still get .docx<sup><a id="fnr.5" name="fnr.5" class="footref" href="#fn.5">5</a></sup> files in my inbox. However, open
+source has come a long way; with workable alternatives (ahem, Julia)
+things could be different this time. At the very least it's worth a
+shot.
+</p>
+
+<p>
+Now let me find some more windmills to tilt at.
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+This is what I love about my distro ArchLinux. There's a
+wealth of knowledge in the <a href="https://wiki.archlinux.org/">wiki</a> and <a href="https://bbs.archlinux.org/">bbs</a> that most problems are
+resolved with a quick search.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+Not sure if I could legally distribute it.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
+Technically it doesn't work for AUR packges, but if Matlab
+was open it probably wouldn't be in the AUR. Octave isn't.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.4" name="fn.4" class="footnum" href="#fnr.4">4</a></sup> <p class="footpara">
+By the way, I hate open source software too: Octave is my
+favorite example here.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.5" name="fn.5" class="footnum" href="#fnr.5">5</a></sup> <p class="footpara">
+This isn't much of problem with technical folks. I do get
+.xlsx files all of the time though, which is annoying.
+</p></div>
+
+
+</div>
+</div>
