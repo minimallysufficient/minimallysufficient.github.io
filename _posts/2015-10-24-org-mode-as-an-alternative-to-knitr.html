@@ -1,0 +1,258 @@
+---
+layout: post
+title: Org-mode as an alternative to knitr
+---
+
+<p>
+Using ski ratings, I would classify knitr as a Blue Square. It's great
+for beginners and experts alike, balancing excitement and
+accessibility. Looking back, I was one of the early adopters back in
+college breezing through regression report assignments while my
+classmates were still copy-and-pasting to Word. There's no denying
+that knitr has been an amazing development for reproducibility.
+</p>
+
+<p>
+However, sometimes you want a little more. I'd like to introduce you
+to the Black Diamond of reproducible computing: org-mode. It's a lot
+more powerful and fun, but definitely has the potential to lead to
+painful wipe-outs if you're not ready.
+</p>
+
+<p>
+At its core, org-mode is just an outlining tool. However, it's <i>just</i>
+an outlining tool in the same sense that emacs is <i>just</i> a text
+editor: it's really an environment for reproducible research.
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Features</h2>
+<div class="outline-text-2" id="text-1">
+</div><div id="outline-container-sec-1-1" class="outline-3">
+<h3 id="sec-1-1">Outlining</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+As mentioned, the most basic use of org-mode is to create outlines
+like the following.
+</p>
+<div class="org-src-container">
+
+<pre class="src src-org">* Section 1
+  Text goes here.
+* Section 2
+  Some more text
+** Subsection 1
+   Details, details, details
+** Subsection 2
+   1) We can add lists too
+   2) ...
+   3) Some more
+</pre>
+</div>
+
+<p>
+This is where I started and if it's all you need, you can totally
+just use it as an outliner. The best strategy learning org-mode
+(and emacs in general) is to establish a beachhead of functionality
+you use and gradually expand into using other, more complicated,
+features.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-1-2" class="outline-3">
+<h3 id="sec-1-2">Todos</h3>
+<div class="outline-text-3" id="text-1-2">
+<div class="org-src-container">
+
+<pre class="src src-org">* TODO Problem 1
+* CHECK Problem 2
+* DONE Problem 3
+</pre>
+</div>
+
+<p>
+You can mark headlines with TODO tags. I find this is helpful for
+tracking progress; starting off with all TODOs as you complete
+sections you mark them with a DONE<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup> tag. You can also
+specify intermediate tags; I have a CHECK tag which I use to
+indicate that I should double-check my work before marking it
+DONE.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-1-3" class="outline-3">
+<h3 id="sec-1-3">Tables</h3>
+<div class="outline-text-3" id="text-1-3">
+<div class="org-src-container">
+
+<pre class="src src-org">* Magic Square
+  | 2 | 7 | 6 |
+  | 9 | 5 | 1 |
+  | 4 | 3 | 8 |
+</pre>
+</div>
+
+<p>
+You have easy creation of tables: no longer do you have to mess
+with LaTeX's tabular/table/tabu environments. Rather you have
+quick and clean syntax for most of your table needs. You can even
+export tables from R with the "ascii" library.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-1-4" class="outline-3">
+<h3 id="sec-1-4">Links and Figures</h3>
+<div class="outline-text-3" id="text-1-4">
+<div class="org-src-container">
+
+<pre class="src src-org">[[http://link][link description]]
+
+[file:path/to/file]
+
+#+NAME: fig:figname
+#+CAPTION: This is a caption
+[file:path.png]
+
+As we can see in figure [[fig:figname]]
+</pre>
+</div>
+
+<p>
+You can also include figures and links. It's straightforward to
+include captions and references. If you want even more control you
+can specify certain attributes such as the export width and
+alignment.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-1-5" class="outline-3">
+<h3 id="sec-1-5">Source Code Blocks</h3>
+<div class="outline-text-3" id="text-1-5">
+<div class="org-src-container">
+
+<pre class="src src-org">#+BEGIN_SRC R :exports results :results graphics :file figs/regression_line.png
+N &lt;- 100
+x &lt;- 1:100
+y &lt;- x + rnorm(N)
+
+plot(y ~ x)
+abline(lm(y ~ x))
+#+END_SRC
+</pre>
+</div>
+
+<p>
+So far we haven't been discussing the real feature that tools like
+knitr and org-mode provide: integration of code and text. Org-mode
+does this too, and it does it for a variety of <a href="http://orgmode.org/manual/Languages.html">languages</a>.
+</p>
+
+<p>
+To add code you just create a new source block <sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup> with the
+appropriate language identifier: R for R, julia for julia, etc. You
+write your code within the block<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup> and when you export your
+document it executes the code and adds the results into the
+document..
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-1-6" class="outline-3">
+<h3 id="sec-1-6">LaTeX</h3>
+<div class="outline-text-3" id="text-1-6">
+<div class="org-src-container">
+
+<pre class="src src-org">#+BEGIN_LaTeX
+\begin{equation}
+(a + b)^{2} = a^{2} + 2ab + b^{2}
+\end{equation}
+#+END_LaTeX
+</pre>
+</div>
+
+<p>
+For common symbols such as Greek letters you can just specify them
+in-line by using their LaTeX expression with no math-delimiters
+required. For more complicated structures you can include blocks of
+LaTeX source code.  These work exactly like regular source code blocks.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-1-7" class="outline-3">
+<h3 id="sec-1-7">Multiple Export Formats</h3>
+<div class="outline-text-3" id="text-1-7">
+<p>
+You can export org-documents into a variety of formats: HTML and
+LaTeX (beamer and vanilla) are the two I use most. The nice thing
+is that almost everything works automatically without changing
+syntax. If I want to change from HTML to LaTeX it's as simple as
+pressing a different key in the export menu. The only thing I've
+run into problems with is exporting complicated LaTeX which doesn't
+have expressions in MathJax, the LaTeX renderer for HTML
+</p>
+
+<p>
+You can also only export only the source code. This supports the
+Knuth literate-programming style with copious amounts of
+documentation from which you can extract the code and compile.
+</p>
+
+<p>
+Also, because this is emacs, if you need a different format you can
+write your own export back-end. There are currently a couple
+packages such as "ox-impress-js" and "ox-reveal" for exporting to
+browser-based presentation tools. If I get the time I'm interested
+in exporting to tikzposter.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Summary</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+I currently use org-mode for everything. I write problem sets,
+papers, presentations, meeting notes, and this very blog post in
+org-mode. I have my schedule and todo list in org-mode. I even have
+my emacs configuration file in org-mode. The benefits of having a
+single tool<sup><a id="fnr.4" name="fnr.4" class="footref" href="#fn.4">4</a></sup> is that you become very efficient.
+</p>
+
+<p>
+The one downside is that it takes a while to get the hang of things.
+This past year I've put in a bunch of time and so have honed my
+emacs-fu. For newcomers, it might take a while.
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+In my setup it then turns green which is more emotionally
+satisfying than I'd care to admit.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+Easy shortcut: &lt;s
+</p></div>
+
+<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
+*C-'* opens the block in a new buffer with the language's
+major-mode
+</p></div>
+
+<div class="footdef"><sup><a id="fn.4" name="fn.4" class="footnum" href="#fnr.4">4</a></sup> <p class="footpara">
+This goes a bit against my stance on programming languages
+where I'm very much a proponent of using the "best tool for the job"
+</p></div>
+
+
+</div>
+</div>
