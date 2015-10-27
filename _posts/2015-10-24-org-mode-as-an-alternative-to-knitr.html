@@ -210,8 +210,58 @@ in exporting to tikzposter.
 </p>
 </div>
 </div>
+
+<div id="outline-container-sec-1-8" class="outline-3">
+<h3 id="sec-1-8">Polyglot Code Blocks</h3>
+<div class="outline-text-3" id="text-1-8">
+<div class="org-src-container">
+
+<pre class="src src-org">#+NAME: read_parameters
+#+BEGIN_SRC ruby :exports none
+nObs = 100
+mean = 0
+sd = 1
+
+[nObs, mean, sd]
+#+END_SRC
+
+#+NAME: run_simulation
+#+BEGIN_SRC python :var params=read_parameters :exports none
+  import numpy.random
+  numpy.random.seed(42)
+
+  nObs, mean, sd = params
+
+  vals = numpy.random.normal(mean, sd, nObs)
+
+  return vals
+#+END_SRC
+
+#+NAME: plot_results
+#+BEGIN_SRC R :var x=run_simulation :exports results :results graphics :file test.png
+x &lt;- as.numeric(x)
+hist(x)
+#+END_SRC
+</pre>
 </div>
 
+<p>
+Where org-mode shines in comparison with knitr is the ability to
+write documents using several languages in concert. For instance,
+in the snippet above we're passing values from ruby to python to R
+seamlessly. Thus, you can combine some data munging python code
+with some Julia optimization code and finish it off with a ggplot
+from R.
+</p>
+
+<p>
+As far as I can tell this isn't possible<sup><a id="fnr.4" name="fnr.4" class="footref" href="#fn.4">4</a></sup> in knitr. It
+also doesn't seem like Jupyter notebooks have this capability
+although there's another project <a href="https://github.com/twosigma/beaker-notebook">Beaker</a> which does.
+</p>
+</div>
+</div>
+</div>
 <div id="outline-container-sec-2" class="outline-2">
 <h2 id="sec-2">Summary</h2>
 <div class="outline-text-2" id="text-2">
@@ -220,7 +270,7 @@ I currently use org-mode for everything. I write problem sets,
 papers, presentations, meeting notes, and this very blog post in
 org-mode. I have my schedule and todo list in org-mode. I even have
 my emacs configuration file in org-mode. The benefits of having a
-single tool<sup><a id="fnr.4" name="fnr.4" class="footref" href="#fn.4">4</a></sup> is that you become very efficient.
+single tool<sup><a id="fnr.5" name="fnr.5" class="footref" href="#fn.5">5</a></sup> is that you become very efficient.
 </p>
 
 <p>
@@ -249,6 +299,10 @@ major-mode
 </p></div>
 
 <div class="footdef"><sup><a id="fn.4" name="fn.4" class="footnum" href="#fnr.4">4</a></sup> <p class="footpara">
+Without writing out temporary results to file
+</p></div>
+
+<div class="footdef"><sup><a id="fn.5" name="fn.5" class="footnum" href="#fnr.5">5</a></sup> <p class="footpara">
 This goes a bit against my stance on programming languages
 where I'm very much a proponent of using the "best tool for the job"
 </p></div>
