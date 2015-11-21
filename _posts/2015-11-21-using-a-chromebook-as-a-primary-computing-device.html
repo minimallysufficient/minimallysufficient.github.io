@@ -1,0 +1,240 @@
+---
+layout: post
+title: Using a Chromebook as a Primary Computing Device
+---
+
+<p>
+I'm writing this post using my Chromebook. It's easily the least
+powerful computer I've ever owned, but I like it the best. Let me
+examine why.
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Why would you ever consider using a Chromebook?</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+How much of your current machine are you using? In the year 2015,
+does it make sense to lug around a fully-powered laptop? If your
+answers are "not much" and "no", then you might be in the market for
+a Chromebook.
+</p>
+
+<p>
+Most laptops are designed as replacements for desktop units;
+whatever you could do on a desktop you should be able to do on a
+laptop. The only problem with this design philosophy is that you
+either end up with a desktop with a handle or you buy an expensive
+MacBook you need to replace every few years.
+</p>
+
+<p>
+But what if you already had the computing power you need? The key
+idea is to you can trade performance for productivity. Instead of a
+high performance machine you'd look into making the machine more
+pleasant to use. So what features should we be optimizing in this
+case?
+</p>
+
+<dl class="org-dl">
+<dt> Small and light </dt><dd>Ideally you always have a laptop with you when
+you want it. That means carrying it. Your body will thank you
+for lightening the load.
+</dd>
+<dt> Long battery life </dt><dd>Having your laptop always with you isn't
+worth anything if it's out of power. Power cords are clunky and
+I can't carry an extension cord long enough to reach my hammock
+in the park.
+</dd>
+<dt> Nice keyboard </dt><dd>This is often overlooked, but having a comfy
+keyboard is crucial to your experience.
+</dd>
+<dt> Cheap </dt><dd>Aside from the obvious reason of saving money, having a
+cheaper machine means it's easier to replace if it gets lost or
+stolen. If it ever breaks you're better off getting a new one
+off Amazon rather than dealing with the time delay of repairs.
+</dd>
+</dl>
+
+<p>
+Notice that a Chromebook<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup> scores highly on these
+criteria.
+</p>
+
+<p>
+Now, realize that for most practical purposes you don't actually
+need all of your computing power. My usual tasks involve editing
+text, reading pdfs, and using my browser. It's not a huge load. Even
+my computational work is usually fairly trivial on a modern machine.
+</p>
+
+<p>
+With this usage profile, it makes a lot of sense to use my
+Chromebook. Since I've switched I haven't noticed many downsides and
+I've definitely noticed the benefits.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">You should probably have a real machine too</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+It's crucial that you don't forget that a Chromebook is not meant
+for serious computational work. So if you want/need to do something
+computationally involved you must have another machine available.
+Fortunately you can be very flexible as to what <i>available</i> means.
+</p>
+
+<p>
+For example, I have a laptop that sits in my apartment which I use
+as a home server. When I need to run something I just connect using
+SSH<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>.
+</p>
+
+<p>
+Your alternate machine doesn't even have to be your own machine. My
+department has some servers available and some of my cohort have
+access to a supercomputer<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup>. This does have the
+downside of (probably) not having superuser powers and people will
+be angry if you monopolize community resources.
+</p>
+
+<p>
+There's also the option of using the "cloud". Amazon AWS just got
+added to the GitHub student package, so I'll be experimenting with
+it in the near future. However, I'm not sure that the economics are
+currently in your favor for using AWS.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">How to use a Chromebook</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+Ok, so you've decided to go with a Chromebook. Now before you start
+working you need to make some tweaks.
+</p>
+
+<p>
+The first step is getting rid of the out-of-the-box OS, ChromeOS.
+There isn't anything particularly wrong with ChromeOS: it's
+lightweight and user-friendly. But it's just can't compete with
+Linux.
+</p>
+
+<p>
+There are two main approaches,
+</p>
+
+<ol class="org-ol">
+<li><a href="https://github.com/dnschneid/crouton">Crouton</a> is a straightforward way to run a Linux userspace
+alongside ChromeOS. I started with a fork of crouton <a href="https://github.com/drinkcat/chroagh">croagh</a> which
+is just crouton for Arch Linux. It worked well.
+
+<p>
+This is very easy to try and doesn't require any commitment. If
+you don't like it, just delete it and you're back to your
+out-of-the-box Chromebook experience.
+</p>
+
+<p>
+Installation is straightforward. Follow the <a href="https://github.com/dnschneid/crouton">instructions</a> and
+everything should work.
+</p>
+</li>
+
+<li>After trying out Crouton for a while, you might start realizing
+that you rarely use ChromeOS anymore. It's time to switch to
+Linux full-time.
+
+<p>
+This removes ChromeOS completely which gives you a lot more disk
+space and control. It requires a little more effort and linux
+acumen.  But it's very manageable.
+</p>
+
+<p>
+The install more or less follows the typical process. The only
+twist is that you need to enable developer mode on your
+Chromebook. Follow the <a href="https://wiki.archlinux.org/index.php/Chrome_OS_devices">directions</a> and you'll be fine.
+</p>
+</li>
+</ol>
+
+<p>
+Once you've installed Linux you should customize it to your liking.
+Lightweight should be your focus: you have limited resources and
+you want to spend your disk space and computational resources on
+getting work done.
+</p>
+
+<p>
+If you use something like Arch Linux this task is very easy, just
+install all of the packages you need and don't install the ones you
+don't. If you're starting with a full installation of another
+distro you might need to work harder.
+</p>
+
+<p>
+Your biggest leverage point is avoid a desktop environment like
+Unity or KDE. Instead just install a lightweight window manager
+like i3, awesome, or openbox. You're always running these programs
+so minimizing their footprint makes sense. Plus, you might just end
+up liking them better irrespective of the performance boosts.
+</p>
+
+<p>
+Other than that, most software is not going to be a problem. My
+chromebook uses only 3.6 GB of space for packages. You don't have
+space for a typical install of Matlab or Mathematica. It's not a big
+loss.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">Conclusions</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+Having worked with my Chromebook for over a year now, I can
+recommend it without reservation. It's very comfortable and can
+handle all of my day-to-day tasks. Traveling in particular is much
+better, I can just slip my Chromebook in my bag and work
+continuously while sitting on my train, plane, or automobile.
+</p>
+
+<p>
+Eventually I think the Chromebook model is going to be mainstream.
+As distributed computing becomes more viable, we'll start moving
+away from the traditional laptop model. Taken to the limit, we'd
+only have a really nice display and a really nice keyboard with the
+actual computation occurring elsewhere. The Chromebook is a first
+start towards that future.
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+It should be noted that none of these traits is
+specific to a Chromebook. Many low-end laptops could have many of
+these features. The only thing special about Chromebooks is that they
+explicitly made the decision to embrace the fact that they're not
+trying to make a fully-powered machine.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+I can even connect via SSH from my phone. It's every bit as
+cool as it seems.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
+Yes, I'm a bit jealous.
+</p></div>
+
+
+</div>
+</div>
