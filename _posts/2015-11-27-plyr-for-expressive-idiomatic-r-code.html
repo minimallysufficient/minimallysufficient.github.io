@@ -1,0 +1,276 @@
+---
+layout: post
+title: Using plyr for expressive, idiomatic R code
+---
+
+
+<p>
+When I first encountered the <i>plyr</i> package for R, I thought it was
+needless frippery. There was nothing that a well-written loop or
+subset couldn't do. Then I read Hadley Wickham's <a href="http://www.jstatsoft.org/article/view/v040i01/v40i01.pdf">Split-Apply-Combine</a>
+paper, taught <i>plyr</i> as a TA, and tried it out in my own code. I've
+been converted, it's a great tool for expressive R code. It's best to
+see this by example.
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">A simple example</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+For my ADA work I'm working with power spectra from a large number
+of recordings of neural activity in mice brains. When I'm doing my
+analysis the first part of my code is loading the data. My first
+approach is below.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-R">dfs &lt;- list()
+
+for(ii in seq_along(files)) {
+    file &lt;- files[ii]
+    mouse &lt;- mice[ii]
+    label &lt;- labels[ii]
+
+    dfs[[ii]] &lt;- cbind(read_spectrum(file), mouse = mouse, label = label)
+}
+
+df &lt;- do.call(rbind, dfs)
+</pre>
+</div>
+
+<p>
+This is a fairly straightforward approach. I pass a list of
+filenames, mouse identifiers, and disease labels (using the
+wonderful <a href="https://github.com/trevorld/argparse">argparse</a> package) and load the spectra as dataframes which
+I eventually <i>rbind</i> together.
+</p>
+
+<p>
+Here's the corresponding <i>plyr</i> version
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-R">inputs &lt;- data.frame(file = files, mouse = mice, label = labels)
+
+df &lt;- mdply(inputs, function(file, mouse, label) {
+    return(cbind(read_spectrum(file), mouse = mouse, label = label))
+})
+</pre>
+</div>
+
+<p>
+Looking at this code, it's more compact at 5 lines compared to 11
+for the for loop.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">A more complicated example</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Now, once I've loaded the spectra as a dataframe, I need to
+aggregate them, first within mice, and then between label.
+</p>
+
+<p>
+The resulting R code is a little messy.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-R">average_specs &lt;- function(df) {
+    freqs &lt;- unique(df$frequency)
+    avepower &lt;- rep(NA, length(freqs))
+
+    for(ii in seq_along(freqs)) {
+	freq &lt;- freqs[ii]
+	nRecordings &lt;- nrow(df) / length(freqs)
+	avepower[ii] &lt;- sum(df$power[df$frequency == freq]) / nRecordings
+    }
+
+    data.frame(frequency = freqs, power = avepower)
+
+    return(df)
+}
+
+## Aggregate by mouse
+micedfs &lt;- list()
+uniqMice &lt;- unique(mice)
+for(ii in seq_along(uniqMice)) {
+    mouse &lt;- uniqMice[ii]
+    label &lt;- df$label[df$mouse == mouse][1]
+
+    mousedf &lt;- averageSpecs(df[df$mouse == mouse])
+    mousedf$label &lt;- label
+    micedfs[ii] &lt;- mousedf
+}
+
+micedf &lt;- do.call(rbind, micedfs)
+
+## Aggregate by condition
+labeldfs &lt;- list()
+uniqLabels &lt;- unique(labels)
+for(ii in seq_along(uniqLabels)) {
+    label &lt;- uniqLabels[ii]
+
+    labeldf &lt;- averageSpecs(micedf[micedf$label == label])
+    labeldf$label &lt;- label
+    labeldfs[ii] &lt;- labeldf
+}
+
+df &lt;- do.call(rbind, labeldfs)
+</pre>
+</div>
+
+<p>
+I don't want to talk about this. It's just ugly.
+</p>
+
+<p>
+This was actually the example which lead to my <i>plyr</i> epiphany. Just
+look at the <i>plyr</i> version.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-R">average_specs &lt;- function(df) {
+    df &lt;- ddply(df, .(frequency), summarize, power &lt;- mean(power))
+    return(df)
+}
+
+df &lt;- ddply(specdf, .(label), function(labelsub) {
+    df &lt;- ddply(specdf, .(mouse), function(mousesub) {
+	df &lt;- average_specs(sub)
+	return(df)
+    })
+    return(df)
+})
+</pre>
+</div>
+
+<p>
+Wow, that just looks nice. It's concise with very little
+boilerplate. I can easily extend it to calculate other summary
+statistics such as standard deviations.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Icing on the cake</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+Now that I've gotten the summary statistics I like to plot them.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-R">for(label in uniqLabels) {
+    outfile &lt;- paste0(outdir, "/", label, ".pdf")
+
+    select &lt;- df$label == label
+    subdf &lt;- df[select, ]
+    fig &lt;- ggplot(subdf, aes(x = frequency, y = power)) + geom_line()
+    ggsave(outfile, fig)
+}
+</pre>
+</div>
+
+<p>
+The <i>plyr</i> version is very similar.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-R">d_ply(df, .(label), function(df) {
+    label &lt;- df$label[1]
+    outfile &lt;- paste0(outdir, "/", label, ".pdf")
+
+    fig &lt;- ggplot(df, aes(x = frequency, y = power)) + geom_line()
+    ggsave(outfile, fig)
+})
+</pre>
+</div>
+
+<p>
+That's nice, but not really that different. But what if I got data
+from a several location in the brain and wanted to plot those
+locations individually?
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-R">for(label in uniqLabels) {
+    for(location in uniqLocations) {
+	select &lt;- df$label == label &amp; df$location == location
+	if(any(select)) { # avoid empty df error
+	    outfile &lt;- paste0(outdir, "/", label, "-", location, ".pdf")
+
+	    subdf &lt;- df[select, ]
+	    fig &lt;- ggplot(subdf, aes(x = frequency, y = power)) + geom_line()
+	    ggsave(outfile, fig)
+	}
+    }
+}
+</pre>
+</div>
+
+<p>
+I dislike the look of this. The first four lines are too long and
+I'm already at three levels of indentation.
+</p>
+
+<p>
+By contrast, <i>plyr</i> handles this very gracefully.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-R">d_ply(df, .(label, location), function(df) {
+    label &lt;- df$label[1]
+    location &lt;- df$location[1]
+    outfile &lt;- paste0(outdir, "/", label, , "-", location, ".pdf")
+
+    fig &lt;- ggplot(df, aes(x = frequency, y = power)) + geom_line()
+    ggsave(outfile, fig)
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">Conclusion</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+Experimenting with <i>plyr</i> is a manifestation of my effort to write
+more idiomatic R. Like the examples above, I find that most of the R
+code that stands out to me as ugly is the result of failing to use
+the correct R idiom. I haven't compared the speed of plyr. I assume
+it would compare well enough, but that's somewhat beside the point.
+Expressiveness and readability are the metrics that I'm trying to
+optimize here.
+</p>
+
+<p>
+A similar process occured with <i>ggplot2</i>. At first I thought it was
+completely unnecessary. Now I feel pain at the thought of showing
+people base R plots. The syntax is just so much easier and
+expressive.
+</p>
+
+<p>
+The common thread is that both packages are part of the
+"Hadleyverse". I'll have to <a href="http://adolfoalvarez.cl/the-hitchhikers-guide-to-the-hadleyverse/">explore</a> further, <i>dplyr</i> and <i>tidyr</i>
+seem like the logical next steps.
+</p>
+
+<p>
+Oh, and just in case you're wondering, you can do some of the <a href="http://dataframesjl.readthedocs.org/en/latest/split_apply_combine.html">same
+things</a> in <i>julia</i>.
+</p>
+</div>
+</div>
