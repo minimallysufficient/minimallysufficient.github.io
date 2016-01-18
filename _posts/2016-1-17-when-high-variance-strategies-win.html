@@ -1,0 +1,158 @@
+---
+layout: post
+title: When high variance strategies win
+---
+
+<p>
+Over the holidays I find myself playing lots of board and card games.
+This year I ended up playing several games of <a href="https://en.wikipedia.org/wiki/Wizard_(card_game)">Wizard</a>. It's a
+trick-taking game where you bid on the number of tricks you'll take in
+the next game.
+</p>
+
+<p>
+What makes this of interest<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup> to me as a statistician is
+the results of our games. While I thought I had played rather well, I
+never won<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup> any of about a half-dozen games. I had however came
+in second every game and when aggregating scores across games I won by
+a landslide <sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup>. So how does that happen?
+</p>
+
+<p>
+Roughly speaking, there's two strategies players can follow.
+</p>
+
+<dl class="org-dl">
+<dt> Tortoise/Low Variance </dt><dd>This strategy is to bid low and slough off cards to
+ensure you don't take too many tricks. This strategy is reliable
+and it's very hard to not make your bid. However, you don't get
+quite as many points this way.
+</dd>
+<dt> Hare/High Variance </dt><dd>This strategy is to bid high and do your best to take as
+many tricks as possible. This strategy is difficult and relies
+heavily on luck. However, you are rewarded well when you do make
+your bid.
+</dd>
+</dl>
+
+<p>
+I typically followed the first strategy, everyone else followed the
+second. So why didn't slow and steady win the race?
+</p>
+
+<p>
+To see what's happening let's consider a simple game: we draw random
+numbers from a distribution and the highest number wins. We'll let
+the players choose the variance of a Normal
+distribution <sup><a id="fnr.4" name="fnr.4" class="footref" href="#fn.4">4</a></sup>. Let's start with just two players
+</p>
+
+<p>
+From this it's obvious that a high-variance strategy is not
+beneficial; regardless of the variance, the game is just a coin flip.
+However, things start getting more complicated when we start
+introducing more players.
+</p>
+
+<p>
+To evaluate this expectation we'll have to resort to numerical
+methods. The first that comes to mind is a Monte Carlo integration.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-R">monte_carlo &lt;- function(variance, nOpp, nSims) {
+    draws &lt;- rnorm(nSims, 0, sqrt(variance))
+    vals &lt;- pnorm(draws, 0, 1)^nOpp
+    return(mean(vals))
+}
+
+set.seed(42)
+monte_carlo(2, 4, 100000)
+</pre>
+</div>
+
+<pre class="example">
+0.257292028255972
+</pre>
+
+<p>
+So with 4 opponents, a higher variance strategy wins almost 25% of
+the time; about 1.25 times as much as would be expected.
+</p>
+
+<p>
+Now, let's plot the win probability as a function of the variance.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-R">library(ggplot2)
+
+var &lt;- seq(1, 20, length.out = 100)
+winprob &lt;- sapply(var, function(x) monte_carlo(x, 4, 1000))
+
+df &lt;- data.frame(var = var, winprob = winprob)
+
+fig &lt;- ggplot(df, aes(x = var, y = winprob)) + geom_line() +
+    xlab("Variance") + ylab("Win Probability") + 
+    theme_bw()
+
+print(fig)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="/assets/2016-01-17-when-high-variance-strategies-win//win_prob_vs_variance.png" alt="win_prob_vs_variance.png" />
+</p>
+</div>
+
+<p>
+From this figure we see that pursuing a high-variance strategy
+dramatically increases the probability of success. As you increase the
+variance it increases from baseline (20%) and asymptotically
+approaches the ceiling (50%).
+</p>
+
+<p>
+This explains why I was always losing. In games where the winner is
+determined by the maximum score, a higher variance strategy is
+favored. But then why did I "win" when we aggregated our scores?
+</p>
+
+<p>
+The answer has to do with the mean. The Hare strategy has a high
+variance, but a slightly lower mean. Averaging games reduces the
+variance while keeping the mean the same. Over the long run, the
+higher mean of the Tortoise will inevitably lead to victory with high
+probability.
+</p>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+Beyond the usual hidden knowledge and inference
+problems of card games in general.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+Not that I'm hyper-competitive and compulsively keeping track
+of my wins
+</p></div>
+
+<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
+And no, I wasn't <i>just</i> desperately finding some way to
+eke out a win; see above footnote.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.4" name="fn.4" class="footnum" href="#fnr.4">4</a></sup> <p class="footpara">
+We can justify this through an appeal to the Central Limit
+Theorem in the case of games which consist of independent repeated
+trials (like Wizard).
+</p></div>
+
+
+</div>
+</div>
