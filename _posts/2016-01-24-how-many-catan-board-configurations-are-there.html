@@ -1,0 +1,123 @@
+---
+layout: post
+title: How many Catan board configurations are there?
+---
+
+<p>
+Recently I played Settlers of Catan and, as you do, got into a
+discussion about combinatorics. We were debating how to answer this
+question:
+</p>
+
+<blockquote>
+<p>
+How many distinct starting Catan board configurations are there using
+the default setup rules?
+</p>
+</blockquote>
+
+<p>
+We tried to resolve our debate with Google. It turns out there's a
+<a href="http://math.stackexchange.com/questions/1184670/settlers-of-catan-boards-possibilities">whole</a> <a href="https://www.quora.com/How-many-board-permutations-are-there-in-the-standard-Settlers-of-Catan-game">lot</a> <a href="https://theboard.byu.edu/questions/23546/">of</a> <a href="https://boardgamegeek.com/thread/149164/problem-math-wiz-number-possible-configurations">answers</a>, most of which must be wrong or (to be more
+charitable) answering a slightly different question. Without a clear
+consensus, I decided to wade into the fray.
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">My Solution</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+The basic solution is just a simple combinatorics exercise.
+</p>
+
+<ul class="org-ul">
+<li>There are \(19!/(4!4!4!3!3!) = 244432188000\) ways to place the tiles.
+</li>
+<li>There are \(6\) ways to arrange the number tokens assuming the normal
+setup where you start in a corner and expand in a spiral pattern.
+</li>
+<li>There are \(9!/4! = 15120\) ways to place the ports.
+</li>
+</ul>
+
+<p>
+Thus in total there are \(244432188000 * 15120 * 6 = 22174888095360000\)
+ways to set up the board disregarding symmetries.
+</p>
+
+<p>
+To account for the symmetries we can use a theorem from group theory:
+<a href="https://en.wikipedia.org/wiki/Burnside's_lemma">Burnside's lemma</a>. Burnside's lemma states that the number of orbits of
+a set \(X\) under the symmetry group \(G\) is the average of the number of
+invariant elements \(X^{g}\) for each element \(g\). In equation form,
+</p>
+
+\begin{equation*}
+\left|X/G\right| = \frac{1}{\left|G\right|} \sum_{g \in G} \left|X^{g}\right|
+\end{equation*}
+
+<p>
+The proof is more or less straightfoward; the Wikipedia version is a
+bit of a mess, so check out <a href="http://www.artofproblemsolving.com/wiki/index.php?title=Burnside's_Lemma">this version</a> if you want the details.
+</p>
+
+<p>
+To use this formula we first need to figure out the size of \(X\). This
+is simply the result from the first part: \(22174888095360000\).
+</p>
+
+<p>
+Now that we have \(\left|X\right|\) we need to figure out what our group
+\(G\) is. We need to be careful here; most of the approaches I've seen
+only consider symmetries of the tiles and conclude that Catan has the
+symmetry group of a regular hexagon. However, the ports also restrict
+the set of symmetries. For example, rotation by angle \(\pi/3\) moves ports
+onto previously empty coastline thus clearly ruling this out as a
+symmetry. Adding in this constraint results in only permitting
+reflections about 3 axes (denoted \(F_{1}\), \(F_{2}\), and \(F_{3}\) respectively)
+and rotations by angle \(\pi/3\) (\(R_{1}\) and \(R_{2}\) respectively). Thus our
+group is
+</p>
+
+\begin{equation*}
+G = \left\{ I, R_{1}, R_{2}, F_{1}, F_{2}, F_{3} \right\}
+\end{equation*}
+
+<p>
+Now we calculate the number of invariants.
+</p>
+
+<ul class="org-ul">
+<li>For the identity element \(I\) everything is invariant so we have
+\(22174888095360000\) invariants.
+</li>
+<li>For \(R_{1}\) we have no invariants. Firstly, consider the desert tile.
+For a board to be invariant the Desert tile must be in the center of
+the board otherwise it would be rotated onto a previously different
+tile. But now consider the Wool and Wheat tiles which both have 4
+tiles. At most three of these tiles can be invariant while the
+fourth must be rotated onto a previously different tile (since the
+center is already taken). Thus there are no boards invariant under
+\(R_{1}\). The same goes for \(R_{2}\).
+</li>
+<li>For \(F_{1}\) we again have no invariants. This is due to the ports
+again. We have 4 2:1 ports which being unique must be reflected onto
+a previously different port. Thus no boards are invariant under
+\(F_{1}\). The same goes for \(F_{2}\) and \(F_{3}\).
+</li>
+</ul>
+
+<p>
+Plugging this into the formula for Burnside's lemma we get
+</p>
+
+\begin{equation*}
+\left|X/G\right| = \frac{1}{6}(22174888095360000 + 0 + 0 + 0 + 0 + 0) = 3695814682560000
+\end{equation*}
+
+<p>
+Thus there are 3,695,814,682,560,000 distinct Catan board setups using
+the default setup rules.
+</p>
+</div>
+</div>
