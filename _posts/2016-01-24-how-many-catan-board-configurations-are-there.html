@@ -1,8 +1,14 @@
 ---
 layout: post
 title: How many Catan board configurations are there?
+date: 2016-01-24
+categories: 
+-
+tags: 
+- dummy-tags-should-be-replaced
+author: 
+excerpt: 
 ---
-
 <p>
 Recently I played Settlers of Catan and, as you do, got into a
 discussion about combinatorics. We were debating how to answer this
@@ -23,21 +29,18 @@ charitable) answering a slightly different question. Without a clear
 consensus, I decided to wade into the fray.
 </p>
 
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1">My Solution</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-orgheadline1" class="outline-2">
+<h2 id="orgheadline1">My Solution</h2>
+<div class="outline-text-2" id="text-orgheadline1">
 <p>
 The basic solution is just a simple combinatorics exercise.
 </p>
 
 <ul class="org-ul">
-<li>There are \(19!/(4!4!4!3!3!) = 244432188000\) ways to place the tiles.
-</li>
+<li>There are \(19!/(4!4!4!3!3!) = 244432188000\) ways to place the tiles.</li>
 <li>There are \(6\) ways to arrange the number tokens assuming the normal
-setup where you start in a corner and expand in a spiral pattern.
-</li>
-<li>There are \(9!/4! = 15120\) ways to place the ports.
-</li>
+setup where you start in a corner and expand in a spiral pattern.</li>
+<li>There are \(9!/4! = 15120\) ways to place the ports.</li>
 </ul>
 
 <p>
@@ -89,8 +92,7 @@ Now we calculate the number of invariants.
 
 <ul class="org-ul">
 <li>For the identity element \(I\) everything is invariant so we have
-\(22174888095360000\) invariants.
-</li>
+\(22174888095360000\) invariants.</li>
 <li>For \(R_{1}\) we have no invariants. Firstly, consider the desert tile.
 For a board to be invariant the Desert tile must be in the center of
 the board otherwise it would be rotated onto a previously different
@@ -98,13 +100,11 @@ tile. But now consider the Wool and Wheat tiles which both have 4
 tiles. At most three of these tiles can be invariant while the
 fourth must be rotated onto a previously different tile (since the
 center is already taken). Thus there are no boards invariant under
-\(R_{1}\). The same goes for \(R_{2}\).
-</li>
+\(R_{1}\). The same goes for \(R_{2}\).</li>
 <li>For \(F_{1}\) we again have no invariants. This is due to the ports
 again. We have 4 2:1 ports which being unique must be reflected onto
 a previously different port. Thus no boards are invariant under
-\(F_{1}\). The same goes for \(F_{2}\) and \(F_{3}\).
-</li>
+\(F_{1}\). The same goes for \(F_{2}\) and \(F_{3}\).</li>
 </ul>
 
 <p>

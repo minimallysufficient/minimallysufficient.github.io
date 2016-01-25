@@ -1,11 +1,18 @@
 ---
 layout: post
 title: Data Splitting
+date: 2015-01-01
+categories: 
+-
+tags: 
+- dummy-tags-should-be-replaced
+author: 
+excerpt: 
 ---
 
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1">A quick review of p-values</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-orgheadline1" class="outline-2">
+<h2 id="orgheadline1">A quick review of p-values</h2>
+<div class="outline-text-2" id="text-orgheadline1">
 <p>
 Feel free to skip to the next section if you're already familiar
 with p-values.
@@ -31,8 +38,8 @@ Thus, the whole enterprise can be summed up as a guarantee:
 <blockquote>
 <p>
 Over our lifetime of making many such tests, we'll have cried wolf
-only about \(\alpha\) percent of the time. We also tried to minimize
-the number of true effects we found, but we make no promises there.
+only about \(\alpha\) percent of the time. We also tried to minimize the
+number of true effects we miss, but we make no promises there.
 </p>
 </blockquote>
 
@@ -41,34 +48,34 @@ Under the null hypothesis \(H_{0}\) the p-value of test is distributed
 uniformly over \([0,1]\) which implies that
 </p>
 
-<p>
-$$ \Pr(p < \alpha \mid H_{0}) = \alpha $$
-</p>
+\begin{equation*}
+\Pr(p < \alpha \mid H_{0}) = \alpha
+\end{equation*}
 
 <p>
 for our chosen significance level \(\alpha\). So if the null hypothesis is
 true, rejecting the null above \(\alpha\) and failing to reject the null
-below gives us a type 1 error rate of \(\alpha\)
+below gives us a type 1 error rate of \(\alpha\).
 </p>
 
 <p>
-If we don't have the correct<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup> distribution for the
+If we don't have the correct<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup> distribution for the
 p-values, we've lost our guarantee. We would be raising false alarms
 at some unknown rate.
 </p>
 </div>
 </div>
 
-<div id="outline-container-sec-2" class="outline-2">
-<h2 id="sec-2">Why inference after model selection is bad</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-orgheadline2" class="outline-2">
+<h2 id="orgheadline2">Why inference after model selection is bad</h2>
+<div class="outline-text-2" id="text-orgheadline2">
 <p>
 Generally when we're doing model selection we're picking out the
-explanatory variables which are most correlated <sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup> with
+explanatory variables which are most correlated <sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup> with
 our response variable. The result is obvious; if we're picking
 variables based upon being highly correlated with the response
 variable, we shouldn't be surprised when the variables we pick are
-highly correlated with the response variable. 
+highly correlated with the response variable.
 </p>
 
 <p>
@@ -81,18 +88,18 @@ variables which by chance appear to be significant.
 <p>
 Then when we run our significance test we don't account for this
 selection effect. Thus the p-values are going to be too
-small<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup>. Too small p-values means that we haven't achieved
+small<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup>. Too small p-values means that we haven't achieved
 our promise of a type-I-error rate of \(\alpha\).
 </p>
 </div>
 </div>
 
-<div id="outline-container-sec-3" class="outline-2">
-<h2 id="sec-3">Data splitting to the rescue</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-orgheadline3" class="outline-2">
+<h2 id="orgheadline3">Data splitting to the rescue</h2>
+<div class="outline-text-2" id="text-orgheadline3">
 <p>
 This conclusion is unsettling; it appears that we can either do
-model selection or inference, but not both. 
+model selection or inference, but not both.
 </p>
 
 <p>
@@ -114,17 +121,17 @@ variable selection process.
 </div>
 </div>
 
-<div id="outline-container-sec-4" class="outline-2">
-<h2 id="sec-4">A Simulation</h2>
-<div class="outline-text-2" id="text-4">
+<div id="outline-container-orgheadline4" class="outline-2">
+<h2 id="orgheadline4">A simulation</h2>
+<div class="outline-text-2" id="text-orgheadline4">
 <p>
 To see the extent of the problem we'll run a simulation of linear
 regression after model selection. We'll fit the following model
 </p>
 
-<p>
-$$ Y = \beta X + \epsilon $$
-</p>
+\begin{equation*}
+Y = \beta X + \epsilon
+\end{equation*}
 
 <p>
 where \(\epsilon \sim N(0,1)\) and the null hypothesis is \(\beta = 0\)
@@ -140,9 +147,11 @@ the following <a href="https://gist.github.com/minimallysufficient/498ba36bc59fb
 
 
 <div class="figure">
-<p><img src="/assets/2015-01-01-data-splitting//data-splitting.png" alt="data-splitting.png" />
+<p><img src="/img/data-splitting.png" alt="data-splitting.png" />
 </p>
 </div>
+
+
 
 <p>
 Looking at a histogram of the p-values we can clearly see from the
@@ -153,24 +162,23 @@ selection; these are highly concentrated around 0.
 </div>
 </div>
 
-<div id="outline-container-sec-5" class="outline-2">
-<h2 id="sec-5">Human Decision-making</h2>
-<div class="outline-text-2" id="text-5">
+<div id="outline-container-orgheadline5" class="outline-2">
+<h2 id="orgheadline5">Human decision-making</h2>
+<div class="outline-text-2" id="text-orgheadline5">
 <p>
 Presumably the most common method of model selection doesn't rely
-upon an automated method. Instead a human analyst tries out a
-bunch of models, adds some variables, perhaps uses a
-transformation, fits interactions, and through some ineffable
-process arrives at a final model.
+upon an automated method. Instead a human analyst tries out a bunch
+of models, adds some variables, perhaps uses a transformation, fits
+interactions, and through some ineffable process arrives at a final
+model.
 </p>
 
 <p>
-Clearly I can't distill this process into a function in R. I
-imagine that this could be a fun exercise to give to an
-introductory regression class. Give them each a data set
-(generated from the null) for homework with instructions to fit a
-model. Have them report their p-values and show the distribution
-in class.
+Clearly I can't distill this process into a function in R. I imagine
+that this could be a fun exercise to give to an introductory
+regression class. Give them each a data set (generated from the
+null) for homework with instructions to fit a model. Have them
+report their p-values and show the distribution in class.
 </p>
 </div>
 </div>
@@ -178,27 +186,27 @@ in class.
 <h2 class="footnotes">Footnotes: </h2>
 <div id="text-footnotes">
 
-<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
 If we knew the distribution of the p-values or more
 realistically the statistic \(T\) we could "correct" the values by using
-as our p-values \(p^{*} = F^{-1}(T)\) where \(F^{-1}\) is the inverse-cdf
-function for \(T\).
-</p></div>
+as our p-values \(p^{*} = F^{-1}(T)\) where \(F^{-1}\) is the inverse-cdf function
+for \(T\).
+</p></div></div>
 
-<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
 This isn't exactly true; we need something more than
 correlation. However, it gives the right intuition of the problem with
 selection and then inference.
-</p></div>
+</p></div></div>
 
-<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3">3</a></sup> <div class="footpara"><p class="footpara">
 We could also have the opposite problem where the p-values
 are too large. This isn't as big of a problem, we still achieve the
 right type 1 error rate, we're just giving up power. As a check on the
 intuition, try devising a model selection procedure that will result
 in larger p-values under the null. What about a model selection
 procedure that will retain the correct distribution of the p-values?
-</p></div>
+</p></div></div>
 
 
 </div>

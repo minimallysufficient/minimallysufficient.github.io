@@ -1,8 +1,14 @@
 ---
 layout: post
 title: Closed proprietary software ruined (a sizeable chunk of) my day
+date: 2015-09-19
+categories: 
+-
+tags: 
+- dummy-tags-should-be-replaced
+author: 
+excerpt: 
 ---
-
 <p>
 I recently got a new data dump for my ADA project. To my slight
 annoyance the data came in a new file format .pl2. Things didn't get
@@ -16,12 +22,12 @@ points, but predominately just venting
 </p>
 </blockquote>
 
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1">Incident Report</h2>
-<div class="outline-text-2" id="text-1">
-</div><div id="outline-container-sec-1-1" class="outline-3">
-<h3 id="sec-1-1">Closed proprietary data formats are terrible</h3>
-<div class="outline-text-3" id="text-1-1">
+<div id="outline-container-orgheadline3" class="outline-2">
+<h2 id="orgheadline3">Incident Report</h2>
+<div class="outline-text-2" id="text-orgheadline3">
+</div><div id="outline-container-orgheadline1" class="outline-3">
+<h3 id="orgheadline1">Closed proprietary data formats are terrible</h3>
+<div class="outline-text-3" id="text-orgheadline1">
 <p>
 I knew immediately how to open this file: ask Google. It turns out
 it's a proprietary data format. I'll save you a surprisingly long
@@ -37,9 +43,9 @@ download the Matlab SDK.
 </div>
 </div>
 
-<div id="outline-container-sec-1-2" class="outline-3">
-<h3 id="sec-1-2">But closed proprietary programs are even worse</h3>
-<div class="outline-text-3" id="text-1-2">
+<div id="outline-container-orgheadline2" class="outline-3">
+<h3 id="orgheadline2">But closed proprietary programs are even worse</h3>
+<div class="outline-text-3" id="text-orgheadline2">
 <p>
 Ok, so I needed to use Matlab to open the files; at least I can rely
 upon Matlab being reliable, right? After all, people pay (an
@@ -65,7 +71,7 @@ upon the new version. Back to Google.
 </p>
 
 <p>
-I found a very helpful<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup> <a href="https://bbs.archlinux.org/viewtopic.php?id=202575">thread</a> about the problem. I
+I found a very helpful<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup> <a href="https://bbs.archlinux.org/viewtopic.php?id=202575">thread</a> about the problem. I
 download a package from the AUR and everything's good.
 </p>
 
@@ -85,12 +91,12 @@ about 2 hours.
 </div>
 </div>
 
-<div id="outline-container-sec-2" class="outline-2">
-<h2 id="sec-2">Assignment of Blame</h2>
-<div class="outline-text-2" id="text-2">
-</div><div id="outline-container-sec-2-1" class="outline-3">
-<h3 id="sec-2-1">File Format: mostly harmless</h3>
-<div class="outline-text-3" id="text-2-1">
+<div id="outline-container-orgheadline6" class="outline-2">
+<h2 id="orgheadline6">Assignment of Blame</h2>
+<div class="outline-text-2" id="text-orgheadline6">
+</div><div id="outline-container-orgheadline4" class="outline-3">
+<h3 id="orgheadline4">File Format: mostly harmless</h3>
+<div class="outline-text-3" id="text-orgheadline4">
 <p>
 The file format being closed actually doesn't bother me too much.
 Firstly they provide an SDK. There's even an option: C++ or Matlab.
@@ -102,7 +108,7 @@ Googling I came across a press release that claimed the new format
 was orders of magnitude faster than the old. If they're doing
 something clever I'd rather they just give me the tools to read the
 data than have to figure it out myself. I can even write
-packages<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup> to read this data into all sorts of languages
+packages<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup> to read this data into all sorts of languages
 just using the FFI.  So they get passing marks here.
 </p>
 
@@ -124,9 +130,9 @@ the list of things that irk me.
 </div>
 </div>
 
-<div id="outline-container-sec-2-2" class="outline-3">
-<h3 id="sec-2-2">Matlab: bane of my existence</h3>
-<div class="outline-text-3" id="text-2-2">
+<div id="outline-container-orgheadline5" class="outline-3">
+<h3 id="orgheadline5">Matlab: bane of my existence</h3>
+<div class="outline-text-3" id="text-orgheadline5">
 <p>
 In contrast, I currently am wishing I could go "Office Space" on
 the portion of my hard drive that contains Matlab.
@@ -144,7 +150,7 @@ On the other hand, if the source code was available I'd be able to
 just rebuild against the new ncurses. I probably wouldn't even need
 to do it myself, the packagers for my distribution would do it for
 me. All I have to do is run <i>pacman -Syu</i> and everything works
-great, just like it did for every<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup> other program that
+great, just like it did for every<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup> other program that
 depends upon ncurses.
 </p>
 
@@ -152,7 +158,7 @@ depends upon ncurses.
 Before you conclude I'm over-reacting, I should also provide some
 context: Matlab has been a thorn in my side for a while now. Prior
 to this year the closest I had gotten to Matlab had been its
-open-source clone Octave<sup><a id="fnr.4" name="fnr.4" class="footref" href="#fn.4">4</a></sup> which I was required to use for
+open-source clone Octave<sup><a id="fnr.4" class="footref" href="#fn.4">4</a></sup> which I was required to use for
 a machine learning course.
 </p>
 
@@ -192,23 +198,23 @@ barred from using this method.
 </div>
 </div>
 
-<div id="outline-container-sec-3" class="outline-2">
-<h2 id="sec-3">Solutions</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-orgheadline7" class="outline-2">
+<h2 id="orgheadline7">Solutions</h2>
+<div class="outline-text-2" id="text-orgheadline7">
 <p>
 So how do you fix this problem. One solution is to just use open
 source software. At the very least this makes your life easier and
-refrains from making the problem worse. However, there also needs to
-be some effort to fix others' behavior. 
+refrains from making the problem worse. However, there also needs
+to be some effort to fix others' behavior.
 </p>
 
 <p>
 Unfortunately this seems to be a quixotic effort. Richard Stallman
 has been <a href="http://www.gnu.org/philosophy/no-word-attachments.html">railing</a> against Microsoft Word for years and last time I
-checked I still get .docx<sup><a id="fnr.5" name="fnr.5" class="footref" href="#fn.5">5</a></sup> files in my inbox. However, open
-source has come a long way; with workable alternatives (ahem, Julia)
-things could be different this time. At the very least it's worth a
-shot.
+checked I still get .docx<sup><a id="fnr.5" class="footref" href="#fn.5">5</a></sup> files in my inbox. However, open
+source has come a long way; with workable alternatives (ahem,
+Julia) things could be different this time. At the very least it's
+worth a shot.
 </p>
 
 <p>
@@ -220,30 +226,30 @@ Now let me find some more windmills to tilt at.
 <h2 class="footnotes">Footnotes: </h2>
 <div id="text-footnotes">
 
-<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
 This is what I love about my distro ArchLinux. There's a
 wealth of knowledge in the <a href="https://wiki.archlinux.org/">wiki</a> and <a href="https://bbs.archlinux.org/">bbs</a> that most problems are
 resolved with a quick search.
-</p></div>
+</p></div></div>
 
-<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
 Not sure if I could legally distribute it.
-</p></div>
+</p></div></div>
 
-<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3">3</a></sup> <div class="footpara"><p class="footpara">
 Technically it doesn't work for AUR packges, but if Matlab
 was open it probably wouldn't be in the AUR. Octave isn't.
-</p></div>
+</p></div></div>
 
-<div class="footdef"><sup><a id="fn.4" name="fn.4" class="footnum" href="#fnr.4">4</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4">4</a></sup> <div class="footpara"><p class="footpara">
 By the way, I hate open source software too: Octave is my
 favorite example here.
-</p></div>
+</p></div></div>
 
-<div class="footdef"><sup><a id="fn.5" name="fn.5" class="footnum" href="#fnr.5">5</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.5" class="footnum" href="#fnr.5">5</a></sup> <div class="footpara"><p class="footpara">
 This isn't much of problem with technical folks. I do get
 .xlsx files all of the time though, which is annoying.
-</p></div>
+</p></div></div>
 
 
 </div>

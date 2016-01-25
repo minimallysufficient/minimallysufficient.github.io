@@ -1,17 +1,23 @@
 ---
 layout: post
 title: The Unix Philosophy and Data Analysis Projects
+date: 2015-06-20
+categories: 
+-
+tags: 
+- dummy-tags-should-be-replaced
+author: 
+excerpt: 
 ---
-
 <p>
 At the halfway point of my ADA project I've been doing some reflection
 on my progress. One of things I've been most pleased with is the
 computational aspect. It definitely could have been a nightmare; I've
 got a large amount of data to process and more coming in every day,
 tempermental third-party software to accomodate, and a lot of
-nonstandard analyses to code up.. It's a minor miracle
-that I haven't had any real difficulties. I'd attribute my success to
-emulating the Unix philosophy as expressed below
+nonstandard analyses to code up.. It's a minor miracle that I haven't
+had any real difficulties. I'd attribute my success to emulating the
+Unix philosophy as expressed below
 </p>
 
 <blockquote>
@@ -26,9 +32,9 @@ text streams, because that is a universal interface.  &#x2013; Doug McIlroy
 Let's break this down.
 </p>
 
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1">Write programs that do one thing and do it well</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-orgheadline1" class="outline-2">
+<h2 id="orgheadline1">Write programs that do one thing and do it well</h2>
+<div class="outline-text-2" id="text-orgheadline1">
 <p>
 The pitfall to avoid here is the monolithic script file. I see this
 as a TA in my students' projects, they have their entire project in
@@ -41,38 +47,31 @@ complicated projects. Here's a few of the problems:
 <ul class="org-ul">
 <li><b>It's a nightmare to collaborate:</b> I'm thinking mostly of people
 for whom the state-of-the-art in collaboration is emailing the
-script file back and forth. You have to read<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup> the entire
+script file back and forth. You have to read<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup> the entire
 file to find out what changed, and then copy and paste in your
 changes. If you use a version-control tool like git this isn't
 that bad. You might have to do manual merges more often, but
 that's not usually a problem. But your commit logs are terrible to
 walk through because you have to either trust the comments or
-actually look at the diffs.
-</li>
+actually look at the diffs.</li>
 <li><b>It's hard to cache intermediate results:</b> If you have a lot of
 preprocessing to do, you're going to want to avoid performing any
 redundant work. But the big script file will rerun that
 preprocessing every time. I've seen people write the results to a
 file and then comment out the relevent section of code, but that
-just seems like a sure recipe for headaches.
-</li>
+just seems like a sure recipe for headaches.</li>
 <li><b>It's not language agnostic:</b> This may or may not be a sticking
 point, but if you are familiar with several languages it's nice to
 be able to use the right tool for the job.
 <ul class="org-ul">
 <li>Want to compare your method against several standard
-classifiers? It's dead simple to write the relevant code in scikit-learn.
-</li>
-<li>Need to decompress your raw data files?  Just use your usual commandline tools
-</li>
-<li>Want to really impress your advisor? Code up a shiny app.
-</li>
+classifiers? It's dead simple to write the relevant code in scikit-learn.</li>
+<li>Need to decompress your raw data files?  Just use your usual commandline tools</li>
+<li>Want to really impress your advisor? Code up a shiny app.</li>
 <li>Have somebody else's matlab code? Waste an afternoon trying to get
 matlab installed and running and eventually you can just "run
-it"<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>.
-</li>
-</ul>
-</li>
+it"<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>.</li>
+</ul></li>
 </ul>
 
 <p>
@@ -88,22 +87,19 @@ because it solves all of the problems we stated above.
 <li><b>It's easy to collaborate:</b> You just work on different script
 files and if you're so inclined you can just email them back and
 completely replace your local file. For the more sophisticated
-users, your commit history becomes much more informative.
-</li>
+users, your commit history becomes much more informative.</li>
 <li><b>It's easy to cache intermediate results:</b> Indeed you must save
 intermediate results if you decouple the data producing script
-from the data consuming script.
-</li>
+from the data consuming script.</li>
 <li><b>It's easy to use different languages:</b> Everything is implemented
-separately, so the language doesn't matter.
-</li>
+separately, so the language doesn't matter.</li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-sec-2" class="outline-2">
-<h2 id="sec-2">Write programs to work together</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-orgheadline2" class="outline-2">
+<h2 id="orgheadline2">Write programs to work together</h2>
+<div class="outline-text-2" id="text-orgheadline2">
 <p>
 One objection to the above organizational scheme is that it's an
 ordeal to keep everything up-to-date. Suppose you changed the data
@@ -132,9 +128,9 @@ files and the commands to create the file. So if I want to create
 
 <div class="org-src-container">
 
-<pre class="src src-ruby">file "figs/histogram.png" =&gt; ["code/plot-histogram.R", "data/data-file.csv"] do
-  sh "Rscript code/plot-histogram.R data/data-file.csv figs/histogram.png"
-end
+<pre class="src src-ruby">file <span style="color: #61CE3C;">"figs/histogram.png"</span> =&gt; [<span style="color: #61CE3C;">"code/plot-histogram.R"</span>, <span style="color: #61CE3C;">"data/data-file.csv"</span>] <span style="color: #4c83ff;">do</span>
+  sh <span style="color: #61CE3C;">"Rscript code/plot-histogram.R data/data-file.csv figs/histogram.png"</span>
+<span style="color: #4c83ff;">end</span>
 </pre>
 </div>
 
@@ -148,24 +144,19 @@ Then I run "rake figs/histogram.png" and it'll try to build my plot through the 
 try to build the missing file by finding instructions elsewhere
 in the file. Thus if "data/data-files.csv" is an intermediate
 data file <i>rake</i> will run the appropriate commands to create it
-(and any dependencies it has).
-</li>
+(and any dependencies it has).</li>
 <li>Once both dependencies exist <i>rake</i> will check if the histogram
 exists.
 <ul class="org-ul">
 <li>If the histogram is missing then the "Rscript &#x2026;"
-command will be run.
-</li>
+command will be run.</li>
 <li>If the histogram exists but has a earlier
-timestamp<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup> than any one of its dependencies then
-the "Rscript &#x2026;" command will be run.
-</li>
+timestamp<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup> than any one of its dependencies then
+the "Rscript &#x2026;" command will be run.</li>
 <li>If the histogram exists but has a later timestamp
 than both of its dependencies then nothing will happen because
-the output wouldn't have changed.
-</li>
-</ul>
-</li>
+the output wouldn't have changed.</li>
+</ul></li>
 </ol>
 
 <p>
@@ -180,9 +171,9 @@ reproducible.
 </div>
 </div>
 
-<div id="outline-container-sec-3" class="outline-2">
-<h2 id="sec-3">Write programs to handle text streams, because that is a universal interface</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-orgheadline3" class="outline-2">
+<h2 id="orgheadline3">Write programs to handle text streams, because that is a universal interface</h2>
+<div class="outline-text-2" id="text-orgheadline3">
 <p>
 If we're going to have programs working together we need to have
 some way of sharing data. I'm not going to advocate a UNIX piping
@@ -225,9 +216,9 @@ the project without lugging around my real laptop.
 </div>
 </div>
 
-<div id="outline-container-sec-4" class="outline-2">
-<h2 id="sec-4">Summary</h2>
-<div class="outline-text-2" id="text-4">
+<div id="outline-container-orgheadline4" class="outline-2">
+<h2 id="orgheadline4">Summary</h2>
+<div class="outline-text-2" id="text-orgheadline4">
 <p>
 If I had to concisely summary the benefit of this organizational
 choice it's that it allows me to focus exclusively on a well-defined
@@ -244,22 +235,22 @@ product. Or at least I hope.
 <h2 class="footnotes">Footnotes: </h2>
 <div id="text-footnotes">
 
-<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
 Or diff it, but I suppose that having the technical acumen
 to think of using diff would imply having the technical acumen to
 avoid getting in this position in the first place.
-</p></div>
+</p></div></div>
 
-<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
 For licensing reasons I can't forget to either be on the
 CMU network or connected to the VPN. Also if I abort in the middle
 the matlab process doesn't get killed and decides to eat up one of
 my processors until I manually terminate it. Add to the fact that
 the source code is unreadable (who uses a(3) to refer to indexing?)
 and I don't know why anyone uses matlab.
-</p></div>
+</p></div></div>
 
-<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3">3</a></sup> <div class="footpara"><p class="footpara">
 I disliked this early on because making a cosmetic
 change like adding comments to your data cleaning code can lead to a
 complete rebuild of your project. The way I've found to minimize
@@ -269,26 +260,26 @@ example in R I can structure things like this
 
 <div class="org-src-container">
 
-<pre class="src src-R">fname &lt;- "perm.csv"
+<pre class="src src-R">fname <span style="color: #96CBFE;">&lt;-</span> <span style="color: #61CE3C;">"perm.csv"</span>
 
-perm &lt;- sample(1:100)
+perm <span style="color: #96CBFE;">&lt;-</span> sample(1:100)
 
-## Saves everytime
+<span style="color: #8B8989; font-style: italic;">## </span><span style="color: #8B8989; font-style: italic;">Saves everytime</span>
 write(perm, fname)
 
-## Saves only if the data changed
-changed &lt;- TRUE
-if(file.exists(fname)) {
-    old &lt;- scan(fname)
+<span style="color: #8B8989; font-style: italic;">## </span><span style="color: #8B8989; font-style: italic;">Saves only if the data changed</span>
+changed <span style="color: #96CBFE;">&lt;-</span> <span style="color: #afd8af;">TRUE</span>
+<span style="color: #4c83ff;">if</span>(file.exists(fname)) {
+    old <span style="color: #96CBFE;">&lt;-</span> scan(fname)
 
-    if(length(old) == length(perm)) {
-	if(all(old == perm)) {
-	    changed &lt;- FALSE
-	}
+    <span style="color: #4c83ff;">if</span>(length(old) == length(perm)) {
+        <span style="color: #4c83ff;">if</span>(all(old == perm)) {
+            changed <span style="color: #96CBFE;">&lt;-</span> <span style="color: #afd8af;">FALSE</span>
+        }
     }
 }
 
-if(changed) {
+<span style="color: #4c83ff;">if</span>(changed) {
     write(perm, fname)
 }
 </pre>
@@ -302,7 +293,7 @@ Thus in the worse case you only have to rerun a single step.
 If I have some spare time I should wrap up these up in an R package. I
 haven't had any issues with HDF5, but text representations, especially
 of floating points, can get tricky.
-</p></div>
+</p></div></div>
 
 
 </div>

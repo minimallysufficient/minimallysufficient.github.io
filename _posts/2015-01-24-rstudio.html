@@ -1,10 +1,16 @@
 ---
 layout: post
 title: The Normative Power of RStudio
+date: 2015-01-24
+categories: 
+-
+tags: 
+- dummy-tags-should-be-replaced
+author: 
+excerpt: 
 ---
-
 <p>
-I would never willingly use RStudio for my own work <sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>.
+I would never willingly use RStudio for my own work <sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>.
 Despite that caveat, I do love RStudio for teaching R to students.
 RStudio's best feature is its normative power; by virtue of becoming
 the de facto standard for R GUIs, RStudio has the power to promote
@@ -13,12 +19,12 @@ their integration with knitr. If they adopted a few more tweaks, they
 could set future waves of R users off on the right track.
 </p>
 
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1">Knitr and Reproducibility</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-orgheadline1" class="outline-2">
+<h2 id="orgheadline1">Knitr and Reproducibility</h2>
+<div class="outline-text-2" id="text-orgheadline1">
 <p>
 For instance, their integration with knitr is the greatest step
-taken towards reproducibility in statistics. Read this <i>paper</i> for
+taken towards reproducibility in statistics. Read this[<a href="http://arxiv.org/abs/1402.18%5D%5Bpaper">http://arxiv.org/abs/1402.18%5D%5Bpaper</a>]] for
 some examples of how switching to RMarkdown has improved
 introductory stats classes.
 </p>
@@ -32,7 +38,7 @@ couldn't be run.
 
 <p>
 Then I saw the light, and used knitr for my own work. However, it
-was still a pain; I had to write my code in notepad<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup> and
+was still a pain; I had to write my code in notepad<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup> and
 then try and parse R errors and LaTeX errors. It was not a process I
 would recommend for an introductory stats course: there would be a
 violent uprising among the students.
@@ -49,9 +55,9 @@ habit of reproducibility.
 </div>
 </div>
 
-<div id="outline-container-sec-2" class="outline-2">
-<h2 id="sec-2">The Script Window</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-orgheadline2" class="outline-2">
+<h2 id="orgheadline2">The Script Window</h2>
+<div class="outline-text-2" id="text-orgheadline2">
 <p>
 But not everything is done as well as the knitr integration. For
 instance, a design decision to emphasize the script window would be
@@ -75,9 +81,9 @@ default.
 </div>
 </div>
 
-<div id="outline-container-sec-3" class="outline-2">
-<h2 id="sec-3">Workspaces</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-orgheadline3" class="outline-2">
+<h2 id="orgheadline3">Workspaces</h2>
+<div class="outline-text-2" id="text-orgheadline3">
 <p>
 Another aspect that could be improved on is RStudio's handling of
 workspaces. Workspaces save your current working environment: the
@@ -92,7 +98,7 @@ The mess I saw students falling into with workspaces was that they
 would keep the same environment all year, filling it up with all
 sorts of junk. This lead to errors when using variables with old
 initializations like using "uninitialized" variables or working with
-the wrong data set<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup><sup>, </sup><sup><a id="fnr.4" name="fnr.4" class="footref" href="#fn.4">4</a></sup>. It also leads to
+the wrong data set<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup><sup>, </sup><sup><a id="fnr.4" class="footref" href="#fn.4">4</a></sup>. It also leads to
 nonreproducable results if their scripts rely on the state of their
 workspace. The first thing I check for when a students' knitr file
 fails to compile is to make sure they aren't relying on the state of
@@ -118,17 +124,17 @@ vast majority can safely and happily ignore this "feature".
 </div>
 </div>
 
-<div id="outline-container-sec-4" class="outline-2">
-<h2 id="sec-4">Build System</h2>
-<div class="outline-text-2" id="text-4">
+<div id="outline-container-orgheadline4" class="outline-2">
+<h2 id="orgheadline4">Build System</h2>
+<div class="outline-text-2" id="text-orgheadline4">
 <p>
 Speaking of temporary files, this leads to a stylistic issue. I had
 a hard time understanding students' code for their final projects
-because they'd write everything in a single script. 
+because they'd write everything in a single script.
 </p>
 
 <p>
-Instead of a monolithic script, a modular<sup><a id="fnr.5" name="fnr.5" class="footref" href="#fn.5">5</a></sup> approach can
+Instead of a monolithic script, a modular<sup><a id="fnr.5" class="footref" href="#fn.5">5</a></sup> approach can
 help. You can have a script that cleans the data, one that fits a
 model, and then several which make graphs and tables. Each writes
 out temporary files with the data needed for later steps. This keeps
@@ -164,37 +170,34 @@ these tools.
 <h2 class="footnotes">Footnotes: </h2>
 <div id="text-footnotes">
 
-<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
 I'm a bit of an emacs snob.
-</p></div>
+</p></div></div>
 
-<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
 It was a dark time.
-</p></div>
+</p></div></div>
 
-<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3">3</a></sup> <div class="footpara"><p class="footpara">
 Because they had to name every data set "data"
-</p></div>
+</p></div></div>
 
-<div class="footdef"><sup><a id="fn.4" name="fn.4" class="footnum" href="#fnr.4">4</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4">4</a></sup> <div class="footpara"><p class="footpara">
 Or they used the "attach" function. Why do people keep
 teaching/using this function? It can only end in tears. Before anyone
 says it "saves keystrokes" I'd like to point out that any half decent
 editor (even RStudio) has auto-complete.
-</p></div>
+</p></div></div>
 
-<div class="footdef"><sup><a id="fn.5" name="fn.5" class="footnum" href="#fnr.5">5</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.5" class="footnum" href="#fnr.5">5</a></sup> <div class="footpara"><p class="footpara">
 I go a step further and I generally write different steps
 in my preferred language for the task: 
 </p>
 <ul class="org-ul">
-<li>munging -&gt; python
-</li>
-<li>numerics -&gt; julia
-</li>
-<li>graphics -&gt; R
-</li>
-</ul></div>
+<li>munging -&gt; python</li>
+<li>numerics -&gt; julia</li>
+<li>graphics -&gt; R</li>
+</ul></div></div>
 
 
 </div>

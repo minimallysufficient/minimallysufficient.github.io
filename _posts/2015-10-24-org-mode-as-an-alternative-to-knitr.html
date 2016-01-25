@@ -1,8 +1,14 @@
 ---
 layout: post
 title: Org-mode as an alternative to knitr
+date: 2015-10-24
+categories: 
+-
+tags: 
+- dummy-tags-should-be-replaced
+author: 
+excerpt: 
 ---
-
 <p>
 Using ski ratings, I would classify knitr as a Blue Square. It's great
 for beginners and experts alike, balancing excitement and
@@ -25,25 +31,25 @@ an outlining tool in the same sense that emacs is <i>just</i> a text
 editor: it's really an environment for reproducible research.
 </p>
 
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1">Features</h2>
-<div class="outline-text-2" id="text-1">
-</div><div id="outline-container-sec-1-1" class="outline-3">
-<h3 id="sec-1-1">Outlining</h3>
-<div class="outline-text-3" id="text-1-1">
+<div id="outline-container-orgheadline9" class="outline-2">
+<h2 id="orgheadline9">Features</h2>
+<div class="outline-text-2" id="text-orgheadline9">
+</div><div id="outline-container-orgheadline1" class="outline-3">
+<h3 id="orgheadline1">Outlining</h3>
+<div class="outline-text-3" id="text-orgheadline1">
 <p>
 As mentioned, the most basic use of org-mode is to create outlines
 like the following.
 </p>
 <div class="org-src-container">
 
-<pre class="src src-org">* Section 1
+<pre class="src src-org"><span style="color: #ff1493; font-size: 130%;">* Section 1</span>
   Text goes here.
-* Section 2
+<span style="color: #ff1493; font-size: 130%;">* Section 2</span>
   Some more text
-** Subsection 1
+<span style="color: #ffff00; font-size: 120%;">** Subsection 1</span>
    Details, details, details
-** Subsection 2
+<span style="color: #ffff00; font-size: 120%;">** Subsection 2</span>
    1) We can add lists too
    2) ...
    3) Some more
@@ -60,21 +66,21 @@ features.
 </div>
 </div>
 
-<div id="outline-container-sec-1-2" class="outline-3">
-<h3 id="sec-1-2">Todos</h3>
-<div class="outline-text-3" id="text-1-2">
+<div id="outline-container-orgheadline2" class="outline-3">
+<h3 id="orgheadline2">Todos</h3>
+<div class="outline-text-3" id="text-orgheadline2">
 <div class="org-src-container">
 
-<pre class="src src-org">* TODO Problem 1
-* CHECK Problem 2
-* DONE Problem 3
+<pre class="src src-org"><span style="color: #ff1493; font-size: 130%;">* </span><span style="color: #ffa500; font-weight: bold;">TODO</span><span style="color: #ff1493; font-size: 130%;"> Problem 1</span>
+<span style="color: #ff1493; font-size: 130%;">* CHECK Problem 2</span>
+<span style="color: #ff1493; font-size: 130%;">* </span><span style="color: #00ff00; font-weight: bold;">DONE</span><span style="color: #ff1493; font-size: 130%;"> Problem 3</span>
 </pre>
 </div>
 
 <p>
 You can mark headlines with TODO tags. I find this is helpful for
 tracking progress; starting off with all TODOs as you complete
-sections you mark them with a DONE<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup> tag. You can also
+sections you mark them with a DONE<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup> tag. You can also
 specify intermediate tags; I have a CHECK tag which I use to
 indicate that I should double-check my work before marking it
 DONE.
@@ -82,15 +88,15 @@ DONE.
 </div>
 </div>
 
-<div id="outline-container-sec-1-3" class="outline-3">
-<h3 id="sec-1-3">Tables</h3>
-<div class="outline-text-3" id="text-1-3">
+<div id="outline-container-orgheadline3" class="outline-3">
+<h3 id="orgheadline3">Tables</h3>
+<div class="outline-text-3" id="text-orgheadline3">
 <div class="org-src-container">
 
-<pre class="src src-org">* Magic Square
-  | 2 | 7 | 6 |
-  | 9 | 5 | 1 |
-  | 4 | 3 | 8 |
+<pre class="src src-org"><span style="color: #ff1493; font-size: 130%;">* Magic Square</span>
+  <span style="color: #87cefa;">| 2 | 7 | 6 |</span>
+  <span style="color: #87cefa;">| 9 | 5 | 1 |</span>
+  <span style="color: #87cefa;">| 4 | 3 | 8 |</span>
 </pre>
 </div>
 
@@ -103,20 +109,20 @@ export tables from R with the "ascii" library.
 </div>
 </div>
 
-<div id="outline-container-sec-1-4" class="outline-3">
-<h3 id="sec-1-4">Links and Figures</h3>
-<div class="outline-text-3" id="text-1-4">
+<div id="outline-container-orgheadline4" class="outline-3">
+<h3 id="orgheadline4">Links and Figures</h3>
+<div class="outline-text-3" id="text-orgheadline4">
 <div class="org-src-container">
 
-<pre class="src src-org">[[http://link][link description]]
+<pre class="src src-org"><span style="color: #96CBFE; text-decoration: underline;"><a href="http://link">link description</a></span>
 
-[file:path/to/file]
+[<span style="color: #96CBFE; text-decoration: underline;"><a href="file:path/to/file">file:path/to/file</a></span>]
 
-#+NAME: fig:figname
-#+CAPTION: This is a caption
-[file:path.png]
+<span style="color: #8B8989; font-style: italic;">#+NAME: fig:figname</span>
+<span style="color: #8B8989; font-style: italic;">#+CAPTION:</span> <span style="color: #dcdccc; background-color: #383838;">This is a caption</span>
+[<span style="color: #96CBFE; text-decoration: underline;"><a href="file:path.png">file:path.png</a></span>]
 
-As we can see in figure [[fig:figname]]
+As we can see in figure <span style="color: #96CBFE; text-decoration: underline;"><a href="fig:figname">fig:figname</a></span>
 </pre>
 </div>
 
@@ -128,19 +134,19 @@ alignment.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-1-5" class="outline-3">
-<h3 id="sec-1-5">Source Code Blocks</h3>
-<div class="outline-text-3" id="text-1-5">
+<div id="outline-container-orgheadline5" class="outline-3">
+<h3 id="orgheadline5">Source Code Blocks</h3>
+<div class="outline-text-3" id="text-orgheadline5">
 <div class="org-src-container">
 
-<pre class="src src-org">#+BEGIN_SRC R :exports results :results graphics :file figs/regression_line.png
-N &lt;- 100
-x &lt;- 1:100
-y &lt;- x + rnorm(N)
+<pre class="src src-org"><span style="color: #008ED1; background-color: #2b2b2b;">#+BEGIN_SRC R :exports results :results graphics :file figs/regression_line.png</span>
+N <span style="color: #96CBFE;">&lt;-</span> 100
+x <span style="color: #96CBFE;">&lt;-</span> 1:100
+y <span style="color: #96CBFE;">&lt;-</span> x + rnorm(N)
 
 plot(y ~ x)
 abline(lm(y ~ x))
-#+END_SRC
+<span style="color: #008ED1; background-color: #2b2b2b;">#+END_SRC</span>
 </pre>
 </div>
 
@@ -151,25 +157,25 @@ does this too, and it does it for a variety of <a href="http://orgmode.org/manua
 </p>
 
 <p>
-To add code you just create a new source block <sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup> with the
+To add code you just create a new source block <sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup> with the
 appropriate language identifier: R for R, julia for julia, etc. You
-write your code within the block<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup> and when you export your
+write your code within the block<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup> and when you export your
 document it executes the code and adds the results into the
 document..
 </p>
 </div>
 </div>
 
-<div id="outline-container-sec-1-6" class="outline-3">
-<h3 id="sec-1-6">LaTeX</h3>
-<div class="outline-text-3" id="text-1-6">
+<div id="outline-container-orgheadline6" class="outline-3">
+<h3 id="orgheadline6">LaTeX</h3>
+<div class="outline-text-3" id="text-orgheadline6">
 <div class="org-src-container">
 
-<pre class="src src-org">#+BEGIN_LaTeX
-\begin{equation}
-(a + b)^{2} = a^{2} + 2ab + b^{2}
-\end{equation}
-#+END_LaTeX
+<pre class="src src-org"><span style="color: #008ED1; background-color: #2b2b2b;">#+BEGIN_LaTeX</span>
+<span style="color: #dcdccc; background-color: #383838;">\begin{equation}</span>
+<span style="color: #dcdccc; background-color: #383838;">(a + b)^{2} = a^{2} + 2ab + b^{2}</span>
+<span style="color: #dcdccc; background-color: #383838;">\end{equation}</span>
+<span style="color: #008ED1; background-color: #2b2b2b;">#+END_LaTeX</span>
 </pre>
 </div>
 
@@ -182,9 +188,9 @@ LaTeX source code.  These work exactly like regular source code blocks.
 </div>
 </div>
 
-<div id="outline-container-sec-1-7" class="outline-3">
-<h3 id="sec-1-7">Multiple Export Formats</h3>
-<div class="outline-text-3" id="text-1-7">
+<div id="outline-container-orgheadline7" class="outline-3">
+<h3 id="orgheadline7">Multiple Export Formats</h3>
+<div class="outline-text-3" id="text-orgheadline7">
 <p>
 You can export org-documents into a variety of formats: HTML and
 LaTeX (beamer and vanilla) are the two I use most. The nice thing
@@ -211,37 +217,37 @@ in exporting to tikzposter.
 </div>
 </div>
 
-<div id="outline-container-sec-1-8" class="outline-3">
-<h3 id="sec-1-8">Polyglot Code Blocks</h3>
-<div class="outline-text-3" id="text-1-8">
+<div id="outline-container-orgheadline8" class="outline-3">
+<h3 id="orgheadline8">Polyglot Code Blocks</h3>
+<div class="outline-text-3" id="text-orgheadline8">
 <div class="org-src-container">
 
-<pre class="src src-org">#+NAME: read_parameters
-#+BEGIN_SRC ruby :exports none
+<pre class="src src-org"><span style="color: #8B8989; font-style: italic;">#+NAME: read_parameters</span>
+<span style="color: #008ED1; background-color: #2b2b2b;">#+BEGIN_SRC ruby :exports none</span>
 nObs = 100
 mean = 0
 sd = 1
 
 [nObs, mean, sd]
-#+END_SRC
+<span style="color: #008ED1; background-color: #2b2b2b;">#+END_SRC</span>
 
-#+NAME: run_simulation
-#+BEGIN_SRC python :var params=read_parameters :exports none
-  import numpy.random
+<span style="color: #8B8989; font-style: italic;">#+NAME: run_simulation</span>
+<span style="color: #008ED1; background-color: #2b2b2b;">#+BEGIN_SRC python :var params=read_parameters :exports none</span>
+  <span style="color: #4c83ff;">import</span> numpy.random
   numpy.random.seed(42)
 
-  nObs, mean, sd = params
+  <span style="color: #ff69b4;">nObs</span>, <span style="color: #ff69b4;">mean</span>, <span style="color: #ff69b4;">sd</span> = params
 
-  vals = numpy.random.normal(mean, sd, nObs)
+  <span style="color: #ff69b4;">vals</span> = numpy.random.normal(mean, sd, nObs)
 
-  return vals
-#+END_SRC
+  <span style="color: #4c83ff;">return</span> vals
+<span style="color: #008ED1; background-color: #2b2b2b;">#+END_SRC</span>
 
-#+NAME: plot_results
-#+BEGIN_SRC R :var x=run_simulation :exports results :results graphics :file test.png
-x &lt;- as.numeric(x)
+<span style="color: #8B8989; font-style: italic;">#+NAME: plot_results</span>
+<span style="color: #008ED1; background-color: #2b2b2b;">#+BEGIN_SRC R :var x=run_simulation :exports results :results graphics :file test.png</span>
+x <span style="color: #96CBFE;">&lt;-</span> as.numeric(x)
 hist(x)
-#+END_SRC
+<span style="color: #008ED1; background-color: #2b2b2b;">#+END_SRC</span>
 </pre>
 </div>
 
@@ -255,22 +261,22 @@ from R.
 </p>
 
 <p>
-As far as I can tell this isn't possible<sup><a id="fnr.4" name="fnr.4" class="footref" href="#fn.4">4</a></sup> in knitr. It
+As far as I can tell this isn't possible<sup><a id="fnr.4" class="footref" href="#fn.4">4</a></sup> in knitr. It
 also doesn't seem like Jupyter notebooks have this capability
 although there's another project <a href="https://github.com/twosigma/beaker-notebook">Beaker</a> which does.
 </p>
 </div>
 </div>
 </div>
-<div id="outline-container-sec-2" class="outline-2">
-<h2 id="sec-2">Summary</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-orgheadline10" class="outline-2">
+<h2 id="orgheadline10">Summary</h2>
+<div class="outline-text-2" id="text-orgheadline10">
 <p>
 I currently use org-mode for everything. I write problem sets,
 papers, presentations, meeting notes, and this very blog post in
 org-mode. I have my schedule and todo list in org-mode. I even have
 my emacs configuration file in org-mode. The benefits of having a
-single tool<sup><a id="fnr.5" name="fnr.5" class="footref" href="#fn.5">5</a></sup> is that you become very efficient.
+single tool<sup><a id="fnr.5" class="footref" href="#fn.5">5</a></sup> is that you become very efficient.
 </p>
 
 <p>
@@ -284,28 +290,28 @@ emacs-fu. For newcomers, it might take a while.
 <h2 class="footnotes">Footnotes: </h2>
 <div id="text-footnotes">
 
-<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
 In my setup it then turns green which is more emotionally
 satisfying than I'd care to admit.
-</p></div>
+</p></div></div>
 
-<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
 Easy shortcut: &lt;s
-</p></div>
+</p></div></div>
 
-<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3">3</a></sup> <div class="footpara"><p class="footpara">
 *C-'* opens the block in a new buffer with the language's
 major-mode
-</p></div>
+</p></div></div>
 
-<div class="footdef"><sup><a id="fn.4" name="fn.4" class="footnum" href="#fnr.4">4</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4">4</a></sup> <div class="footpara"><p class="footpara">
 Without writing out temporary results to file
-</p></div>
+</p></div></div>
 
-<div class="footdef"><sup><a id="fn.5" name="fn.5" class="footnum" href="#fnr.5">5</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.5" class="footnum" href="#fnr.5">5</a></sup> <div class="footpara"><p class="footpara">
 This goes a bit against my stance on programming languages
 where I'm very much a proponent of using the "best tool for the job"
-</p></div>
+</p></div></div>
 
 
 </div>

@@ -1,10 +1,18 @@
 ---
 layout: post
 title: Reservoir Sampling
+date: 2015-08-01
+categories: 
+-
+tags: 
+- dummy-tags-should-be-replaced
+author: 
+excerpt: 
 ---
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1">Introduction</h2>
-<div class="outline-text-2" id="text-1">
+
+<div id="outline-container-orgheadline1" class="outline-2">
+<h2 id="orgheadline1">Introduction</h2>
+<div class="outline-text-2" id="text-orgheadline1">
 <p>
 We want to get a random sample of size \(n\) from a population of size
 \(N\). The thing is, we don't know \(N\).
@@ -24,9 +32,9 @@ each tweet once.
 </div>
 </div>
 
-<div id="outline-container-sec-2" class="outline-2">
-<h2 id="sec-2">Reservoir Sampling</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-orgheadline2" class="outline-2">
+<h2 id="orgheadline2">Reservoir Sampling</h2>
+<div class="outline-text-2" id="text-orgheadline2">
 <p>
 A simple solution is to maintain a reservoir, a collection of \(n\)
 items, which contains your sample at any given time. When you
@@ -39,7 +47,7 @@ element must be discarded to maintain the correct size.
 For a random sample we make these decisions randomly, in effect
 tossing a coin to decide whether the item should be in or out.
 However, we need to be careful to maintain uniform inclusion
-probabilities <sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>. To illustrate, suppose we just wanted a single sample
+probabilities <sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>. To illustrate, suppose we just wanted a single sample
 and just flipped a fair coin. Then the last element we see has a 50%
 chance of being selected, the penultimate 25%, the antepenultimate
 12.5%, and the preantepenultimate 6.25%.
@@ -51,9 +59,9 @@ inclusion \(\frac{n}{i}\) for the i<sup>th</sup> element. We then select with
 equal probabilities one of the elements of the reservoir to discard.
 </p>
 </div>
-<div id="outline-container-sec-2-1" class="outline-3">
-<h3 id="sec-2-1">Quick proof of correctness</h3>
-<div class="outline-text-3" id="text-2-1">
+<div id="outline-container-orgheadline3" class="outline-3">
+<h3 id="orgheadline3">Quick proof of correctness</h3>
+<div class="outline-text-3" id="text-orgheadline3">
 <p>
 Now we should show that we've actually achieved the goal; if we have
 a random sample we would should have the probability of inclusion,
@@ -70,11 +78,11 @@ for \(i\) to be in the sample. First we have to have chosen to include
 
 <p>
 We'll only work out the math for the case where \(i >
-  n\) <sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>.
+  n\) <sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>.
 </p>
 
 <p>
-$$  \Pr(i \in S) = \Pr(\text{\(i\) is selected})\Pr(\text{\(i\) is not replaced} \mid \text{\(i\) is selected}) $$
+\($  \Pr(i \in S) = \Pr(\text{$i$ is selected})\Pr(\text{$i$ is not replaced} \mid \text{$i$ is selected}) $\)
 </p>
 
 <p>
@@ -88,7 +96,7 @@ probability for this is the product
 </p>
 
 <p>
-$$ \Pr(\text{\(i\) is not replaced by $i + 1$}) \Pr(\text{\(i\) is not replaced by $i + 2$} \mid \text{\(i\) is not replaced before $i + 2$}) \dots \Pr(\text{\(i\) is not replaced by $N$} \mid \text{\(i\) is not replaced before $N$}) $$
+\($ \Pr(\text{$i$ is not replaced by $i + 1$}) \Pr(\text{$i$ is not replaced by $i + 2$} \mid \text{$i$ is not replaced before $i + 2$}) \dots \Pr(\text{$i$ is not replaced by $N$} \mid \text{$i$ is not replaced before $N$}) $\)
 </p>
 
 <p>
@@ -96,7 +104,7 @@ where each term is just
 </p>
 
 <p>
-$$ \Pr(\text{\(i\) is not replaced by $j$} \mid \text{\(i\) is not replaced before $j$}) = \frac{j-1}{j} $$
+\($ \Pr(\text{$i$ is not replaced by $j$} \mid \text{$i$ is not replaced before $j$}) = \frac{j-1}{j} $\)
 </p>
 
 <p>
@@ -104,7 +112,7 @@ and thus the product is simply
 </p>
 
 <p>
-$$ \frac{i}{i+1} \times \frac{i+1}{i+2} \times \dots  \times \frac{N -1}{N} = \frac{i}{N} $$
+\($ \frac{i}{i+1} \times \frac{i+1}{i+2} \times \dots  \times \frac{N -1}{N} = \frac{i}{N} $\)
 </p>
 
 <p>
@@ -112,8 +120,8 @@ Combining these two parts.
 </p>
 
 <p>
-$$  \Pr(i \in S) = \Pr(\text{\(i\) is selected})\Pr(\text{\(i\) is not replaced} \mid \text{\(i\) is selected}) 
-  = \left(\frac{n}{i}\right)\left(\frac{i}{N}\right) = \frac{n}{N} $$
+\($  \Pr(i \in S) = \Pr(\text{$i$ is selected})\Pr(\text{$i$ is not replaced} \mid \text{$i$ is selected}) 
+  = \left(\frac{n}{i}\right)\left(\frac{i}{N}\right) = \frac{n}{N} $\)
 </p>
 
 <p>
@@ -121,50 +129,50 @@ Problem solved.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-2-2" class="outline-3">
-<h3 id="sec-2-2">Julia Implementation</h3>
-<div class="outline-text-3" id="text-2-2">
+<div id="outline-container-orgheadline4" class="outline-3">
+<h3 id="orgheadline4">Julia Implementation</h3>
+<div class="outline-text-3" id="text-orgheadline4">
 <div class="org-src-container">
 
-<pre class="src src-julia"><span style="color: #FBDE2D;">function</span> <span style="color: #ff1493;">reservoir_sample</span>(source, n::<span style="color: #D8FA3C;">Int</span>)
-    state = <span style="color: #ff1493;">start</span>(source)
+<pre class="src src-julia"><span style="color: #4c83ff;">function</span> <span style="color: #ff1493;">reservoir_sample</span>(source, n<span style="color: #d3d3d3; background-color: #000000;">::</span><span style="color: #afd8af;">Int</span>)
+    state = start(source)
 
     nSeen = 0
-    sample = <span style="color: #D8FA3C;">Array</span>(<span style="color: #D8FA3C;">Any</span>, n) <span style="color: #8B8989; font-style: italic;"># </span><span style="color: #8B8989; font-style: italic;">can be specialized</span>
+    sample = <span style="color: #afd8af;">Array</span>(<span style="color: #afd8af;">Any</span>, n) <span style="color: #8B8989; font-style: italic;"># </span><span style="color: #8B8989; font-style: italic;">can be specialized</span>
 
     <span style="color: #8B8989; font-style: italic;">## </span><span style="color: #8B8989; font-style: italic;">automatically add first n items</span>
-    <span style="color: #FBDE2D;">while</span> nSeen &lt; n
+    <span style="color: #4c83ff;">while</span> nSeen &lt; n
         nSeen += 1
-        item, state = <span style="color: #ff1493;">next</span>(source, state)
+        item, state = next(source, state)
         sample[nSeen] = item
 
         <span style="color: #8B8989; font-style: italic;">## </span><span style="color: #8B8989; font-style: italic;">check for early exhaustion of source</span>
-        <span style="color: #FBDE2D;">if</span> <span style="color: #ff1493;">done</span>(source, state)
-            <span style="color: #ff1493;">error</span>(<span style="color: #61CE3C;">"Source is not sufficiently long"</span>)
-        <span style="color: #FBDE2D;">end</span>
-    <span style="color: #FBDE2D;">end</span>
+        <span style="color: #4c83ff;">if</span> done(source, state)
+            error(<span style="color: #61CE3C;">"Source is not sufficiently long"</span>)
+        <span style="color: #4c83ff;">end</span>
+    <span style="color: #4c83ff;">end</span>
 
     <span style="color: #8B8989; font-style: italic;">## </span><span style="color: #8B8989; font-style: italic;">then continue until all items are exhausted</span>
-    <span style="color: #FBDE2D;">while</span> !<span style="color: #ff1493;">done</span>(source, state)
-        item, state = <span style="color: #ff1493;">next</span>(source, state)
+    <span style="color: #4c83ff;">while</span> !done(source, state)
+        item, state = next(source, state)
         nSeen += 1
 
-        r = <span style="color: #ff1493;">rand</span>(1:nSeen)
-        <span style="color: #FBDE2D;">if</span> r &lt;= n
+        r = rand(1:nSeen)
+        <span style="color: #4c83ff;">if</span> r &lt;= n
             sample[r] = item
-        <span style="color: #FBDE2D;">end</span>
-    <span style="color: #FBDE2D;">end</span>  
+        <span style="color: #4c83ff;">end</span>
+    <span style="color: #4c83ff;">end</span>  
 
-    <span style="color: #FBDE2D;">return</span> sample
-<span style="color: #FBDE2D;">end</span>
+    <span style="color: #4c83ff;">return</span> sample
+<span style="color: #4c83ff;">end</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-sec-2-3" class="outline-3">
-<h3 id="sec-2-3">A note on the second-order probabilities</h3>
-<div class="outline-text-3" id="text-2-3">
+<div id="outline-container-orgheadline5" class="outline-3">
+<h3 id="orgheadline5">A note on the second-order probabilities</h3>
+<div class="outline-text-3" id="text-orgheadline5">
 <p>
 One subtlety that might escape the notice of non-statisticians is
 that we not only care about the probability of inclusion of a
@@ -216,7 +224,7 @@ element \(k+1\)
 </p>
 
 <p>
-$$ \Pr_{k+1}(i \in S, k+1 \in S) = \Pr_{k}(i) \times \Pr(\text{\(k+1\) is selected but does not replace $i$}) = \frac{n}{k} \times \frac{n-1}{k+1} $$
+\($ \Pr_{k+1}(i \in S, k+1 \in S) = \Pr_{k}(i) \times \Pr(\text{$k+1$ is selected but does not replace $i$}) = \frac{n}{k} \times \frac{n-1}{k+1} $\)
 </p>
 
 <p>
@@ -224,7 +232,7 @@ and the second  in which \(i\) and \(j\) are both less than \(k+1\).
 </p>
 
 <p>
-$$ \Pr_{k+1}(i \in S, j \in S) = \Pr_{k}(i, j) \times \Pr(\text{neither \(i\) or \(j\) are replaced}) = \Pr_{k}(i, j) \times \frac{(k+1)-2}{k+1}$$
+\($ \Pr_{k+1}(i \in S, j \in S) = \Pr_{k}(i, j) \times \Pr(\text{neither $i$ or $j$ are replaced}) = \Pr_{k}(i, j) \times \frac{(k+1)-2}{k+1}$\)
 </p>
 
 <p>
@@ -232,7 +240,7 @@ and because \(\Pr_{k}(i,j)\) are all equal, it must be equal to \(\frac{n(n-1)}{
 </p>
 
 <p>
-$$ \Pr_{k+1}(i \in S, j \in S) = \Pr_{k}(i, j) \times \frac{(k+1)-2}{k+1} = \frac{n}{k} \times \frac{n-1}{k+1} $$
+\($ \Pr_{k+1}(i \in S, j \in S) = \Pr_{k}(i, j) \times \frac{(k+1)-2}{k+1} = \frac{n}{k} \times \frac{n-1}{k+1} $\)
 </p>
 
 <p>
@@ -248,17 +256,17 @@ inclusion probabilities.
 <h2 class="footnotes">Footnotes: </h2>
 <div id="text-footnotes">
 
-<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
 Or not, if we're doing something like estimating a
 population mean we can use the Horvitz-Thompson estimator which takes
 into account differing inclusion probabilities so our estimate remains
 unbiased. It messes with your variance though.
-</p></div>
+</p></div></div>
 
-<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
 Proving the case where \(i \le n\) would be a good check for
 understanding the proof for \(i > n\).
-</p></div>
+</p></div></div>
 
 
 </div>
