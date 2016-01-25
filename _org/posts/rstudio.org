@@ -1,0 +1,137 @@
+#+OPTIONS: toc:nil num:nil todo:nil
+#+LAYOUT: post
+#+DATE: 2015-01-24
+#+TITLE: The Normative Power of RStudio
+#+DESCRIPTION:
+#+CATEGORIES:
+
+#+HTML_MATHJAX: align:"center"
+#+OPTIONS: toc:nil num:nil todo:nil
+
+I would never willingly use RStudio for my own work [fn:emacs].
+Despite that caveat, I do love RStudio for teaching R to students.
+RStudio's best feature is its normative power; by virtue of becoming
+the de facto standard for R GUIs, RStudio has the power to promote
+good habits. They've already done wonders for reproducibility with
+their integration with knitr. If they adopted a few more tweaks, they
+could set future waves of R users off on the right track.
+
+* DONE Knitr and Reproducibility
+  For instance, their integration with knitr is the greatest step
+  taken towards reproducibility in statistics. Read this[http://arxiv.org/abs/1402.18][paper]] for
+  some examples of how switching to RMarkdown has improved
+  introductory stats classes.
+
+  I remember the dark days before knitr when I manually saved plots
+  and copied tables of numbers into my reports and homeworks. As a TA
+  I would receive code students had pasted into Word that I knew
+  couldn't be run. 
+
+  Then I saw the light, and used knitr for my own work. However, it
+  was still a pain; I had to write my code in notepad[fn:notepad] and
+  then try and parse R errors and LaTeX errors. It was not a process I
+  would recommend for an introductory stats course: there would be a
+  violent uprising among the students.
+
+  Now of course, there's RMarkdown which provides a user-friendly
+  interface to knitr. I have a few crotchety complaints about it not
+  being LaTeX, but for the most part it's a pain-free, intuitive
+  process. That's the important part: if there's a button to compile
+  the file students will do it and in the process they'll ingrain a
+  habit of reproducibility.
+  
+* DONE The Script Window
+  But not everything is done as well as the knitr integration. For
+  instance, a design decision to emphasize the script window would be
+  brilliant. Before widespread adoption of RStudio I often would find
+  students typing their work, stream-of-consciousness style, into the
+  console. Whenever they made a mistake they'd retype it (all) in.
+  Needless to say, this resulted in lots of frustration and a bevy of
+  unusual bugs. With RStudio it's easier to show them the script
+  window and demonstrate better work-flows. However, the default
+  screen doesn't even include the script window so I still see
+  students working only on the console.
+  
+  Now imagine if these students opened up RStudio the first time and saw
+  a huge script window with just a small console underneath. A few lines
+  of comments explaining how to use the script would be all that's
+  needed to get students started. It would make good work-flow habits the
+  default.
+
+* DONE Workspaces
+  Another aspect that could be improved on is RStudio's handling of
+  workspaces. Workspaces save your current working environment: the
+  functions, data frames, variables, and other objects that you're
+  using in the R session. The problem that I have with workspaces is
+  that they're solving a problem which only exists if you're doing
+  things sub-optimally.
+
+  The mess I saw students falling into with workspaces was that they
+  would keep the same environment all year, filling it up with all
+  sorts of junk. This lead to errors when using variables with old
+  initializations like using "uninitialized" variables or working with
+  the wrong data set[fn:data][fn:attach]. It also leads to
+  nonreproducable results if their scripts rely on the state of their
+  workspace. The first thing I check for when a students' knitr file
+  fails to compile is to make sure they aren't relying on the state of
+  their current R session; many of them do the work on the console and
+  then expect to "save" the results in the knitr doc.
+
+  The only argument I can make for using workspaces is to save time.
+  If you're working with MCMC runs or cross-validation estimates you
+  don't want to rerun your procedure every time you work on the code.
+  Thus being able to recover your results would be nice. However, the
+  solution is not workspaces, it's writing out temporary files.
+  There's no need to save the whole environment, just the parts you
+  can't easily replicate.
+  
+  Switching to disabling workspaces by default would be a good idea.
+  Users who find a purpose for workspaces and turn them on, but the
+  vast majority can safely and happily ignore this "feature".
+  
+* DONE Build System
+  Speaking of temporary files, this leads to a stylistic issue. I had
+  a hard time understanding students' code for their final projects
+  because they'd write everything in a single script.
+
+  Instead of a monolithic script, a modular[fn:modular] approach can
+  help. You can have a script that cleans the data, one that fits a
+  model, and then several which make graphs and tables. Each writes
+  out temporary files with the data needed for later steps. This keeps
+  every script file understandable and facilitates collaboration and
+  exploration as alternative models or graphics can be easily worked
+  on in parallel.
+  
+  Of course, to implement this modular approach, you also need some
+  way of keeping things up-to-date. The typical approach is asking
+  yourself the question "if I change this file, what else needs to
+  update?" and then manually rerunning the appropriate scripts. This
+  is not a great idea as you will always forget something.
+  
+  For myself, I use the Ruby utility Rake to automate this process. I
+  simply document the dependencies of my steps and Rake will rerun
+  only those steps which are necessary to keep everything up-to-date
+  (defined as all outputs have later timestamps than their respective
+  inputs).
+
+  RStudio seems to integrate with the canonical build system /make/
+  for projects. However, more could be done to introduce newcomers to
+  these tools. 
+  
+* DONE Footnotes
+[fn:emacs] I'm a bit of an emacs snob.
+
+[fn:notepad] It was a dark time.
+  
+[fn:data] Because they had to name every data set "data"
+  
+[fn:attach] Or they used the "attach" function. Why do people keep
+teaching/using this function? It can only end in tears. Before anyone
+says it "saves keystrokes" I'd like to point out that any half decent
+editor (even RStudio) has auto-complete.
+
+[fn:modular] I go a step further and I generally write different steps
+in my preferred language for the task: 
+- munging -> python
+- numerics -> julia
+- graphics -> R

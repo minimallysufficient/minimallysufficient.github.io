@@ -1,0 +1,208 @@
+#+OPTIONS: toc:nil num:nil todo:nil
+#+LAYOUT: post
+#+DATE: 2015-11-27
+#+TITLE: Using plyr for expressive, idiomatic R code
+#+DESCRIPTION:
+#+CATEGORIES:
+
+When I first encountered the /plyr/ package for R, I thought it was
+needless frippery. There was nothing that a well-written loop or
+subset couldn't do. Then I read Hadley Wickham's [[http://www.jstatsoft.org/article/view/v040i01/v40i01.pdf][Split-Apply-Combine]]
+paper, taught /plyr/ as a TA, and tried it out in my own code. I've
+been converted, it's a great tool for expressive R code. It's best to
+see this by example.
+
+* A simple example 
+  For my ADA work I'm working with power spectra from a large number
+  of recordings of neural activity in mice brains. When I'm doing my
+  analysis the first part of my code is loading the data. My first
+  approach is below.
+
+  #+BEGIN_SRC R
+    dfs <- list()
+
+    for(ii in seq_along(files)) {
+        file <- files[ii]
+        mouse <- mice[ii]
+        label <- labels[ii]
+
+        dfs[[ii]] <- cbind(read_spectrum(file), mouse = mouse, label = label)
+    }
+
+    df <- do.call(rbind, dfs)
+  #+END_SRC
+  
+  This is a fairly straightforward approach. I pass a list of
+  filenames, mouse identifiers, and disease labels (using the
+  wonderful [[https://github.com/trevorld/argparse][argparse]] package) and load the spectra as dataframes which
+  I eventually /rbind/ together.
+  
+  Here's the corresponding /plyr/ version
+
+  #+BEGIN_SRC R
+    inputs <- data.frame(file = files, mouse = mice, label = labels)
+
+    df <- mdply(inputs, function(file, mouse, label) {
+        return(cbind(read_spectrum(file), mouse = mouse, label = label))
+    })
+  #+END_SRC
+  
+  Looking at this code, it's more compact at 5 lines compared to 11
+  for the for loop.
+
+* A more complicated example
+  Now, once I've loaded the spectra as a dataframe, I need to
+  aggregate them, first within mice, and then between label.
+
+  The resulting R code is a little messy.
+
+  #+BEGIN_SRC R
+    average_specs <- function(df) {
+        freqs <- unique(df$frequency)
+        avepower <- rep(NA, length(freqs))
+    
+        for(ii in seq_along(freqs)) {
+            freq <- freqs[ii]
+            nRecordings <- nrow(df) / length(freqs)
+            avepower[ii] <- sum(df$power[df$frequency == freq]) / nRecordings
+        }
+
+        data.frame(frequency = freqs, power = avepower)
+    
+        return(df)
+    }
+
+    ## Aggregate by mouse
+    micedfs <- list()
+    uniqMice <- unique(mice)
+    for(ii in seq_along(uniqMice)) {
+        mouse <- uniqMice[ii]
+        label <- df$label[df$mouse == mouse][1]
+
+        mousedf <- averageSpecs(df[df$mouse == mouse])
+        mousedf$label <- label
+        micedfs[ii] <- mousedf
+    }
+
+    micedf <- do.call(rbind, micedfs)
+
+    ## Aggregate by condition
+    labeldfs <- list()
+    uniqLabels <- unique(labels)
+    for(ii in seq_along(uniqLabels)) {
+        label <- uniqLabels[ii]
+
+        labeldf <- averageSpecs(micedf[micedf$label == label])
+        labeldf$label <- label
+        labeldfs[ii] <- labeldf
+    }
+
+    df <- do.call(rbind, labeldfs)
+  #+END_SRC
+
+  I don't want to talk about this. It's just ugly.
+
+  This was actually the example which lead to my /plyr/ epiphany. Just
+  look at the /plyr/ version.
+
+  #+BEGIN_SRC R
+    average_specs <- function(df) {
+        df <- ddply(df, .(frequency), summarize, power <- mean(power))
+        return(df)
+    }
+
+    df <- ddply(specdf, .(label), function(labelsub) {
+        df <- ddply(specdf, .(mouse), function(mousesub) {
+            df <- average_specs(sub)
+            return(df)
+        })
+        return(df)
+    })
+  #+END_SRC
+
+  Wow, that just looks nice. It's concise with very little
+  boilerplate. I can easily extend it to calculate other summary
+  statistics such as standard deviations.
+
+* Icing on the cake
+  Now that I've gotten the summary statistics I like to plot them.
+
+  #+BEGIN_SRC R
+    for(label in uniqLabels) {
+        outfile <- paste0(outdir, "/", label, ".pdf")
+
+        select <- df$label == label
+        subdf <- df[select, ]
+        fig <- ggplot(subdf, aes(x = frequency, y = power)) + geom_line()
+        ggsave(outfile, fig)
+    }
+  #+END_SRC
+
+  The /plyr/ version is very similar.
+
+  #+BEGIN_SRC R
+    d_ply(df, .(label), function(df) {
+        label <- df$label[1]
+        outfile <- paste0(outdir, "/", label, ".pdf")
+
+        fig <- ggplot(df, aes(x = frequency, y = power)) + geom_line()
+        ggsave(outfile, fig)
+    })
+  #+END_SRC
+  
+  That's nice, but not really that different. But what if I got data
+  from a several location in the brain and wanted to plot those
+  locations individually?
+
+  #+BEGIN_SRC R
+    for(label in uniqLabels) {
+        for(location in uniqLocations) {
+            select <- df$label == label & df$location == location
+            if(any(select)) { # avoid empty df error
+                outfile <- paste0(outdir, "/", label, "-", location, ".pdf")
+
+                subdf <- df[select, ]
+                fig <- ggplot(subdf, aes(x = frequency, y = power)) + geom_line()
+                ggsave(outfile, fig)
+            }
+        }
+    }
+  #+END_SRC
+
+  I dislike the look of this. The first four lines are too long and
+  I'm already at three levels of indentation.
+
+  By contrast, /plyr/ handles this very gracefully.
+
+  #+BEGIN_SRC R
+    d_ply(df, .(label, location), function(df) {
+        label <- df$label[1]
+        location <- df$location[1]
+        outfile <- paste0(outdir, "/", label, , "-", location, ".pdf")
+    
+        fig <- ggplot(df, aes(x = frequency, y = power)) + geom_line()
+        ggsave(outfile, fig)
+    }
+  #+END_SRC
+
+* Conclusion
+  Experimenting with /plyr/ is a manifestation of my effort to write
+  more idiomatic R. Like the examples above, I find that most of the R
+  code that stands out to me as ugly is the result of failing to use
+  the correct R idiom. I haven't compared the speed of plyr. I assume
+  it would compare well enough, but that's somewhat beside the point.
+  Expressiveness and readability are the metrics that I'm trying to
+  optimize here.
+
+  A similar process occured with /ggplot2/. At first I thought it was
+  completely unnecessary. Now I feel pain at the thought of showing
+  people base R plots. The syntax is just so much easier and
+  expressive.
+
+  The common thread is that both packages are part of the
+  "Hadleyverse". I'll have to [[http://adolfoalvarez.cl/the-hitchhikers-guide-to-the-hadleyverse/][explore]] further, /dplyr/ and /tidyr/
+  seem like the logical next steps.
+
+  Oh, and just in case you're wondering, you can do some of the [[http://dataframesjl.readthedocs.org/en/latest/split_apply_combine.html][same
+  things]] in /julia/.
+   
