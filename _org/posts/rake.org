@@ -1,0 +1,230 @@
+#+OPTIONS: toc:nil num:nil todo:nil
+#+LAYOUT: post
+#+DATE: 2016-04-02
+#+TITLE: Organizing data analyses with Rake
+#+DESCRIPTION:
+#+CATEGORIES:
+#+OPTIONS: toc:nil num:nil
+
+* Organizing a data analysis is hard
+  Organizing data analysis is hard. Here's a couple reasons it gets
+  tricky:
+
+  + You have thousands of files :: You can work with a single CSV file
+       by hand. Maybe you could do a dozen, but you're not going to be
+       able to keep track of thousands of files. You can't even count
+       them without some sort of tool.
+  + Data collection is ongoing :: Not only do you have a bunch of
+       files, but you keep getting more. Somehow you need to keep
+       everything up-to-date with the latest data dump.
+  + You want to be reproducible :: You'd like anybody to be able to
+       download your analysis and run it on their machine.
+       Unfortunately, running it on your machine is often an ordeal.
+    
+  Fortunately, there's a solution for all of these problems. You
+  should use a tool called rake.
+
+* What is Rake?
+  Rake is a build utility; build utilities were originally designed to
+  automate the process of compiling code from source. You can
+  generalize the process to simply updating files based upon
+  dependencies.
+
+  Let's look at how rake address the problems with organizing data analysis
+
+  + You have thousands of files :: No problem, you can handle
+       everything programmatically. Rake will handle the tedious stuff.
+  + Data collection is ongoing :: Once your workflow is defined,
+       processing new data doesn't require anything more than typing a
+       single rake command into your shell. If you want to get really
+       fancy, you don't even have to type it, you can automate the
+       process using a chron job.
+  + You want to be reproducible :: Rake doesn't work well if you're
+       not explicit about your workflow. The benefit of this is that,
+       if it runs, it's probably reproducible (assuming you dealt with
+       stuff like seeding your PRNG).
+
+  I use rake for all of my projects. Perhaps the most useful is my
+  work on neuroscience data. I need to manage a bunch of brain
+  recordings, preprocess them, and then run some analysis. The lab
+  manages this process by hand and it takes up a lot of their time. My
+  system is automated, so whenever I update my methods or get new data
+  it's a simple matter of typing one command and then coming back a
+  couple minutes (or hours depending) later to look at the results.
+  
+* An example
+  To see how rake works, it's best to look at an example. Let's work
+  with [[https://www.ssa.gov/oact/babynames/limits.html][baby name data from the SSA]]. The SSA, by virtue of issuing
+  social security cards, has a list of baby names for each year. What
+  we want to do is look at the number of babies with a particular name
+  plotted over time. Are certain names getting more or less popular?
+  How many kids are named Elvis?
+
+  Rake requires that you have a specific file in your project
+  directory named "Rakefile". This is where you specify your workflow.
+  So let's walk through an example Rakefile.
+
+** Step 1
+   Our first step is downloading the data from the SSA's website. We
+   can achieve this with the following entry in our Rakefile.
+   
+   #+BEGIN_SRC ruby :exports code
+     file "data/raw/names.zip" => [] do |t|
+       mkdir_p "data/raw"
+       sh "wget https://www.ssa.gov/oact/babynames/names.zip -O data/raw/names.zip"
+     end
+   #+END_SRC
+
+   The /file/ at the start indicates that I'm denoting a file task
+   (we'll get to the other types). /"names.zip"/ is the file that I'm
+   creating, the "/=> []/" syntax is used to express dependencies
+   (more on that later). The code included within the /do-end/ block
+   is the action I take to create my file, namely make the directory
+   and download the file from the SSA website. You can use any ruby
+   command within the block; here I use the built-in system tools to
+   make the "data/raw" directory and then run my shell command.
+
+   To execute this I simply run "rake data/raw/names.zip" in the same
+   directory as my Rakefile. Note that once the file has been created,
+   nothing happens when I repeat the command. The only time that rake
+   executes a task is when the target doesn't exist or one of its
+   dependencies is newer than the existing target file. You'll never
+   repeat unnecessary work.
+
+** Step 2
+   The zip file that I've downloaded contains a bunch of text files of
+   the form /yob****.txt" which contain the names data for a certain
+   year. To extract these I can make a task
+  
+   #+BEGIN_SRC ruby :exports code
+     directory "data/processed"
+
+     yob_files = FileList[(1880..2014).map{|year| "data/processed/yob#{year}.txt"}]
+
+     yob_files.each do |yob_file|
+       file yob_file => ["data/raw/names.zip", "data/processed"] do |t|
+         sh "unzip -DD data/raw/names.zip -d data/processed"
+       end
+     end
+   #+END_SRC
+
+   The first thing that I do is define a directory task.
+
+   We then make a list of all of the text files we want to extract.
+   Here we make this list by taking each year between 1880 and 2014
+   and mapping it to the relevent file name. We then store it as a
+   FileList, a structure which is simply a list of filenames which
+   have some nice methods defined on it for ease of use.
+
+   We then iterate through this list of filenames and make file tasks
+   for each one. The body is the same for each, running /unzip/ on the
+   zip file.
+   
+   When we run rake, the zip file will only be unzipped once since
+   rake checks to see if a task is necessary before running. Remember,
+   a task only runs if the target doesn't exist or one of its
+   dependencies is newer than the existing target file. Note that we
+   need to make sure the timestamps work out by using the "-DD" flag,
+   otherwise the timestamps for our unzipped files will be behind the
+   timestamp of the zipped file.
+
+** Step 3
+   Working with all of the txt files is going to be painful. So our
+   next step is consolidate them into a single csv file.
+
+  #+BEGIN_SRC ruby :exports code
+    file "data/single-file.csv" => [*yob_files, "code/make-single-file.R"] do |t|
+      sh "Rscript code/make-single-file.R --outfile #{t.name} --yob_files #{yob_files}"
+    end
+  #+END_SRC
+
+  Now that we've gotten used to the syntax, this step is fairly
+  self-explanatory. 
+  
+  Passing arguments to R is a little different though. You definitely
+  want to make use of the argparse package. Otherwise, parsing the
+  command line options in the above script is difficult since the
+  number of txt files is variable.
+
+** Step 4
+   Now for the final product. We want to make some graphs.
+
+   #+BEGIN_SRC ruby :exports code
+     def make_plot(name, sex, outfile)
+       dir = directory outfile.pathmap("%d")
+       file outfile => ["code/plot-name-by-year.R", "data/single-file.csv", dir] do |t|
+         sh "Rscript code/plot-name-by-year.R --name #{name} --sex #{sex} --infile data/single-file.csv --outfile #{outfile}"
+       end
+       multitask :make_plots => outfile
+     end
+
+     make_plot("Amelia", "F", "figs/amelia.pdf")
+     make_plot("Elvis", "M", "figs/elvis.pdf")
+     make_plot("John", "M", "figs/john.pdf")
+   #+END_SRC
+
+   We have full use of the ruby language, so we can define functions.
+   This saves us a lot of copy-and-pasting.
+
+   We also can run our tasks in parallel. The multitask token
+   indicates a task which can be done in parallel. This speeds things
+   up considerably.
+
+** End Result
+   Anybody can replicate our figures just by downloading our source
+   code and running the following command.
+   
+   #+BEGIN_SRC sh
+   rake make_plots
+   #+END_SRC
+
+   Then rake will download the file, do the pre-processing, and make
+   the figures (in parallel) automatically. It's great.
+* A word of caution
+  If you've read this far down, you're probably interested in using
+  rake in your own work. Let me warn you about something.
+
+  This is very much a tool for managing *your* computational flow.
+  There's the definite potential for things to spiral out of control
+  when you start collaborating with others. Here's a short list of
+  potential problems and solutions.
+
+  - Your collaborator doesn't know ruby
+    
+    This is fairly common; ruby is not a standard stats/math language.
+    For people who don't find learning languages fun, there's little
+    reason to have heard of ruby, let alone have learned how to use
+    it.
+    
+    Fortunately it's not too hard to teach them the basic syntax
+    required to make simple tasks (it's just as easy as Make). You
+    should take the lead on anything complex.
+    
+  - You have incompatable systems / packages
+
+    This happened to me when a munging script that worked perfectly
+    fine on my machine started spewing errors on my collaborators
+    machine. It took me longer than I'd like to publicly admit to
+    realize that the problem was that on my machine the command
+    =python= refers to =python3= while on his machine it refers to
+    =python2=.
+
+    This is easy fixed by making sure you have the same packages on
+    all machines. Or if some machines can't run certain programs
+    (ahem, matlab) then just work around it as much as you can.
+ 
+  - Your collaborator doesn't use the command line
+    
+    View this as an opportunity; you can initiate them into the
+    mysteries of the command line.
+
+  - Your collaborator doesn't use Linux
+
+    This is the worst case scenario. My understanding is that you
+    should be mostly ok with OS X. Windows seems like it would be a
+    nightmare (but maybe it'll work now that [[https://linux.slashdot.org/story/16/03/30/1021224/confirmed-microsoft-and-canonical-partner-to-bring-ubuntu-to-windows-10][bash is coming to
+    Windows]]). I haven't really dealt with this, but the solution is
+    obvious: "borrow" their machine and install linux. Eventually
+    they'll come around and thank you.
+    
+

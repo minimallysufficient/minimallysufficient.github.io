@@ -1,0 +1,354 @@
+---
+layout: post
+title: Organizing data analyses with Rake
+date: 2016-04-02
+categories: 
+-
+tags: 
+- dummy-tags-should-be-replaced
+author: 
+excerpt: 
+---
+
+<div id="outline-container-orgheadline1" class="outline-2">
+<h2 id="orgheadline1">Organizing a data analysis is hard</h2>
+<div class="outline-text-2" id="text-orgheadline1">
+<p>
+Organizing data analysis is hard. Here's a couple reasons it gets
+tricky:
+</p>
+
+<dl class="org-dl">
+<dt>You have thousands of files</dt><dd>You can work with a single CSV file
+by hand. Maybe you could do a dozen, but you're not going to be
+able to keep track of thousands of files. You can't even count
+them without some sort of tool.</dd>
+<dt>Data collection is ongoing</dt><dd>Not only do you have a bunch of
+files, but you keep getting more. Somehow you need to keep
+everything up-to-date with the latest data dump.</dd>
+<dt>You want to be reproducible</dt><dd>You'd like anybody to be able to
+download your analysis and run it on their machine.
+Unfortunately, running it on your machine is often an ordeal.</dd>
+</dl>
+
+<p>
+Fortunately, there's a solution for all of these problems. You
+should use a tool called rake.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline2" class="outline-2">
+<h2 id="orgheadline2">What is Rake?</h2>
+<div class="outline-text-2" id="text-orgheadline2">
+<p>
+Rake is a build utility; build utilities were originally designed to
+automate the process of compiling code from source. You can
+generalize the process to simply updating files based upon
+dependencies.
+</p>
+
+<p>
+Let's look at how rake address the problems with organizing data analysis
+</p>
+
+<dl class="org-dl">
+<dt>You have thousands of files</dt><dd>No problem, you can handle
+everything programmatically. Rake will handle the tedious stuff.</dd>
+<dt>Data collection is ongoing</dt><dd>Once your workflow is defined,
+processing new data doesn't require anything more than typing a
+single rake command into your shell. If you want to get really
+fancy, you don't even have to type it, you can automate the
+process using a chron job.</dd>
+<dt>You want to be reproducible</dt><dd>Rake doesn't work well if you're
+not explicit about your workflow. The benefit of this is that,
+if it runs, it's probably reproducible (assuming you dealt with
+stuff like seeding your PRNG).</dd>
+</dl>
+
+<p>
+I use rake for all of my projects. Perhaps the most useful is my
+work on neuroscience data. I need to manage a bunch of brain
+recordings, preprocess them, and then run some analysis. The lab
+manages this process by hand and it takes up a lot of their time. My
+system is automated, so whenever I update my methods or get new data
+it's a simple matter of typing one command and then coming back a
+couple minutes (or hours depending) later to look at the results.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline3" class="outline-2">
+<h2 id="orgheadline3">An example</h2>
+<div class="outline-text-2" id="text-orgheadline3">
+<p>
+To see how rake works, it's best to look at an example. Let's work
+with <a href="https://www.ssa.gov/oact/babynames/limits.html">baby name data from the SSA</a>. The SSA, by virtue of issuing
+social security cards, has a list of baby names for each year. What
+we want to do is look at the number of babies with a particular name
+plotted over time. Are certain names getting more or less popular?
+How many kids are named Elvis?
+</p>
+
+<p>
+Rake requires that you have a specific file in your project
+directory named "Rakefile". This is where you specify your workflow.
+So let's walk through an example Rakefile.
+</p>
+</div>
+
+<div id="outline-container-orgheadline4" class="outline-3">
+<h3 id="orgheadline4">Step 1</h3>
+<div class="outline-text-3" id="text-orgheadline4">
+<p>
+Our first step is downloading the data from the SSA's website. We
+can achieve this with the following entry in our Rakefile.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-ruby">file <span style="color: #61CE3C;">"data/raw/names.zip"</span> =&gt; [] <span style="color: #4c83ff;">do</span> |t|
+  mkdir_p <span style="color: #61CE3C;">"data/raw"</span>
+  sh <span style="color: #61CE3C;">"wget https://www.ssa.gov/oact/babynames/names.zip -O data/raw/names.zip"</span>
+<span style="color: #4c83ff;">end</span>
+</pre>
+</div>
+
+<p>
+The <i>file</i> at the start indicates that I'm denoting a file task
+(we'll get to the other types). /"names.zip"/ is the file that I'm
+creating, the "<i>=&gt; []</i>" syntax is used to express dependencies
+(more on that later). The code included within the <i>do-end</i> block
+is the action I take to create my file, namely make the directory
+and download the file from the SSA website. You can use any ruby
+command within the block; here I use the built-in system tools to
+make the "data/raw" directory and then run my shell command.
+</p>
+
+<p>
+To execute this I simply run "rake data/raw/names.zip" in the same
+directory as my Rakefile. Note that once the file has been created,
+nothing happens when I repeat the command. The only time that rake
+executes a task is when the target doesn't exist or one of its
+dependencies is newer than the existing target file. You'll never
+repeat unnecessary work.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline5" class="outline-3">
+<h3 id="orgheadline5">Step 2</h3>
+<div class="outline-text-3" id="text-orgheadline5">
+<p>
+The zip file that I've downloaded contains a bunch of text files of
+the form /yob****.txt" which contain the names data for a certain
+year. To extract these I can make a task
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-ruby">directory <span style="color: #61CE3C;">"data/processed"</span>
+
+yob_files = <span style="color: #afd8af;">FileList</span>[(1880..2014).map{|year| <span style="color: #61CE3C;">"data/processed/yob</span><span style="color: #ff69b4;">#{year}</span><span style="color: #61CE3C;">.txt"</span>}]
+
+yob_files.each <span style="color: #4c83ff;">do</span> |yob_file|
+  file yob_file =&gt; [<span style="color: #61CE3C;">"data/raw/names.zip"</span>, <span style="color: #61CE3C;">"data/processed"</span>] <span style="color: #4c83ff;">do</span> |t|
+    sh <span style="color: #61CE3C;">"unzip -DD data/raw/names.zip -d data/processed"</span>
+  <span style="color: #4c83ff;">end</span>
+<span style="color: #4c83ff;">end</span>
+</pre>
+</div>
+
+<p>
+The first thing that I do is define a directory task.
+</p>
+
+<p>
+We then make a list of all of the text files we want to extract.
+Here we make this list by taking each year between 1880 and 2014
+and mapping it to the relevent file name. We then store it as a
+FileList, a structure which is simply a list of filenames which
+have some nice methods defined on it for ease of use.
+</p>
+
+<p>
+We then iterate through this list of filenames and make file tasks
+for each one. The body is the same for each, running <i>unzip</i> on the
+zip file.
+</p>
+
+<p>
+When we run rake, the zip file will only be unzipped once since
+rake checks to see if a task is necessary before running. Remember,
+a task only runs if the target doesn't exist or one of its
+dependencies is newer than the existing target file. Note that we
+need to make sure the timestamps work out by using the "-DD" flag,
+otherwise the timestamps for our unzipped files will be behind the
+timestamp of the zipped file.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline6" class="outline-3">
+<h3 id="orgheadline6">Step 3</h3>
+<div class="outline-text-3" id="text-orgheadline6">
+<p>
+Working with all of the txt files is going to be painful. So our
+next step is consolidate them into a single csv file.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-ruby">file <span style="color: #61CE3C;">"data/single-file.csv"</span> =&gt; [*yob_files, <span style="color: #61CE3C;">"code/make-single-file.R"</span>] <span style="color: #4c83ff;">do</span> |t|
+  sh <span style="color: #61CE3C;">"Rscript code/make-single-file.R --outfile </span><span style="color: #ff69b4;">#{t.name}</span><span style="color: #61CE3C;"> --yob_files </span><span style="color: #ff69b4;">#{yob_files}</span><span style="color: #61CE3C;">"</span>
+<span style="color: #4c83ff;">end</span>
+</pre>
+</div>
+
+<p>
+Now that we've gotten used to the syntax, this step is fairly
+self-explanatory. 
+</p>
+
+<p>
+Passing arguments to R is a little different though. You definitely
+want to make use of the argparse package. Otherwise, parsing the
+command line options in the above script is difficult since the
+number of txt files is variable.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline7" class="outline-3">
+<h3 id="orgheadline7">Step 4</h3>
+<div class="outline-text-3" id="text-orgheadline7">
+<p>
+Now for the final product. We want to make some graphs.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-ruby"><span style="color: #4c83ff;">def</span> <span style="color: #ff1493;">make_plot</span>(name, sex, outfile)
+  dir = directory outfile.pathmap(<span style="color: #61CE3C;">"%d"</span>)
+  file outfile =&gt; [<span style="color: #61CE3C;">"code/plot-name-by-year.R"</span>, <span style="color: #61CE3C;">"data/single-file.csv"</span>, dir] <span style="color: #4c83ff;">do</span> |t|
+    sh <span style="color: #61CE3C;">"Rscript code/plot-name-by-year.R --name </span><span style="color: #ff69b4;">#{name}</span><span style="color: #61CE3C;"> --sex </span><span style="color: #ff69b4;">#{sex}</span><span style="color: #61CE3C;"> --infile data/single-file.csv --outfile </span><span style="color: #ff69b4;">#{outfile}</span><span style="color: #61CE3C;">"</span>
+  <span style="color: #4c83ff;">end</span>
+  multitask <span style="color: #96CBFE;">:make_plots</span> =&gt; outfile
+<span style="color: #4c83ff;">end</span>
+
+make_plot(<span style="color: #61CE3C;">"Amelia"</span>, <span style="color: #61CE3C;">"F"</span>, <span style="color: #61CE3C;">"figs/amelia.pdf"</span>)
+make_plot(<span style="color: #61CE3C;">"Elvis"</span>, <span style="color: #61CE3C;">"M"</span>, <span style="color: #61CE3C;">"figs/elvis.pdf"</span>)
+make_plot(<span style="color: #61CE3C;">"John"</span>, <span style="color: #61CE3C;">"M"</span>, <span style="color: #61CE3C;">"figs/john.pdf"</span>)
+</pre>
+</div>
+
+<p>
+We have full use of the ruby language, so we can define functions.
+This saves us a lot of copy-and-pasting.
+</p>
+
+<p>
+We also can run our tasks in parallel. The multitask token
+indicates a task which can be done in parallel. This speeds things
+up considerably.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline8" class="outline-3">
+<h3 id="orgheadline8">End Result</h3>
+<div class="outline-text-3" id="text-orgheadline8">
+<p>
+Anybody can replicate our figures just by downloading our source
+code and running the following command.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh">rake make_plots
+</pre>
+</div>
+
+<p>
+Then rake will download the file, do the pre-processing, and make
+the figures (in parallel) automatically. It's great.
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline9" class="outline-2">
+<h2 id="orgheadline9">A word of caution</h2>
+<div class="outline-text-2" id="text-orgheadline9">
+<p>
+If you've read this far down, you're probably interested in using
+rake in your own work. Let me warn you about something.
+</p>
+
+<p>
+This is very much a tool for managing <b>your</b> computational flow.
+There's the definite potential for things to spiral out of control
+when you start collaborating with others. Here's a short list of
+potential problems and solutions.
+</p>
+
+<ul class="org-ul">
+<li><p>
+Your collaborator doesn't know ruby
+</p>
+
+<p>
+This is fairly common; ruby is not a standard stats/math language.
+For people who don't find learning languages fun, there's little
+reason to have heard of ruby, let alone have learned how to use
+it.
+</p>
+
+<p>
+Fortunately it's not too hard to teach them the basic syntax
+required to make simple tasks (it's just as easy as Make). You
+should take the lead on anything complex.
+</p></li>
+
+<li><p>
+You have incompatable systems / packages
+</p>
+
+<p>
+This happened to me when a munging script that worked perfectly
+fine on my machine started spewing errors on my collaborators
+machine. It took me longer than I'd like to publicly admit to
+realize that the problem was that on my machine the command
+<code>python</code> refers to <code>python3</code> while on his machine it refers to
+<code>python2</code>.
+</p>
+
+<p>
+This is easy fixed by making sure you have the same packages on
+all machines. Or if some machines can't run certain programs
+(ahem, matlab) then just work around it as much as you can.
+</p></li>
+
+<li><p>
+Your collaborator doesn't use the command line
+</p>
+
+<p>
+View this as an opportunity; you can initiate them into the
+mysteries of the command line.
+</p></li>
+
+<li><p>
+Your collaborator doesn't use Linux
+</p>
+
+<p>
+This is the worst case scenario. My understanding is that you
+should be mostly ok with OS X. Windows seems like it would be a
+nightmare (but maybe it'll work now that <a href="https://linux.slashdot.org/story/16/03/30/1021224/confirmed-microsoft-and-canonical-partner-to-bring-ubuntu-to-windows-10">bash is coming to
+Windows</a>). I haven't really dealt with this, but the solution is
+obvious: "borrow" their machine and install linux. Eventually
+they'll come around and thank you.
+</p></li>
+</ul>
+</div>
+</div>
