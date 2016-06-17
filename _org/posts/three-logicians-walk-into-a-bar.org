@@ -3,7 +3,8 @@
 #+DATE: 2016-06-16
 #+TITLE: Three logicians walk into a bar
 #+DESCRIPTION: I interpret a simple question very literally. It causes some problems.
-#+CATEGORIES: logic, fun
+#+CATEGORIES:  
+#+commentIssueId: 2
 
 #+BEGIN_QUOTE
 Attention Conservation Notice: Logic joke with explanation; you had to
