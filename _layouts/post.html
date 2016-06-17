@@ -22,7 +22,7 @@ layout: default
   </div>
 </div>
 
-<script type="text/javascript" src="http://datejs.googlecode.com/svn/trunk/build/date-en-US.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/datejs/1.0/date.min.js"></script>
 
 <script type="text/javascript">
 
@@ -36,14 +36,14 @@ layout: default
       var cdate = Date.parse(data[i].created_at).toString("yyyy-MM-dd HH:mm:ss");
 
       $("#comments").append("<div class='comment'><div class='commentheader'><div class='commentgravatar'>" + '<img src="' + cavatarlink + '" alt="" width="20" height="20">' + "</div><a class='commentuser' href=\""+ cuserlink + "\">" + cuser + "</a><a class='commentdate' href=\"" + clink + "\">" + cdate + "</a></div><div class='commentbody'>" + cbody + "</div></div>");
-      }
     }
+  }
 
   $.ajax("https://api.github.com/repos/minimallysufficient/minimallysufficient.github.io/issues/{{page.commentIssueId}}/comments?per_page=100", {
     headers: {Accept: "application/vnd.github.full+json"},
     dataType: "json",
     success: function(msg){
       loadComments(msg);
-   }
+    }
   });
 </script>
