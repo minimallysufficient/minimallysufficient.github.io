@@ -2,8 +2,9 @@
 #+LAYOUT: post
 #+DATE: 2015-01-24
 #+TITLE: The Normative Power of RStudio
-#+DESCRIPTION:
-#+CATEGORIES:
+#+DESCRIPTION:  
+#+CATEGORIES:   
+#+commentissueid: 6
 
 #+HTML_MATHJAX: align:"center"
 #+OPTIONS: toc:nil num:nil todo:nil

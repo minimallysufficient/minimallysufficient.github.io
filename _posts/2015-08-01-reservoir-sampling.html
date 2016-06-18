@@ -1,13 +1,108 @@
 ---
-layout: post
-title: Reservoir Sampling
 date: 2015-08-01
-categories: 
--
 tags: 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
 - dummy-tags-should-be-replaced
 author: 
-excerpt: 
+layout: post
+title: Reservoir Sampling
+excerpt:  
+categories: 
+-
+commentissueid: 10
 ---
 
 <div id="outline-container-orgheadline1" class="outline-2">
@@ -82,7 +177,7 @@ We'll only work out the math for the case where \(i >
 </p>
 
 <p>
-\($  \Pr(i \in S) = \Pr(\text{$i$ is selected})\Pr(\text{$i$ is not replaced} \mid \text{$i$ is selected}) $\)
+\[  \Pr(i \in S) = \Pr(\text{$i$ is selected})\Pr(\text{$i$ is not replaced} \mid \text{$i$ is selected}) \]
 </p>
 
 <p>
@@ -96,7 +191,7 @@ probability for this is the product
 </p>
 
 <p>
-\($ \Pr(\text{$i$ is not replaced by $i + 1$}) \Pr(\text{$i$ is not replaced by $i + 2$} \mid \text{$i$ is not replaced before $i + 2$}) \dots \Pr(\text{$i$ is not replaced by $N$} \mid \text{$i$ is not replaced before $N$}) $\)
+\[ \Pr(\text{$i$ is not replaced by $i + 1$}) \Pr(\text{$i$ is not replaced by $i + 2$} \mid \text{$i$ is not replaced before $i + 2$}) \dots \Pr(\text{$i$ is not replaced by $N$} \mid \text{$i$ is not replaced before $N$}) \]
 </p>
 
 <p>
@@ -104,7 +199,7 @@ where each term is just
 </p>
 
 <p>
-\($ \Pr(\text{$i$ is not replaced by $j$} \mid \text{$i$ is not replaced before $j$}) = \frac{j-1}{j} $\)
+\[ \Pr(\text{$i$ is not replaced by $j$} \mid \text{$i$ is not replaced before $j$}) = \frac{j-1}{j} \]
 </p>
 
 <p>
@@ -112,7 +207,7 @@ and thus the product is simply
 </p>
 
 <p>
-\($ \frac{i}{i+1} \times \frac{i+1}{i+2} \times \dots  \times \frac{N -1}{N} = \frac{i}{N} $\)
+\[ \frac{i}{i+1} \times \frac{i+1}{i+2} \times \dots  \times \frac{N -1}{N} = \frac{i}{N} \]
 </p>
 
 <p>
@@ -120,8 +215,8 @@ Combining these two parts.
 </p>
 
 <p>
-\($  \Pr(i \in S) = \Pr(\text{$i$ is selected})\Pr(\text{$i$ is not replaced} \mid \text{$i$ is selected}) 
-  = \left(\frac{n}{i}\right)\left(\frac{i}{N}\right) = \frac{n}{N} $\)
+\[  \Pr(i \in S) = \Pr(\text{$i$ is selected})\Pr(\text{$i$ is not replaced} \mid \text{$i$ is selected}) 
+  = \left(\frac{n}{i}\right)\left(\frac{i}{N}\right) = \frac{n}{N} \]
 </p>
 
 <p>
@@ -224,7 +319,7 @@ element \(k+1\)
 </p>
 
 <p>
-\($ \Pr_{k+1}(i \in S, k+1 \in S) = \Pr_{k}(i) \times \Pr(\text{$k+1$ is selected but does not replace $i$}) = \frac{n}{k} \times \frac{n-1}{k+1} $\)
+\[ \Pr_{k+1}(i \in S, k+1 \in S) = \Pr_{k}(i) \times \Pr(\text{$k+1$ is selected but does not replace $i$}) = \frac{n}{k} \times \frac{n-1}{k+1} \]
 </p>
 
 <p>
@@ -232,7 +327,7 @@ and the second  in which \(i\) and \(j\) are both less than \(k+1\).
 </p>
 
 <p>
-\($ \Pr_{k+1}(i \in S, j \in S) = \Pr_{k}(i, j) \times \Pr(\text{neither $i$ or $j$ are replaced}) = \Pr_{k}(i, j) \times \frac{(k+1)-2}{k+1}$\)
+\[ \Pr_{k+1}(i \in S, j \in S) = \Pr_{k}(i, j) \times \Pr(\text{neither $i$ or $j$ are replaced}) = \Pr_{k}(i, j) \times \frac{(k+1)-2}{k+1}\]
 </p>
 
 <p>
@@ -240,7 +335,7 @@ and because \(\Pr_{k}(i,j)\) are all equal, it must be equal to \(\frac{n(n-1)}{
 </p>
 
 <p>
-\($ \Pr_{k+1}(i \in S, j \in S) = \Pr_{k}(i, j) \times \frac{(k+1)-2}{k+1} = \frac{n}{k} \times \frac{n-1}{k+1} $\)
+\[ \Pr_{k+1}(i \in S, j \in S) = \Pr_{k}(i, j) \times \frac{(k+1)-2}{k+1} = \frac{n}{k} \times \frac{n-1}{k+1} \]
 </p>
 
 <p>

@@ -2,8 +2,9 @@
 #+LAYOUT: post
 #+DATE: 2016-03-04
 #+TITLE: Azure ML and the future of data science
-#+DESCRIPTION:
-#+CATEGORIES:
+#+DESCRIPTION:  
+#+CATEGORIES:  
+#+commentissueid: 20
 
 I attended a demo/sales pitch for [[https://studio.azureml.net/][Azure Machine Learning Studio]] (AMLS)
 at the Pittsburgh useR meetup this week. Unfortunately, I, along with

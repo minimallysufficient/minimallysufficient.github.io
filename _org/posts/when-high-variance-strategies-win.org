@@ -2,8 +2,9 @@
 #+LAYOUT: post
 #+DATE: 2016-01-17
 #+TITLE: When high variance strategies win
-#+DESCRIPTION:
-#+CATEGORIES:
+#+DESCRIPTION:  
+#+CATEGORIES:  
+#+commentissueid: 17
 
 Over the holidays I find myself playing lots of board and card games.
 This year I ended up playing several games of [[https://en.wikipedia.org/wiki/Wizard_(card_game)][Wizard]]. It's a

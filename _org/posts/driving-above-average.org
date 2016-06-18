@@ -2,8 +2,9 @@
 #+LAYOUT: post
 #+DATE: 2016-03-18
 #+TITLE: Driving Above Average
-#+DESCRIPTION:
-#+CATEGORIES:
+#+DESCRIPTION:  
+#+CATEGORIES:  
+#+commentissueid: 21
 
 At lunch my friend stated that "Most people are so arrogant; they
 think they're better than the average driver". As a stats nerd I

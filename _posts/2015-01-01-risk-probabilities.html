@@ -1,13 +1,107 @@
 ---
-layout: post
-title: Risk (board game) Probabilities
 date: 2015-01-01
-categories: 
--
 tags: 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
 - dummy-tags-should-be-replaced
 author: 
-excerpt: 
+layout: post
+title: Risk (board game) Probabilities
+excerpt:  
+categories: 
+-
+commentissueid: 4
 ---
 
 <div id="outline-container-orgheadline1" class="outline-2">
@@ -80,8 +174,8 @@ research for this post I found this <a href="http://www4.stat.ncsu.edu/~jaosborn
 </p>
 
 <p>
-The idea is that a battle is a Markov chain with states \($ \{(A,D) :
-  A \in \mathbb{Z}, D \in \mathbb{Z} \}$\) which represent the number of
+The idea is that a battle is a Markov chain with states \[ \{(A,D) :
+  A \in \mathbb{Z}, D \in \mathbb{Z} \}\] which represent the number of
 armies of the attacker and defender respectively. While both
 attacker and defender have armies the chain progresses through the
 states until it eventually hits an absorbing state \((A, 0)\) in which
@@ -127,7 +221,7 @@ Let's just use the following recursion.
 </p>
 
 <p>
-\($ p(A, D) = \sum_{l=0}^{A} t(l, \min(A, 3), \min(D, 2)) \times p(A - l, D - (n - l)) $\)
+\[ p(A, D) = \sum_{l=0}^{A} t(l, \min(A, 3), \min(D, 2)) \times p(A - l, D - (n - l)) \]
 </p>
 
 <p>
@@ -143,7 +237,7 @@ it's a sure win for the attacker, thus
 </p>
 
 <p>
-\($ p(A, 0) = 1 $\) 
+\[ p(A, 0) = 1 \] 
 </p>
 
 <p>
@@ -151,7 +245,7 @@ Likewise if the attacker has no armies then it's a sure loss.
 </p>
 
 <p>
-\($ p(0, D) = 0 $\)
+\[ p(0, D) = 0 \]
 </p>
 
 <p>

@@ -2,8 +2,9 @@
 #+LAYOUT: post
 #+DATE: 2015-01-11
 #+TITLE: Time Tracking with TagTime
-#+DESCRIPTION:
-#+CATEGORIES:
+#+DESCRIPTION:  
+#+CATEGORIES:  
+#+commentissueid: 5
 
 This semester I'll experimenting with an app called TagTime to track
 how I spend my time.

@@ -1,13 +1,113 @@
 ---
-layout: post
-title: March Madness Prediction
 date: 2015-03-21
-categories: 
--
 tags: 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
 - dummy-tags-should-be-replaced
 author: 
-excerpt: 
+layout: post
+title: March Madness Prediction
+excerpt:  
+categories: 
+-
+commentissueid: 8
 ---
 <p>
 I generally don't invest much time exploring the connections between
@@ -26,7 +126,7 @@ Terry model. The general idea is that each team is assigned a score,
 </p>
 
 <p>
-\($ \frac{\lambda_{i}}{\lambda_{i} + \lambda_{j}} $\)
+\[ \frac{\lambda_{i}}{\lambda_{i} + \lambda_{j}} \]
 </p>
 
 <p>
@@ -69,7 +169,7 @@ winning. Using the properties of exponentials we see that
 </p>
 
 <p>
-\($ \Pr(Y_{ki} > Y_{kj}) = \frac{\lambda_{i}}{\lambda_{i} + \lambda_{j}} $\)
+\[ \Pr(Y_{ki} > Y_{kj}) = \frac{\lambda_{i}}{\lambda_{i} + \lambda_{j}} \]
 </p>
 
 <p>
@@ -77,7 +177,7 @@ we then introduce the latent variable
 </p>
 
 <p>
-\($ Z_{ij} = \sum_{k=1}^{n_{ij}} \min(Y_{kj}, Y_{ki}) $\) 
+\[ Z_{ij} = \sum_{k=1}^{n_{ij}} \min(Y_{kj}, Y_{ki}) \] 
 </p>
 
 <p>
@@ -93,8 +193,8 @@ can create a nice Gibbs sampler with the following conditionals.
 </p>
 
 <p>
-\($ Z_{ij} | D, \lambda \sim \text{Gamma}(n_{ij}, \lambda_{i} + \lambda_{j}) $\)
-\($ \lambda_{i} \mid D, Z \sim \text{Gamma}(a + w_{i}, b + \sum_{i < j} Z_{ij} + \sum_{j < i} Z_{ji}) $\)
+\[ Z_{ij} | D, \lambda \sim \text{Gamma}(n_{ij}, \lambda_{i} + \lambda_{j}) \]
+\[ \lambda_{i} \mid D, Z \sim \text{Gamma}(a + w_{i}, b + \sum_{i < j} Z_{ij} + \sum_{j < i} Z_{ji}) \]
 </p>
 
 <p>

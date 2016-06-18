@@ -2,8 +2,9 @@
 #+LAYOUT: post
 #+DATE: 2015-10-24
 #+TITLE: Org-mode as an alternative to knitr
-#+DESCRIPTION:
-#+CATEGORIES:
+#+DESCRIPTION:  
+#+CATEGORIES:  
+#+commentissueid: 14
 
 Using ski ratings, I would classify knitr as a Blue Square. It's great
 for beginners and experts alike, balancing excitement and

@@ -2,8 +2,9 @@
 #+LAYOUT: post
 #+DATE: 2015-01-01
 #+TITLE: Data Splitting
-#+DESCRIPTION:
-#+CATEGORIES:
+#+DESCRIPTION:  
+#+CATEGORIES:  
+#+commentissueid: 3
 
 * A quick review of p-values
   Feel free to skip to the next section if you're already familiar
@@ -214,8 +215,6 @@
 
   #+RESULTS:
   [[file:img/data-splitting.png]]
-
-
   
   Looking at a histogram of the p-values we can clearly see from the
   top plot that the data splitting p-values have the correct

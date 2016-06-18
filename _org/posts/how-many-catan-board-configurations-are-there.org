@@ -2,8 +2,9 @@
 #+LAYOUT: post
 #+DATE: 2016-01-24
 #+TITLE: How many Catan board configurations are there?
-#+DESCRIPTION:
-#+CATEGORIES:
+#+DESCRIPTION:  
+#+CATEGORIES:  
+#+commentissueid: 18
 
 Recently I played Settlers of Catan and, as you do, got into a
 discussion about combinatorics. We were debating how to answer this

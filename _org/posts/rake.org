@@ -2,9 +2,9 @@
 #+LAYOUT: post
 #+DATE: 2016-04-02
 #+TITLE: Organizing data analyses with Rake
-#+DESCRIPTION:
-#+CATEGORIES:
-#+OPTIONS: toc:nil num:nil
+#+DESCRIPTION:  
+#+CATEGORIES:  
+#+commentissueid: 22
 
 * Organizing a data analysis is hard
   Organizing data analysis is hard. Here's a couple reasons it gets

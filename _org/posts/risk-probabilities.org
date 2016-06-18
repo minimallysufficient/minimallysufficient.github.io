@@ -2,8 +2,9 @@
 #+LAYOUT: post
 #+DATE: 2015-01-01
 #+TITLE: Risk (board game) Probabilities
-#+DESCRIPTION:
-#+CATEGORIES:
+#+DESCRIPTION:  
+#+CATEGORIES:  
+#+commentissueid: 4
 
 * DONE Setup
   I was playing Risk over the holidays and it occurred to me that I can

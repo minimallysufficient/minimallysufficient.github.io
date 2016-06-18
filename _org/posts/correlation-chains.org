@@ -4,6 +4,7 @@
 #+TITLE: Correlation Chains
 #+DESCRIPTION: I investigate SMBC's novel correlation-chain methodology.
 #+CATEGORIES: statistics, comics
+#+commentissueid: 23
 
 #+BEGIN_SRC R :session corr_chains :exports none
   library(plyr)
