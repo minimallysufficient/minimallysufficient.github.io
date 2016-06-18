@@ -76,8 +76,8 @@ I'll leave it to the reader to figure out the connection with the joke.
 [fn:confused] Yes, I basically wrote this up to explain a joke to my father
 [fn:fine] I didn't think of this until writing this up, but there's an
 unwarranted assumption lurking here. As a family, we've empirically
-shown that the fact that a book is sitting on myself does not prevent
-other family members from buying the same book. Thus, even if I had a
-copy, I still couldn't be certain that my father had borrow it; he
-might have just bought it himself. There are, of course, no end to
-these sorts of quibbles (see [[https://en.wikipedia.org/wiki/Philosophical_skepticism][philosophical skepticism]]).
+shown that the fact that a book is sitting on my shelf does not
+prevent other family members from buying the same book. Thus, even if
+I had a copy, I still couldn't be certain that my father had borrowed
+it; he might have just bought it himself. There are, of course, no end
+to these sorts of quibbles (see [[https://en.wikipedia.org/wiki/Philosophical_skepticism][philosophical skepticism]]).
