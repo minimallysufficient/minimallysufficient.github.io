@@ -1,19 +1,13 @@
 ---
 date: 2016-06-26
 tags: 
-- 
-- 
-- 
-- 
-- 
-- 
 - dummy-tags-should-be-replaced
 author: 
 layout: post
 title: Failure? of Brexit Predictions
+excerpt:  
 categories: 
 -
-excerpt:  
 commentissueid: 23
 ---
 <p>
@@ -58,11 +52,22 @@ unlucky. So what can I do?
 In <a href="https://www.amazon.com/Signal-Noise-Many-Predictions-Fail-but/dp/0143125087">Signal and the Noise</a> Nate Silver argues that the best way to judge
 a forecaster's accuracy is calibration. Do the events that they
 predict will happen X% of the time actually occur about X% of the
-time?
+time? 
 </p>
 
+<blockquote>
 <p>
-I don't find calibration particularly compelling.
+"One of the most important tests of a forecast — I would argue that it
+is the single most important one — is called calibration. Out of all
+the times you said there was a 40 percent chance of rain, how often
+did rain actually occur? If over the long run, it really did rain
+about 40 percent of the time, that means your forecasts were well
+calibrated." <a href="https://www.amazon.com/Signal-Noise-Many-Predictions-Fail-but/dp/0143125087">Nate Silver, Signal and the Noise</a>
+</p>
+</blockquote>
+
+<p>
+I don't find calibration nearly as compelling.
 </p>
 
 <p>
@@ -71,12 +76,32 @@ elections; the sequence is [Rep, Rep, Dem, Dem, Rep, Rep, Dem, Dem].
 </p>
 
 <p>
-Suppose I gave a 50% chance to a Republican victory in each election.
-I'm perfectly calibrated on this data. But now consider my
-non-paradox-inducing-time-traveller self who gives the following
-sequence of predictions for a Republican victory [1, 1, 0, 0, 1, 1, 0,
-0]; that prediction is a whole lot more useful, but no more calibrated
-than my uninformed prediction.
+Suppose I gave a 50% chance to a Republican victory in each election
+because that seems to be roughly the base rate. I'm perfectly
+calibrated on this data.
+</p>
+
+<p>
+But now consider my non-paradox-inducing-time-traveller self who gives
+the following sequence of predictions for a Republican victory [1, 1,
+0, 0, 1, 1, 0, 0]; that prediction is a whole lot more useful, but no
+more calibrated than my uninformed prediction.
+</p>
+
+<p>
+Now, consider that my time-traveller self can't outright tell me the
+future (for fear of a paradox) so he rolls a d20 and on a 1 he lies to
+me about the outcome; my prediction now becomes [0.95, 0.95, 0.05,
+0.05, 0.05, 0.95, 0.05, 0.05]. That's going to be uncalibrated, but
+seems a lot better than my base rate prediction.
+</p>
+
+<p>
+From this we see that calibration can't distinguish between useful
+(time-traveller) and non-useful (base rate) calibrated predictions and
+it punishes useful, but poorly calibrated (d20) predictions. So, while
+it's nice to be calibrated, we should look a little harder for a way
+to test our forecasts.
 </p>
 </div>
 </div>
@@ -133,26 +158,44 @@ season when more information is available.
 <div class="outline-text-2" id="text-orgheadline3">
 <p>
 So it seems that just by looking at predictions we're going to have a
-hard time judging predictions. So what if take a different approach
+hard time judging forecasters. So what if take a different approach
 and try creating a process which we trust will give us the best
 available probabilities. This might result in something like
 prediction markets.
 </p>
 
 <p>
-Our hope is that the efficient-market hypothesis holds: the prices of
-assets in a market already reflects the available information. There
-are a couple variants, but the most realistic formulation states that
-there's no way to consistently outperform on the market prediction
-without possessing new information. Indeed, a key feature of markets
-is that they provide encouragement for participants to make the market
-efficient. The idea is that if you can outperform the market you'll
-eventually change the market so that your advantage disappears.
+Our hope is that the Efficient-Market Hypothesis (EMH) holds: the
+prices of assets in a market already reflects the available
+information. There are a couple variants, but the most realistic
+formulation states that there's no way to consistently outperform on
+the market prediction without possessing new information. Indeed, a
+key feature of markets is that they provide encouragement for
+participants to make the market efficient. The idea is that if you can
+outperform the market you'll eventually change the market so that your
+advantage disappears.
 </p>
 
 <p>
 That's the theory anyways. I'm not particularly sure how to quantify
-or test this.
+or test this. I certainly act as if the EMH is true for the stock
+market (and thus I can't make money), but I doubt that it's true in
+currently existing prediction markets. A big reason is that they're
+just far too small-stakes. Byzantine (and archaic, I might add)
+"gambling" regulations mean that the US-based prediction markets like
+<a href="http://tippie.uiowa.edu/iem/">Iowa Electronic Markets</a> or <a href="https://www.predictit.org/">PredictIt</a> have caps on the amount of money
+you can wager. The other market is <a href="https://betting.betfair.com/politics/">Betfair</a>, but even there the volume
+is minuscule compared to other markets such as currency market.
+</p>
+
+<p>
+There's also the issue of the usual set of cognitive biases. Given
+known phenomenon like <a href="https://en.wikipedia.org/wiki/Anchoring">anchoring</a>, <a href="https://en.wikipedia.org/wiki/Availability_heuristic">availability bias</a>, <a href="https://en.wikipedia.org/wiki/Bandwagon_effect">bandwagon effect</a>,
+and the <a href="https://en.wikipedia.org/wiki/Ostrich_effect">ostrich effect</a>, how can we expect markets, made up of
+irrational traders, not to exhibit the same effects? I'm less
+convinced of this; it seems that the logic of the EMH should still
+hold. If the market price is driven by irrational biases, somebody
+should be able to profit by correcting the market.
 </p>
 </div>
 </div>
@@ -217,7 +260,7 @@ If you read my last <a href="http://minimallysufficient.github.io/2016/06/16/thr
 take things a bit literally. I will argue, however, that I'm doing a
 public service by pointing out these imprecisions in language. To
 quote <a href="http://www.orwell.ru/library/essays/politics/english/e_polit/">Orwell</a> again, our language "becomes ugly and inaccurate because
-our thoughts are foolish, but the solvenliness of our language makes
+our thoughts are foolish, but the slovenliness of our language makes
 it easier for us to have foolish thoughts."
 </p></div></div>
 
