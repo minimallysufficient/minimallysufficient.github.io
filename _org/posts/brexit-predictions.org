@@ -4,7 +4,7 @@
 #+TITLE: Failure? of Brexit Predictions
 #+DESCRIPTION:  
 #+CATEGORIES:  
-#+commentissueid: 23
+#+commentissueid: 24
 
 I generally don't follow the news. Thus, when I was asked this week
 how I thought Britain's vote to exit the European Union (aka Brexit)
