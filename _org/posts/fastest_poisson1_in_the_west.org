@@ -1,0 +1,309 @@
+#+OPTIONS: toc:nil num:nil todo:nil
+#+LAYOUT: post
+#+DATE: 2016-06-26
+#+TITLE: The Fastest Poisson(1) in the West
+#+DESCRIPTION:  
+#+CATEGORIES:  
+#+commentissueid: 25
+
+I was optimizing some [[http://www.unofficialgoogledatascience.com/2015/08/an-introduction-to-poisson-bootstrap_26.html][Poisson bootstrap]] code this week.
+Unsurprisingly, it turns out that most of the time was spent drawing
+Poisson random variables. When you've reached the point that your code
+is spending most of its time in the RNG you generally can call it
+quits.
+
+But what if you didn't? What if you could do better?
+
+This isn't as hubristic as you might expect. I only need the $\lambda=1$
+case. Because the library Poisson RNG has to handle various cases of
+\lambda, there should be room to specialize and perhaps save some time.
+Let's find out.
+
+* The Competition
+  Let's start off by scoping out the competition. I'll use julia just
+  because I don't stand a chance with R since I'm actually competing
+  with C in both cases. Interestingly, I'm competing against the same
+  C code since the current version of julia's Distributions package
+  uses RMath library. Let's see how it does.
+  
+  #+BEGIN_SRC julia
+    using Distributions
+    using BenchmarkTools
+
+    function baseline_version()
+        return rand(Poisson(1))
+    end
+
+    @benchmark baseline_version()
+  #+END_SRC
+
+  Julia has a nice [[https://github.com/JuliaCI/BenchmarkTools.jl][BenchmarkTools]] package, so I'll just paste the
+  results verbatim. We're mostly interested in the last four rows with
+  the minimum, median, mean, and maximum times. Obviously lower is
+  better.
+
+  | samples          |                10000 |
+  | evals/sample     |                  983 |
+  | time tolerance   |                5.00% |
+  | memory tolerance |                1.00% |
+  | memory estimate  |           0.00 bytes |
+  | allocs estimate  |                    0 |
+  | minimum time     |  61.00 ns (0.00% GC) |
+  | median time      |  64.00 ns (0.00% GC) |
+  | mean time        |  63.74 ns (0.00% GC) |
+  | maximum time     | 194.00 ns (0.00% GC) |
+
+
+  It is important to note the units for the timings: we're talking
+  nano-seconds. I typically don't bother with optimizing something
+  like this since I'll have to run it 6*10^10 times to make up a minute
+  of programming time. But this is for fun and glory, so I'll do it
+  now.
+  
+  Finally, as a side note, we can do slightly better by removing the
+  initialization of the Poisson distribution.
+
+  #+BEGIN_SRC julia
+    const dist = Poisson(1)
+    function baseline_no_initialization()
+        return rand(dist)
+    end
+
+    @benchmark baseline_no_initialization()
+  #+END_SRC
+
+  | samples          |                10000 |
+  | evals/sample     |                  985 |
+  | time tolerance   |                5.00% |
+  | memory tolerance |                1.00% |
+  | memory estimate  |           0.00 bytes |
+  | allocs estimate  |                    0 |
+  | minimum time     |  56.00 ns (0.00% GC) |
+  | median time      |  58.00 ns (0.00% GC) |
+  | mean time        |  57.89 ns (0.00% GC) |
+  | maximum time     | 107.00 ns (0.00% GC) |
+
+
+  When something like variable initialization starts making a
+  difference you're far too deep into the weeds. But let's gather up
+  our machetes and press forward.
+
+* The First Attempt: What did you expect?
+  So let's try to do this ourselves. We'll start off with the obvious
+  approach: we draw a uniform random variable and invert the cdf. 
+
+  #+BEGIN_SRC julia
+    function inverse_cdf()
+        return quantile(dist, rand())
+    end
+
+    @benchmark inverse_cdf()
+  #+END_SRC
+
+  | samples          |                10000 |
+  | evals/sample     |                  161 |
+  | time tolerance   |                5.00% | 
+  | memory tolerance |                1.00% |
+  | memory estimate  |           0.00 bytes |
+  | allocs estimate  |                    0 |
+  | minimum time     | 643.00 ns (0.00% GC) |
+  | median time      | 706.00 ns (0.00% GC) |
+  | mean time        | 706.15 ns (0.00% GC) |
+  | maximum time     |   1.01 μs (0.00% GC) |
+
+  This is obviously slower; but it'll form a good building block.
+  Let's write our own version.
+
+  #+BEGIN_SRC julia
+    function loop_version()
+        ii = 0
+        u = rand()
+        while u < ccdf(dist, ii)
+            ii += 1
+        end
+        return ii
+    end
+
+    @benchmark loop_version()
+  #+END_SRC
+
+  | samples          |                10000 |
+  | evals/sample     |                  195 |
+  | time tolerance   |                5.00% |
+  | memory tolerance |                1.00% |
+  | memory estimate  |           0.00 bytes |
+  | allocs estimate  |                    0 |
+  | minimum time     | 559.00 ns (0.00% GC) |
+  | median time      | 659.00 ns (0.00% GC) |
+  | mean time        | 662.23 ns (0.00% GC) |
+  | maximum time     | 911.00 ns (0.00% GC) |
+
+  This is smarter than it looks: this is actually performing /almost/
+  binary search. Straightforward binary search works by taking a
+  sorted list and repeatedly testing the middle element. If the
+  target value is equal to the middle element you return; if it's less
+  than you apply binary search to the left side of the array, if it's
+  greater than you apply it to the right. The key insight is that we
+  can split in the array in half and find the value in log(n) time
+  rather than linear time.
+
+  Obviously we have a infinite list of values so something is going to
+  have to be modified (unless you have a good way of determining
+  finding element $\infty/2$). What we do instead is that we test the
+  median element first and then recurse on that.
+
+  Because the tail probabilities decay exponentially, it turns out the
+  binary search progression is exactly the same as linear search
+  except for the beginning, when you should test 1 instead of 0 first.
+  However, when I coded that version up it was slower, so we'll just
+  go in the regular linear order.
+
+  Needless to say, it doesn't matter what order we go in since we're
+  not even in the same ballpark as the baseline. Of course, there's
+  far too much post left for me to have left it at that.
+
+* The Second Attempt: Success
+  Well, it's pretty obvious what's going wrong in the previous
+  example: we're calculating the ccdf function far too often. It
+  doesn't change, so we can move this outside the loop and put it in a
+  lookup table. We have a nice mechanism for doing this that doesn't
+  involve an ugly global constant: [[http://docs.julialang.org/en/release-0.4/manual/metaprogramming/#generated-functions][generated functions]].
+
+  This also leads to the question of how far we should go; I say 100
+  is enough. Technically I'm drawing from a truncated Poisson
+  distribution, but the events this far out have three digits in the
+  exponent so I'm pretty safe.
+  
+  #+BEGIN_SRC julia
+    @generated function loop_cached_version()
+        ccdfs = [[ccdf(dist, ii) for ii in 1:100]; 1.0]
+
+        eval = quote
+            u = rand()
+            ii = 1
+            while u < $ccdfs[ii]
+                ii += 1
+            end
+            return ii - 1
+        end
+
+        return eval
+    end
+
+    @benchmark loop_cached_version()
+  #+END_SRC
+
+  | samples          |               10000 |
+  | evals/sample     |                 996 |
+  | time tolerance   |               5.00% |
+  | memory tolerance |               1.00% |
+  | memory estimate  |          0.00 bytes |
+o | allocs estimate  |                   0 |
+  | minimum time     | 28.00 ns (0.00% GC) |
+  | median time      | 30.00 ns (0.00% GC) |
+  | mean time        | 30.46 ns (0.00% GC) |
+  | maximum time     | 75.00 ns (0.00% GC) |
+
+  I'm pretty pleased with that benchmark.
+
+* Final Attempt: The Alias Method
+  Another approach is to use the Alias method. It turns the linear
+  time loop into a constant time array lookup. Here's a quick
+  implementation based on skimming the [[https://en.wikipedia.org/wiki/Alias_method][Wikipedia article]].
+  
+  #+BEGIN_SRC julia
+    @generated function alias()
+        ## Hacky table generation; you could optimize this better
+        N = 100
+
+        U = [N * pdf(Poisson(1), ii) for ii = 0:(N-1)]
+        K = [-1 for ii = 0:(N-1)]
+
+        for ii = 1:(N-1)
+            ii = indmax(U)
+            jj = findfirst((U .< 1.0) & (K .== -1))
+            K[jj] = ii - 1
+            U[ii] = U[ii] - (1 - U[jj])
+        end
+
+        expr = quote
+            u = rand()
+            ii = floor(Int64, u * $N) + 1
+            yy = $N*u + 1 - ii
+            return yy < $U[ii] ? ii : $K[ii]
+        end
+
+        return expr
+    end
+
+    @benchmark alias()
+  #+END_SRC
+
+  | samples          |               10000 |
+  | evals/sample     |                 977 |
+  | time tolerance   |               5.00% |
+  | memory tolerance |               1.00% |
+  | memory estimate  |         16.00 bytes |
+  | allocs estimate  |                   1 |
+  | minimum time     | 70.00 ns (0.00% GC) |
+  | median time      | 72.00 ns (0.00% GC) |
+  | mean time        | 73.91 ns (1.27% GC) |
+  | maximum time     | 1.66 μs (95.11% GC) |
+
+  I'm actually fairly surprised that this is so slow. I imagine it's
+  the floor function which requires a type conversion (which explains
+  the memory allocation). It could probably be more competitive if you
+  just worked with the bits yourself. So you'd make a table with 128
+  entries and index with the first byte and compare with the rest.
+
+* Further Directions
+  Having mentioned working with bits directly brings up another topic.
+  One problem with all of these method is that it's rather wasteful
+  with its bits. In fact the expected number of bits that we need is
+  just 1.304. So generating 64 bit numbers is doing a lot more work
+  than is necessary.
+
+  To really take advantage of the bits you might try something like a
+  cached implementation. Sketched out it would look something like
+  this:
+
+  #+BEGIN_SRC julia
+    ## This can be tuned for optimal performance
+    _optimal_buffer_length = ??
+
+    type CachedPoisson
+        buffer::Vector{Int}
+        counter::Int
+    end
+
+    function CachedPoisson()
+        buffer = zeros(Int, _optimal_buffer_length)
+        counter = _optimal_buffer_length
+
+        return CachedPoisson(buffer, counter)
+    end
+
+    function rand(::CachedPoisson)
+        dist.counter += 1
+        if dist.counter == _optimal_buffer_length + 1
+            u = rand()
+            ## Code goes here
+            dist.counter = 1
+        end
+        return dist.buffer[dist.counter]
+    end
+  #+END_SRC
+
+  This wrings the most entropy out of the RNG as it can.
+  
+  Doing it this way should be really fast; when the buffer is
+  non-empty you're just doing a buffer lookup and when the buffer is
+  empty you're doing a single random number generation followed by the
+  usual costs of your usual method.
+
+* Conclusion
+  So it seems like you can do a great deal better than the regular
+  Poisson implementation, at least if you can specialize.
+
+  So which of these methods did I end up using? The base
+  implementation of course! 

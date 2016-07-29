@@ -1,0 +1,710 @@
+---
+date: 2016-06-26
+tags: 
+- 
+- dummy-tags-should-be-replaced
+author: 
+layout: post
+title: The Fastest Poisson(1) in the West
+excerpt:  
+categories: 
+-
+commentissueid: 25
+---
+<p>
+I was optimizing some <a href="http://www.unofficialgoogledatascience.com/2015/08/an-introduction-to-poisson-bootstrap_26.html">Poisson bootstrap</a> code this week.
+Unsurprisingly, it turns out that most of the time was spent drawing
+Poisson random variables. When you've reached the point that your code
+is spending most of its time in the RNG you generally can call it
+quits.
+</p>
+
+<p>
+But what if you didn't? What if you could do better?
+</p>
+
+<p>
+This isn't as hubristic as you might expect. I only need the \(\lambda=1\)
+case. Because the library Poisson RNG has to handle various cases of
+&lambda;, there should be room to specialize and perhaps save some time.
+Let's find out.
+</p>
+
+<div id="outline-container-orgheadline1" class="outline-2">
+<h2 id="orgheadline1">The Competition</h2>
+<div class="outline-text-2" id="text-orgheadline1">
+<p>
+Let's start off by scoping out the competition. I'll use julia just
+because I don't stand a chance with R since I'm actually competing
+with C in both cases. Interestingly, I'm competing against the same
+C code since the current version of julia's Distributions package
+uses RMath library. Let's see how it does.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-julia"><span style="color: #4c83ff;">using</span> Distributions
+<span style="color: #4c83ff;">using</span> BenchmarkTools
+
+<span style="color: #4c83ff;">function</span> <span style="color: #ff1493;">baseline_version</span>()
+    <span style="color: #4c83ff;">return</span> rand(Poisson(1))
+<span style="color: #4c83ff;">end</span>
+
+<span style="color: #919191;">@benchmark</span> baseline_version()
+</pre>
+</div>
+
+<p>
+Julia has a nice <a href="https://github.com/JuliaCI/BenchmarkTools.jl">BenchmarkTools</a> package, so I'll just paste the
+results verbatim. We're mostly interested in the last four rows with
+the minimum, median, mean, and maximum times. Obviously lower is
+better.
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">samples</td>
+<td class="org-right">10000</td>
+</tr>
+
+<tr>
+<td class="org-left">evals/sample</td>
+<td class="org-right">983</td>
+</tr>
+
+<tr>
+<td class="org-left">time tolerance</td>
+<td class="org-right">5.00%</td>
+</tr>
+
+<tr>
+<td class="org-left">memory tolerance</td>
+<td class="org-right">1.00%</td>
+</tr>
+
+<tr>
+<td class="org-left">memory estimate</td>
+<td class="org-right">0.00 bytes</td>
+</tr>
+
+<tr>
+<td class="org-left">allocs estimate</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-left">minimum time</td>
+<td class="org-right">61.00 ns (0.00% GC)</td>
+</tr>
+
+<tr>
+<td class="org-left">median time</td>
+<td class="org-right">64.00 ns (0.00% GC)</td>
+</tr>
+
+<tr>
+<td class="org-left">mean time</td>
+<td class="org-right">63.74 ns (0.00% GC)</td>
+</tr>
+
+<tr>
+<td class="org-left">maximum time</td>
+<td class="org-right">194.00 ns (0.00% GC)</td>
+</tr>
+</tbody>
+</table>
+
+
+<p>
+It is important to note the units for the timings: we're talking
+nano-seconds. I typically don't bother with optimizing something
+like this since I'll have to run it 6*10<sup>10</sup> times to make up a minute
+of programming time. But this is for fun and glory, so I'll do it
+now.
+</p>
+
+<p>
+Finally, as a side note, we can do slightly better by removing the
+initialization of the Poisson distribution.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-julia"><span style="color: #4c83ff;">const</span> dist = Poisson(1)
+<span style="color: #4c83ff;">function</span> <span style="color: #ff1493;">baseline_no_initialization</span>()
+    <span style="color: #4c83ff;">return</span> rand(dist)
+<span style="color: #4c83ff;">end</span>
+
+<span style="color: #919191;">@benchmark</span> baseline_no_initialization()
+</pre>
+</div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">samples</td>
+<td class="org-right">10000</td>
+</tr>
+
+<tr>
+<td class="org-left">evals/sample</td>
+<td class="org-right">985</td>
+</tr>
+
+<tr>
+<td class="org-left">time tolerance</td>
+<td class="org-right">5.00%</td>
+</tr>
+
+<tr>
+<td class="org-left">memory tolerance</td>
+<td class="org-right">1.00%</td>
+</tr>
+
+<tr>
+<td class="org-left">memory estimate</td>
+<td class="org-right">0.00 bytes</td>
+</tr>
+
+<tr>
+<td class="org-left">allocs estimate</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-left">minimum time</td>
+<td class="org-right">56.00 ns (0.00% GC)</td>
+</tr>
+
+<tr>
+<td class="org-left">median time</td>
+<td class="org-right">58.00 ns (0.00% GC)</td>
+</tr>
+
+<tr>
+<td class="org-left">mean time</td>
+<td class="org-right">57.89 ns (0.00% GC)</td>
+</tr>
+
+<tr>
+<td class="org-left">maximum time</td>
+<td class="org-right">107.00 ns (0.00% GC)</td>
+</tr>
+</tbody>
+</table>
+
+
+<p>
+When something like variable initialization starts making a
+difference you're far too deep into the weeds. But let's gather up
+our machetes and press forward.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline2" class="outline-2">
+<h2 id="orgheadline2">The First Attempt: What did you expect?</h2>
+<div class="outline-text-2" id="text-orgheadline2">
+<p>
+So let's try to do this ourselves. We'll start off with the obvious
+approach: we draw a uniform random variable and invert the cdf. 
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-julia"><span style="color: #4c83ff;">function</span> <span style="color: #ff1493;">inverse_cdf</span>()
+    <span style="color: #4c83ff;">return</span> quantile(dist, rand())
+<span style="color: #4c83ff;">end</span>
+
+<span style="color: #919191;">@benchmark</span> inverse_cdf()
+</pre>
+</div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">samples</td>
+<td class="org-right">10000</td>
+</tr>
+
+<tr>
+<td class="org-left">evals/sample</td>
+<td class="org-right">161</td>
+</tr>
+
+<tr>
+<td class="org-left">time tolerance</td>
+<td class="org-right">5.00%</td>
+</tr>
+
+<tr>
+<td class="org-left">memory tolerance</td>
+<td class="org-right">1.00%</td>
+</tr>
+
+<tr>
+<td class="org-left">memory estimate</td>
+<td class="org-right">0.00 bytes</td>
+</tr>
+
+<tr>
+<td class="org-left">allocs estimate</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-left">minimum time</td>
+<td class="org-right">643.00 ns (0.00% GC)</td>
+</tr>
+
+<tr>
+<td class="org-left">median time</td>
+<td class="org-right">706.00 ns (0.00% GC)</td>
+</tr>
+
+<tr>
+<td class="org-left">mean time</td>
+<td class="org-right">706.15 ns (0.00% GC)</td>
+</tr>
+
+<tr>
+<td class="org-left">maximum time</td>
+<td class="org-right">1.01 μs (0.00% GC)</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+This is obviously slower; but it'll form a good building block.
+Let's write our own version.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-julia"><span style="color: #4c83ff;">function</span> <span style="color: #ff1493;">loop_version</span>()
+    ii = 0
+    u = rand()
+    <span style="color: #4c83ff;">while</span> u &lt; ccdf(dist, ii)
+        ii += 1
+    <span style="color: #4c83ff;">end</span>
+    <span style="color: #4c83ff;">return</span> ii
+<span style="color: #4c83ff;">end</span>
+
+<span style="color: #919191;">@benchmark</span> loop_version()
+</pre>
+</div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">samples</td>
+<td class="org-right">10000</td>
+</tr>
+
+<tr>
+<td class="org-left">evals/sample</td>
+<td class="org-right">195</td>
+</tr>
+
+<tr>
+<td class="org-left">time tolerance</td>
+<td class="org-right">5.00%</td>
+</tr>
+
+<tr>
+<td class="org-left">memory tolerance</td>
+<td class="org-right">1.00%</td>
+</tr>
+
+<tr>
+<td class="org-left">memory estimate</td>
+<td class="org-right">0.00 bytes</td>
+</tr>
+
+<tr>
+<td class="org-left">allocs estimate</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-left">minimum time</td>
+<td class="org-right">559.00 ns (0.00% GC)</td>
+</tr>
+
+<tr>
+<td class="org-left">median time</td>
+<td class="org-right">659.00 ns (0.00% GC)</td>
+</tr>
+
+<tr>
+<td class="org-left">mean time</td>
+<td class="org-right">662.23 ns (0.00% GC)</td>
+</tr>
+
+<tr>
+<td class="org-left">maximum time</td>
+<td class="org-right">911.00 ns (0.00% GC)</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+This is smarter than it looks: this is actually performing <i>almost</i>
+binary search. Straightforward binary search works by taking a
+sorted list and repeatedly testing the middle element. If the
+target value is equal to the middle element you return; if it's less
+than you apply binary search to the left side of the array, if it's
+greater than you apply it to the right. The key insight is that we
+can split in the array in half and find the value in log(n) time
+rather than linear time.
+</p>
+
+<p>
+Obviously we have a infinite list of values so something is going to
+have to be modified (unless you have a good way of determining
+finding element \(\infty/2\)). What we do instead is that we test the
+median element first and then recurse on that.
+</p>
+
+<p>
+Because the tail probabilities decay exponentially, it turns out the
+binary search progression is exactly the same as linear search
+except for the beginning, when you should test 1 instead of 0 first.
+However, when I coded that version up it was slower, so we'll just
+go in the regular linear order.
+</p>
+
+<p>
+Needless to say, it doesn't matter what order we go in since we're
+not even in the same ballpark as the baseline. Of course, there's
+far too much post left for me to have left it at that.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline3" class="outline-2">
+<h2 id="orgheadline3">The Second Attempt: Success</h2>
+<div class="outline-text-2" id="text-orgheadline3">
+<p>
+Well, it's pretty obvious what's going wrong in the previous
+example: we're calculating the ccdf function far too often. It
+doesn't change, so we can move this outside the loop and put it in a
+lookup table. We have a nice mechanism for doing this that doesn't
+involve an ugly global constant: <a href="http://docs.julialang.org/en/release-0.4/manual/metaprogramming/#generated-functions">generated functions</a>.
+</p>
+
+<p>
+This also leads to the question of how far we should go; I say 100
+is enough. Technically I'm drawing from a truncated Poisson
+distribution, but the events this far out have three digits in the
+exponent so I'm pretty safe.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-julia"><span style="color: #919191;">@generated</span> <span style="color: #4c83ff;">function</span> loop_cached_version()
+    ccdfs = [[ccdf(dist, ii) <span style="color: #4c83ff;">for</span> ii <span style="color: #4c83ff;">in</span> 1:100]; 1.0]
+
+    eval = <span style="color: #4c83ff;">quote</span>
+        u = rand()
+        ii = 1
+        <span style="color: #4c83ff;">while</span> u &lt; <span style="color: #96CBFE;">$ccdfs</span>[ii]
+            ii += 1
+        <span style="color: #4c83ff;">end</span>
+        <span style="color: #4c83ff;">return</span> ii - 1
+    <span style="color: #4c83ff;">end</span>
+
+    <span style="color: #4c83ff;">return</span> eval
+<span style="color: #4c83ff;">end</span>
+
+<span style="color: #919191;">@benchmark</span> loop_cached_version()
+</pre>
+</div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">samples</td>
+<td class="org-right">10000</td>
+</tr>
+
+<tr>
+<td class="org-left">evals/sample</td>
+<td class="org-right">996</td>
+</tr>
+
+<tr>
+<td class="org-left">time tolerance</td>
+<td class="org-right">5.00%</td>
+</tr>
+
+<tr>
+<td class="org-left">memory tolerance</td>
+<td class="org-right">1.00%</td>
+</tr>
+
+<tr>
+<td class="org-left">memory estimate</td>
+<td class="org-right">0.00 bytes</td>
+</tr>
+</tbody>
+</table>
+<p>
+o | allocs estimate  |                   0 |
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">minimum time</td>
+<td class="org-left">28.00 ns (0.00% GC)</td>
+</tr>
+
+<tr>
+<td class="org-left">median time</td>
+<td class="org-left">30.00 ns (0.00% GC)</td>
+</tr>
+
+<tr>
+<td class="org-left">mean time</td>
+<td class="org-left">30.46 ns (0.00% GC)</td>
+</tr>
+
+<tr>
+<td class="org-left">maximum time</td>
+<td class="org-left">75.00 ns (0.00% GC)</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+I'm pretty pleased with that benchmark.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline4" class="outline-2">
+<h2 id="orgheadline4">Final Attempt: The Alias Method</h2>
+<div class="outline-text-2" id="text-orgheadline4">
+<p>
+Another approach is to use the Alias method. It turns the linear
+time loop into a constant time array lookup. Here's a quick
+implementation based on skimming the <a href="https://en.wikipedia.org/wiki/Alias_method">Wikipedia article</a>.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-julia"><span style="color: #919191;">@generated</span> <span style="color: #4c83ff;">function</span> alias()
+    <span style="color: #8B8989; font-style: italic;">## </span><span style="color: #8B8989; font-style: italic;">Hacky table generation; you could optimize this better</span>
+    N = 100
+
+    U = [N * pdf(Poisson(1), ii) <span style="color: #4c83ff;">for</span> ii = 0:(N-1)]
+    K = [-1 <span style="color: #4c83ff;">for</span> ii = 0:(N-1)]
+
+    <span style="color: #4c83ff;">for</span> ii = 1:(N-1)
+        ii = indmax(U)
+        jj = findfirst((U .&lt; 1.0) &amp; (K .== -1))
+        K[jj] = ii - 1
+        U[ii] = U[ii] - (1 - U[jj])
+    <span style="color: #4c83ff;">end</span>
+
+    expr = <span style="color: #4c83ff;">quote</span>
+        u = rand()
+        ii = floor(<span style="color: #afd8af;">Int64</span>, u * <span style="color: #96CBFE;">$N</span>) + 1
+        yy = <span style="color: #96CBFE;">$N</span>*u + 1 - ii
+        <span style="color: #4c83ff;">return</span> yy &lt; <span style="color: #96CBFE;">$U</span>[ii] ? ii : <span style="color: #96CBFE;">$K</span>[ii]
+    <span style="color: #4c83ff;">end</span>
+
+    <span style="color: #4c83ff;">return</span> expr
+<span style="color: #4c83ff;">end</span>
+
+<span style="color: #919191;">@benchmark</span> alias()
+</pre>
+</div>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">samples</td>
+<td class="org-right">10000</td>
+</tr>
+
+<tr>
+<td class="org-left">evals/sample</td>
+<td class="org-right">977</td>
+</tr>
+
+<tr>
+<td class="org-left">time tolerance</td>
+<td class="org-right">5.00%</td>
+</tr>
+
+<tr>
+<td class="org-left">memory tolerance</td>
+<td class="org-right">1.00%</td>
+</tr>
+
+<tr>
+<td class="org-left">memory estimate</td>
+<td class="org-right">16.00 bytes</td>
+</tr>
+
+<tr>
+<td class="org-left">allocs estimate</td>
+<td class="org-right">1</td>
+</tr>
+
+<tr>
+<td class="org-left">minimum time</td>
+<td class="org-right">70.00 ns (0.00% GC)</td>
+</tr>
+
+<tr>
+<td class="org-left">median time</td>
+<td class="org-right">72.00 ns (0.00% GC)</td>
+</tr>
+
+<tr>
+<td class="org-left">mean time</td>
+<td class="org-right">73.91 ns (1.27% GC)</td>
+</tr>
+
+<tr>
+<td class="org-left">maximum time</td>
+<td class="org-right">1.66 μs (95.11% GC)</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+I'm actually fairly surprised that this is so slow. I imagine it's
+the floor function which requires a type conversion (which explains
+the memory allocation). It could probably be more competitive if you
+just worked with the bits yourself. So you'd make a table with 128
+entries and index with the first byte and compare with the rest.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline5" class="outline-2">
+<h2 id="orgheadline5">Further Directions</h2>
+<div class="outline-text-2" id="text-orgheadline5">
+<p>
+Having mentioned working with bits directly brings up another topic.
+One problem with all of these method is that it's rather wasteful
+with its bits. In fact the expected number of bits that we need is
+just 1.304. So generating 64 bit numbers is doing a lot more work
+than is necessary.
+</p>
+
+<p>
+To really take advantage of the bits you might try something like a
+cached implementation. Sketched out it would look something like
+this:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-julia"><span style="color: #8B8989; font-style: italic;">## </span><span style="color: #8B8989; font-style: italic;">This can be tuned for optimal performance</span>
+_optimal_buffer_length = ??
+
+<span style="color: #4c83ff;">type</span> <span style="color: #afd8af;">CachedPoisson</span>
+    buffer<span style="color: #d3d3d3; background-color: #000000;">::</span><span style="color: #afd8af;">Vector</span>{<span style="color: #afd8af;">Int</span>}
+    counter<span style="color: #d3d3d3; background-color: #000000;">::</span><span style="color: #afd8af;">Int</span>
+<span style="color: #4c83ff;">end</span>
+
+<span style="color: #4c83ff;">function</span> <span style="color: #ff1493;">CachedPoisson</span>()
+    buffer = zeros(<span style="color: #afd8af;">Int</span>, _optimal_buffer_length)
+    counter = _optimal_buffer_length
+
+    <span style="color: #4c83ff;">return</span> CachedPoisson(buffer, counter)
+<span style="color: #4c83ff;">end</span>
+
+<span style="color: #4c83ff;">function</span> <span style="color: #ff1493;">rand</span>(<span style="color: #d3d3d3; background-color: #000000;">::</span><span style="color: #afd8af;">CachedPoisson</span>)
+    dist.counter += 1
+    <span style="color: #4c83ff;">if</span> dist.counter == _optimal_buffer_length + 1
+        u = rand()
+        <span style="color: #8B8989; font-style: italic;">## </span><span style="color: #8B8989; font-style: italic;">Code goes here</span>
+        dist.counter = 1
+    <span style="color: #4c83ff;">end</span>
+    <span style="color: #4c83ff;">return</span> dist.buffer[dist.counter]
+<span style="color: #4c83ff;">end</span>
+</pre>
+</div>
+
+<p>
+This wrings the most entropy out of the RNG as it can.
+</p>
+
+<p>
+Doing it this way should be really fast; when the buffer is
+non-empty you're just doing a buffer lookup and when the buffer is
+empty you're doing a single random number generation followed by the
+usual costs of your usual method.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline6" class="outline-2">
+<h2 id="orgheadline6">Conclusion</h2>
+<div class="outline-text-2" id="text-orgheadline6">
+<p>
+So it seems like you can do a great deal better than the regular
+Poisson implementation, at least if you can specialize.
+</p>
+
+<p>
+So which of these methods did I end up using? The base
+implementation of course! 
+</p>
+</div>
+</div>
