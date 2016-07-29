@@ -261,8 +261,8 @@ Let's find out.
   Having mentioned working with bits directly brings up another topic.
   One problem with all of these method is that it's rather wasteful
   with its bits. In fact the expected number of bits that we need is
-  just 1.304. So generating 64 bit numbers is doing a lot more work
-  than is necessary.
+  just the entropy: 1.882. So generating 64 bit numbers is doing a lot
+  more work than is necessary.
 
   To really take advantage of the bits you might try something like a
   cached implementation. Sketched out it would look something like
