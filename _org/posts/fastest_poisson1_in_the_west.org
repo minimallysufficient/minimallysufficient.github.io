@@ -1,6 +1,6 @@
 #+OPTIONS: toc:nil num:nil todo:nil
 #+LAYOUT: post
-#+DATE: 2016-06-26
+#+DATE: 2016-07-28
 #+TITLE: The Fastest Poisson(1) in the West
 #+DESCRIPTION:  
 #+CATEGORIES:  
