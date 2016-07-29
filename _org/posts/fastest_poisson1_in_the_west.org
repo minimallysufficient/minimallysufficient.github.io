@@ -176,7 +176,8 @@ Let's find out.
   
   #+BEGIN_SRC julia
     @generated function loop_cached_version()
-        ccdfs = [[ccdf(dist, ii) for ii in 1:100]; 1.0]
+        N = 100
+        ccdfs = [[ccdf(Poisson(1), ii) for ii in 0:N]; 1.0]
 
         eval = quote
             u = rand()
@@ -194,15 +195,15 @@ Let's find out.
   #+END_SRC
 
   | samples          |               10000 |
-  | evals/sample     |                 996 |
+  | evals/sample     |                 993 |
   | time tolerance   |               5.00% |
   | memory tolerance |               1.00% |
   | memory estimate  |          0.00 bytes |
-o | allocs estimate  |                   0 |
-  | minimum time     | 28.00 ns (0.00% GC) |
-  | median time      | 30.00 ns (0.00% GC) |
-  | mean time        | 30.46 ns (0.00% GC) |
-  | maximum time     | 75.00 ns (0.00% GC) |
+  | allocs estimate  |                   0 |
+  | minimum time     | 30.00 ns (0.00% GC) |
+  | median time      | 43.00 ns (0.00% GC) |
+  | mean time        | 42.77 ns (0.00% GC) |
+  | maximum time     | 79.00 ns (0.00% GC) |
 
   I'm pretty pleased with that benchmark.
 

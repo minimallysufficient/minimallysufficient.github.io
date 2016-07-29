@@ -1,8 +1,6 @@
 ---
 date: 2016-07-28
 tags: 
-- 
-- 
 - dummy-tags-should-be-replaced
 author: 
 layout: post
@@ -433,7 +431,8 @@ exponent so I'm pretty safe.
 <div class="org-src-container">
 
 <pre class="src src-julia"><span style="color: #919191;">@generated</span> <span style="color: #4c83ff;">function</span> loop_cached_version()
-    ccdfs = [[ccdf(dist, ii) <span style="color: #4c83ff;">for</span> ii <span style="color: #4c83ff;">in</span> 1:100]; 1.0]
+    N = 100
+    ccdfs = [[ccdf(Poisson(1), ii) <span style="color: #4c83ff;">for</span> ii <span style="color: #4c83ff;">in</span> 0:N]; 1.0]
 
     eval = <span style="color: #4c83ff;">quote</span>
         u = rand()
@@ -467,7 +466,7 @@ exponent so I'm pretty safe.
 
 <tr>
 <td class="org-left">evals/sample</td>
-<td class="org-right">996</td>
+<td class="org-right">993</td>
 </tr>
 
 <tr>
@@ -484,38 +483,30 @@ exponent so I'm pretty safe.
 <td class="org-left">memory estimate</td>
 <td class="org-right">0.00 bytes</td>
 </tr>
-</tbody>
-</table>
-<p>
-o | allocs estimate  |                   0 |
-</p>
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
+<tr>
+<td class="org-left">allocs estimate</td>
+<td class="org-right">0</td>
+</tr>
 
-<colgroup>
-<col  class="org-left" />
-
-<col  class="org-left" />
-</colgroup>
-<tbody>
 <tr>
 <td class="org-left">minimum time</td>
-<td class="org-left">28.00 ns (0.00% GC)</td>
+<td class="org-right">30.00 ns (0.00% GC)</td>
 </tr>
 
 <tr>
 <td class="org-left">median time</td>
-<td class="org-left">30.00 ns (0.00% GC)</td>
+<td class="org-right">43.00 ns (0.00% GC)</td>
 </tr>
 
 <tr>
 <td class="org-left">mean time</td>
-<td class="org-left">30.46 ns (0.00% GC)</td>
+<td class="org-right">42.77 ns (0.00% GC)</td>
 </tr>
 
 <tr>
 <td class="org-left">maximum time</td>
-<td class="org-left">75.00 ns (0.00% GC)</td>
+<td class="org-right">79.00 ns (0.00% GC)</td>
 </tr>
 </tbody>
 </table>
