@@ -1,0 +1,162 @@
+---
+date: 2016-08-23
+tags: 
+- 
+- 
+- 
+- 
+- 
+- 
+- dummy-tags-should-be-replaced
+author: 
+layout: post
+title: Apparently I've gotten better
+excerpt:  
+categories: 
+-
+commentissueid: 26
+---
+<p>
+I was organizing my hard drive and came across one of the first julia
+programs I ever wrote. It turns out this actually was quite a while
+ago; the timestamp is July 5, 2013. It was an enlightening exercise
+reading the code and then rewriting it with the benefit of three more
+years of experience.
+</p>
+
+<div id="outline-container-orgheadline1" class="outline-2">
+<h2 id="orgheadline1">Old Code</h2>
+<div class="outline-text-2" id="text-orgheadline1">
+<p>
+So here's the code:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-julia">old_version = <span style="color: #4c83ff;">function</span>(n)
+
+    field = trues(n)
+
+    <span style="color: #4c83ff;">for</span> i <span style="color: #4c83ff;">in</span> primes(n)
+        field[i] = <span style="color: #96CBFE;">false</span>
+        x = 1
+        <span style="color: #4c83ff;">while</span> i + 2x*x &lt;= n
+            field[i + 2x*x] = <span style="color: #96CBFE;">false</span>
+            x += 1
+        <span style="color: #4c83ff;">end</span>
+    <span style="color: #4c83ff;">end</span>
+
+    i = 3
+
+    <span style="color: #4c83ff;">while</span> i &lt; n
+        <span style="color: #4c83ff;">if</span> field[i]
+            <span style="color: #4c83ff;">return</span>(i)
+        <span style="color: #4c83ff;">end</span>
+        i += 2
+    <span style="color: #4c83ff;">end</span>
+
+    <span style="color: #4c83ff;">return</span>(<span style="color: #61CE3C;">"Unsuccessful"</span>)
+
+<span style="color: #4c83ff;">end</span>
+</pre>
+</div>
+
+<p>
+Let me start off by saying, while I would be embarrassed by this code
+today, I think it's not bad for a beginner. 
+</p>
+
+<p>
+I'm going to slightly obscure the purpose behind the
+program <sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>. Suffice to say that I'm looking for the first
+odd composite number that can't be written as the sum of a prime
+number and twice a perfect square. The interesting stuff isn't the
+code anyways, it's the style. Here are some things to note:
+</p>
+
+<ul class="org-ul">
+<li>The spacing is huge; this was the first thing that struck me. It's
+only 25 lines, but it just feels really spread out.</li>
+<li>It's obvious that I'm coming from R. I end up define an anonymous
+function (back when they were slow) and return a tuple. Why? Because
+that's what the R code would look like.</li>
+<li>I name things terribly; what is n? Also, I use single letter
+variable names.</li>
+<li>I have bad algorithmic thinking. I make it needlessly more
+complicated than I should have; see the new code below.</li>
+<li>No type stability. I either return an integer or an ASCII string.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgheadline2" class="outline-2">
+<h2 id="orgheadline2">New Code</h2>
+<div class="outline-text-2" id="text-orgheadline2">
+<p>
+Ok, presumably I've learned a few things over the past couple years.
+I should be able to do better. So I rewrote it.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-julia"><span style="color: #4c83ff;">function</span> <span style="color: #ff1493;">new_version</span>(searchMax)
+    mask = primesmask(searchMax)
+
+    <span style="color: #4c83ff;">for</span> ii = 3:2:searchMax
+        mask[ii] &amp;&amp; <span style="color: #4c83ff;">continue</span>
+        xx = 1
+        pairFound = <span style="color: #96CBFE;">false</span>
+        <span style="color: #4c83ff;">while</span> !pairFound &amp;&amp; ii - 2xx^2 &gt; 0
+            xx += 1;
+            pairFound = mask[ii - 2xx^2]
+        <span style="color: #4c83ff;">end</span>
+        !pairFound &amp;&amp; <span style="color: #4c83ff;">return</span> ii
+    <span style="color: #4c83ff;">end</span>
+
+    throw(ErrorException(<span style="color: #61CE3C;">"No cases found below $searchMax"</span>))
+<span style="color: #4c83ff;">end</span>
+</pre>
+</div>
+
+<p>
+It's shorter, more idiomatic, understandable, and runs faster.
+</p>
+
+<p>
+It also just feels better. I can't quite explain it, but just
+looking at the code blocks from a distance, not even reading them,
+the second feels good. I seem to have developed taste idiosyncratic
+as it may be.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline3" class="outline-2">
+<h2 id="orgheadline3">Conclusion</h2>
+<div class="outline-text-2" id="text-orgheadline3">
+<p>
+This raises the question, what if I come back to this code in three
+more years? Will I have the same reaction as I did to my previous
+one? Or will the learning curve have leveled off?
+</p>
+
+<p>
+For short stuff like this I probably can't do much better. There are
+only so many ways to write it. However, I might become better at
+writing larger projects. Or I might switch paradigms; perhaps three
+years from now I'll wonder at my naivete in writing imperative
+programs.
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+If you recognize it you'll understand why.
+</p></div></div>
+
+
+</div>
+</div>
