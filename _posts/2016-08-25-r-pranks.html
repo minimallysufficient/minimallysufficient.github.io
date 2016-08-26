@@ -173,6 +173,25 @@ your own style guide. For their own good.
 Of course, nobody did this for package writers, so hopefully they
 don't need to use too many non-conforming packages.
 </p>
+
+<p>
+It could be worse; I had wanted to do the following
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-R"><span style="color: #ff1493;">'&lt;-'</span> <span style="color: #96CBFE;">&lt;-</span> <span style="color: #4c83ff;">function</span>(...) {
+    <span style="color: #4c83ff;">stop</span>(<span style="color: #61CE3C;">"Using &lt;- for assignment violates the style guide; use -&gt; instead"</span>)
+}
+</pre>
+</div>
+
+<p>
+Unfortunately, this little gem doesn't work since '-&gt;' is just a
+syntactic variation and I can't figure out how to distinguish it
+from within the function call. I'll be very appreciative if someone
+could show me how to do this.
+</p>
 </div>
 </div>
 </div>

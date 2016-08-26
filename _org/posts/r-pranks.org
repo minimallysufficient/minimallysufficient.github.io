@@ -100,9 +100,8 @@ sessions.
 
    Of course, nobody did this for package writers, so hopefully they
    don't need to use too many non-conforming packages.
-* Footnotes
-[fn:friends] At least they were your friends before this post.
-[fn:style] I had wanted to do the following
+
+   It could be worse; I had wanted to do the following
 
   #+BEGIN_SRC R
     '<-' <- function(...) {
@@ -111,6 +110,9 @@ sessions.
   #+END_SRC
 
   Unfortunately, this little gem doesn't work since '->' is just a
-  syntactic variation and I can't figure out how to distinguish it from
-  within the function call. I'll be very appreciative if someone could
-  show me how to do this.
+  syntactic variation and I can't figure out how to distinguish it
+  from within the function call. I'll be very appreciative if someone
+  could show me how to do this.
+
+* Footnotes
+[fn:friends] At least they were your friends before this post.
