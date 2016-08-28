@@ -2,22 +2,18 @@
 #+LAYOUT: post
 #+DATE: 2016-06-16
 #+TITLE: Three logicians walk into a bar
-#+DESCRIPTION: I interpret a simple question very literally. It causes some problems.
+#+DESCRIPTION:  
 #+CATEGORIES:  
 #+commentissueid: 2
-
-#+BEGIN_QUOTE
-Attention Conservation Notice: Logic joke with explanation; you had to
-have been there
-#+END_QUOTE
 
 I had a fun exchange by text today. My father texted both my brother
 and myself the following message "Did I borrow [a particular book]
 from either of you?". This left me in a bit of a predicament; I don't
-have the information to be able to answer his question. For those of
-you who are somewhat confused[fn:confused] by this, let me explicate.
+have the information to be able to answer his question. 
 
-The problem hinges on the word "either". Let's look at a table.
+For those of you who are somewhat confused[fn:confused] by this, let
+me explicate. The problem hinges on the word "either". Let's look at a
+table.
 
 |                           | Borrowed from me | Not borrowed from me |
 | Borrowed from brother     | Yes              | Yes                  |
