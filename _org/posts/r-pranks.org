@@ -8,8 +8,8 @@
 
 One of the more fun features of R is that you can redefine pretty much
 anything. While this isn't particularly useful in itself, it can give
-you plenty of opportunities to mess with your friends' [fn:friends] R
-sessions.
+you plenty of opportunities to mess with your friends' R sessions.
+Well, at least they were your friends before this post.
 
 * Mild pranks
 ** You can't handle the truth
@@ -114,5 +114,3 @@ sessions.
   from within the function call. I'll be very appreciative if someone
   could show me how to do this.
 
-* Footnotes
-[fn:friends] At least they were your friends before this post.
