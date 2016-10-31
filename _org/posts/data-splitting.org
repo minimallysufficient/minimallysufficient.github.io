@@ -4,7 +4,6 @@
 #+TITLE: Data Splitting
 #+DESCRIPTION:  
 #+CATEGORIES:  
-#+commentissueid: 3
 
 * A quick review of p-values
   Feel free to skip to the next section if you're already familiar

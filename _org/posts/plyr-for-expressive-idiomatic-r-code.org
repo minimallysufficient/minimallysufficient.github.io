@@ -4,7 +4,6 @@
 #+TITLE: Using plyr for expressive, idiomatic R code
 #+DESCRIPTION:  
 #+CATEGORIES:  
-#+commentissueid: 16
 
 When I first encountered the /plyr/ package for R, I thought it was
 needless frippery. There was nothing that a well-written loop or

@@ -4,7 +4,6 @@
 #+TITLE: The Fastest Poisson(1) in the West
 #+DESCRIPTION:  
 #+CATEGORIES:  
-#+commentissueid: 25
 
 I was optimizing some [[http://www.unofficialgoogledatascience.com/2015/08/an-introduction-to-poisson-bootstrap_26.html][Poisson bootstrap]] code this week.
 Unsurprisingly, it turns out that most of the time was spent drawing

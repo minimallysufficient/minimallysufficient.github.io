@@ -4,7 +4,6 @@
 #+TITLE: Notes on the First Year of Grad School
 #+DESCRIPTION:  
 #+CATEGORIES:  
-#+commentissueid: 12
 
 #+HTML_MATHJAX: align:"center"
 #+OPTIONS: toc:nil num:nil

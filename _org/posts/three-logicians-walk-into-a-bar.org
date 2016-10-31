@@ -4,7 +4,6 @@
 #+TITLE: Three logicians walk into a bar
 #+DESCRIPTION:  
 #+CATEGORIES:  
-#+commentissueid: 2
 
 I had a fun exchange by text today. My father texted both my brother
 and myself the following message "Did I borrow [a particular book]

@@ -4,7 +4,6 @@
 #+TITLE: How to sort papers
 #+DESCRIPTION:  
 #+CATEGORIES:  
-#+commentissueid: 19
 
 Part of my duties for the department involves TAing for a large
 undergraduate course. At our last meeting we had a discussion about

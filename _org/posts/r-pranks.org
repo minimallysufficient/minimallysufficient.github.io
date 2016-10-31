@@ -4,7 +4,6 @@
 #+TITLE: R pranks
 #+DESCRIPTION:  
 #+CATEGORIES:  
-#+commentissueid: 27
 
 One of the more fun features of R is that you can redefine pretty much
 anything. While this isn't particularly useful in itself, it can give

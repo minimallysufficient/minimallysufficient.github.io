@@ -4,7 +4,6 @@
 #+TITLE: Fun with Grad Cafe data
 #+DESCRIPTION:  
 #+CATEGORIES:  
-#+commentissueid: 7
 
 My classmate [[http://www.statisticalsignal.com][Lee Richardson]] and I were discussing the website [[http://thegradcafe.com][GradCafe]]
 last night and their database of admissions decisions. This morning he

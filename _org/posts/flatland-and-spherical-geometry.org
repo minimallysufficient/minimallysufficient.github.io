@@ -4,7 +4,6 @@
 #+TITLE: Flatland and Spherical Geometry
 #+DESCRIPTION:  
 #+CATEGORIES:  
-#+commentissueid: 11
 
 Before passing along my copy[fn:copy] of Flatland to my brother (as he
 needs it for a class), I reread it on an airplane. It turns out that

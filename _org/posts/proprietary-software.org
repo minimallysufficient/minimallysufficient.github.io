@@ -4,7 +4,6 @@
 #+TITLE: Closed proprietary software ruined (a sizeable chunk of) my day
 #+DESCRIPTION:  
 #+CATEGORIES:  
-#+commentissueid: 13
 
 I recently got a new data dump for my ADA project. To my slight
 annoyance the data came in a new file format .pl2. Things didn't get

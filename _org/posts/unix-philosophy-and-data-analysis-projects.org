@@ -4,7 +4,6 @@
 #+TITLE: The Unix Philosophy and Data Analysis Projects
 #+DESCRIPTION:  
 #+CATEGORIES:  
-#+commentissueid: 9
 
 At the halfway point of my ADA project I've been doing some reflection
 on my progress. One of things I've been most pleased with is the

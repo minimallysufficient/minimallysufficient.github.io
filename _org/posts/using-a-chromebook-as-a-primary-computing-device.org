@@ -4,7 +4,6 @@
 #+TITLE: Using a Chromebook as a Primary Computing Device
 #+DESCRIPTION:  
 #+CATEGORIES:  
-#+commentissueid: 15
 
 I'm writing this post using my Chromebook. It's easily the least
 powerful computer I've ever owned, but I like it the best. Let me

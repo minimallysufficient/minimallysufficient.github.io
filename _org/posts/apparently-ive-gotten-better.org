@@ -4,7 +4,6 @@
 #+TITLE: Apparently I've gotten better
 #+DESCRIPTION:  
 #+CATEGORIES:  
-#+commentissueid: 26
 
 I was organizing my hard drive and came across one of the first julia
 programs I ever wrote. It turns out this actually was quite a while
