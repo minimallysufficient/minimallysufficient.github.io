@@ -37,12 +37,12 @@ knowledge be any different?
 
 So let's build an ethical classifier: we throw in a bunch of ethical
 scenarios and labels (ethical/unethical) and fit a model. When we
-encounter another scenario we can use out model to predict whether or
+encounter another scenario we can use our model to predict whether or
 not it's ethical. Feature extraction might be a problem, but
-philosophers have already proposed a wide array of potentially relevant
-ethical considerations. Since a successful model would result in
-technological unemployment for ethicists, we could cheaply hire whole
-ethics departments to do feature extraction.
+philosophers have already proposed a wide array of potentially
+relevant ethical considerations. Since a successful model would result
+in technological unemployment for ethicists, we could cheaply hire
+whole ethics departments to do feature extraction.
 
 There are other issues though, firstly, we need to address the concern
 that a model might not exist; why should we expect there to be a
