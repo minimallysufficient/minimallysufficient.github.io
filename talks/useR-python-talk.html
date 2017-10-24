@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title><b>Using Python and R Together</b></title>
+<meta name="author" content="(Taylor Pospisil)"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="http://cdn.jsdelivr.net/reveal.js/3.0.0/css/reveal.css"/>
+
+<link rel="stylesheet" href="http://cdn.jsdelivr.net/reveal.js/3.0.0/css/theme/black.css" id="theme"/>
+
+
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'http://cdn.jsdelivr.net/reveal.js/3.0.0/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><b>Using Python and R Together</b><br>Taylor Pospisil<br>Pittsburgh useR 10/21/2017
+</section>
+
+<section>
+<section id="slide-orgb6d7c8c">
+<h2 id="orgb6d7c8c">Python</h2>
+<ul>
+<li>General purpose (scripting) language</li>
+<li>Broadly used for "data science": <code>sklearn</code>, <code>numpy</code>, <code>pandas</code></li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org5840a0f">
+<h2 id="org5840a0f">Why would I want this?</h2>
+<div class="outline-text-2" id="text-org5840a0f">
+</div></section>
+<section id="slide-org04ed055">
+<h3 id="org04ed055">Why use Python from R?</h3>
+<ul>
+<li>Glue together existing code</li>
+<li>Packages: <code>NLTK</code>, <code>scrapy</code></li>
+<li>R's just too slow</li>
+<li>Data structures</li>
+
+</ul>
+</section>
+<section id="slide-orgab8574d">
+<h3 id="orgab8574d">Why use R from Python</h3>
+<ul>
+<li>Glue together existing code</li>
+<li>Packages: almost <b>every</b> statistical method has an R package (or
+should!)</li>
+<li>Sometimes you just want <code>ggplot2</code></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orge474bed">
+<h2 id="orge474bed">However, there are downsides</h2>
+<ul>
+<li>Limits collaboration</li>
+<li>More moving parts</li>
+<li>Little things: zero-indexed vs one-indexed</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org7bc5582">
+<h2 id="org7bc5582">Boring Solution</h2>
+<p>
+Just call them on the command-line
+</p>
+
+<div class="org-src-container">
+
+<pre  class="src src-R">system(<span style="color: #61CE3C;">"python do-something.py input.csv output.csv"</span>)
+</pre>
+</div>
+
+<div class="org-src-container">
+
+<pre  class="src src-python"><span style="color: #4c83ff;">from</span> subprocess <span style="color: #4c83ff;">import</span> call
+call([<span style="color: #61CE3C;">"Rscript"</span>, <span style="color: #61CE3C;">"do-something.R"</span>, <span style="color: #61CE3C;">"input.csv"</span>, <span style="color: #61CE3C;">"output.csv"</span>])
+</pre>
+</div>
+
+
+<p>
+Use txt, csv, <a href="https://github.com/wesm/feather">feather</a>, <a href="http://bioconductor.org/packages/release/bioc/html/rhdf5.html">hdf5</a>, <a href="https://cran.r-project.org/web/packages/RProtoBuf/index.html">protobufs</a>, &#x2026;
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-org48ae682">
+<h2 id="org48ae682">How to call python from R</h2>
+<div class="outline-text-2" id="text-org48ae682">
+</div></section>
+<section id="slide-org39ae55f">
+<h3 id="org39ae55f"><a href="https://github.com/rstudio/reticulate">reticulate</a></h3>
+<ul>
+<li>R package for calling python</li>
+<li><code class="src src-r">install.packages(<span style="color: #61CE3C;">"reticulate"</span>)</code></li>
+<li>RStudio integration (if you're into that sort of thing)</li>
+
+</ul>
+
+</section>
+<section id="slide-org115a771">
+<h4 id="org115a771">Running code</h4>
+<div class="org-src-container">
+
+<pre  class="src src-R"><span style="color: #96CBFE;">library</span>(reticulate)
+
+py_run_file(<span style="color: #61CE3C;">"some-python-file.py"</span>)
+
+env <span style="color: #96CBFE;">&lt;-</span> py_run_string(<span style="color: #61CE3C;">"x = 10"</span>)
+
+print(env$x)
+</pre>
+</div>
+
+<pre class="example">
+[1] 10
+
+</pre>
+</section>
+<section id="slide-orgeae413e">
+<h4 id="orgeae413e">Import packages</h4>
+<div class="org-src-container">
+
+<pre  class="src src-R"><span style="color: #96CBFE;">library</span>(reticulate)
+
+scipy_stats <span style="color: #96CBFE;">&lt;-</span> import(<span style="color: #61CE3C;">"scipy.stats"</span>)
+print(head(names(scipy_stats)))
+
+scipy_stats$alpha$pdf(1.2, 3.4)
+</pre>
+</div>
+
+<pre class="example">
+[1] "absolute_import" "alpha"           "anderson"        "anderson_ksamp"
+[5] "anglit"          "ansari"
+[1] 0.01028433
+
+</pre>
+
+</section>
+<section id="slide-org6f7acb2">
+<h4 id="org6f7acb2">Getting/sending objects</h4>
+<p>
+Usually automatic conversion of R types to python types
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-R"><span style="color: #96CBFE;">library</span>(reticulate)
+
+builtins <span style="color: #96CBFE;">&lt;-</span> import_builtins()
+
+dict(key = value) <span style="color: #8B8989; font-style: italic;"># </span><span style="color: #8B8989; font-style: italic;">not great, build in python</span>
+tuple(4, 3)
+
+<span style="color: #8B8989; font-style: italic;"># </span><span style="color: #8B8989; font-style: italic;">Beware: need actual ints</span>
+builtins$range(2, 3)
+builtins$range(2L, 3L)
+
+<span style="color: #8B8989; font-style: italic;"># </span><span style="color: #8B8989; font-style: italic;">Beware: one-element vectors</span>
+builtins$sum(c(4))
+builtins$sum(list(4))
+</pre>
+</div>
+</section>
+<section id="slide-org6be95d1">
+<h4 id="org6be95d1">Python Classes</h4>
+<div class="org-src-container">
+
+<pre  class="src src-python"><span style="color: #4c83ff;">class</span> <span style="color: #afd8af;">Adder</span>(<span style="color: #4c83ff;">object</span>):
+    <span style="color: #4c83ff;">def</span> <span style="color: #ff1493;">__init__</span>(<span style="color: #4c83ff;">self</span>, a, b):
+        <span style="color: #4c83ff;">self</span>.a = a
+        <span style="color: #4c83ff;">self</span>.b = b
+    <span style="color: #4c83ff;">def</span> <span style="color: #ff1493;">add</span>(<span style="color: #4c83ff;">self</span>):
+        <span style="color: #4c83ff;">return</span> <span style="color: #4c83ff;">self</span>.a + <span style="color: #4c83ff;">self</span>.b
+</pre>
+</div>
+
+<div class="org-src-container">
+
+<pre  class="src src-R"><span style="color: #96CBFE;">library</span>(reticulate)
+
+py_run_file(<span style="color: #61CE3C;">"class_file.py"</span>)
+
+env <span style="color: #96CBFE;">&lt;-</span> py_run_string(<span style="color: #61CE3C;">"x = Adder(4, 5)"</span>)
+
+env$x$a
+env$x$b
+env$x$add()
+</pre>
+</div>
+
+</section>
+<section id="slide-org31b7168">
+<h4 id="org31b7168">Numpy / Pandas interface</h4>
+<dl>
+<dt>Numpy</dt><dd><ul>
+<li>Arrays and matrices automatically convert</li>
+<li>Column-major (R) vs row-major (numpy)</li>
+
+</ul></dd>
+<dt>Pandas</dt><dd><ul>
+<li><a href="https://github.com/posterior/treecat/issues/24">in progress?</a></li>
+<li>for now: <code class="src src-python">pandas.DataFrame.as_matrix</code></li>
+
+</ul></dd>
+
+</dl>
+</section>
+<section id="slide-org2b80d4c">
+<h4 id="org2b80d4c">The python 2/3 question</h4>
+<p>
+Either works; you just need to specify
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-R"><span style="color: #96CBFE;">library</span>(reticulate)
+use_python(<span style="color: #61CE3C;">"/usr/local/bin/python"</span>) <span style="color: #8B8989; font-style: italic;"># </span><span style="color: #8B8989; font-style: italic;">or whatever</span>
+</pre>
+</div>
+</section>
+<section id="slide-orgec444be">
+<h4 id="orgec444be">Example: OpenAI gym</h4>
+<div class="org-src-container">
+
+<pre  class="src src-R"><span style="color: #96CBFE;">library</span>(reticulate)
+
+gym <span style="color: #96CBFE;">&lt;-</span> import(<span style="color: #61CE3C;">"gym"</span>)
+env <span style="color: #96CBFE;">&lt;-</span> gym$make(<span style="color: #61CE3C;">"CartPole-v0"</span>)
+
+env$reset()
+done <span style="color: #96CBFE;">&lt;-</span> <span style="color: #afd8af;">FALSE</span>
+<span style="color: #4c83ff;">while</span> (!done) {
+  env$render()
+  action <span style="color: #96CBFE;">&lt;-</span> env$action_space$sample()
+  results <span style="color: #96CBFE;">&lt;-</span> env$step(action)
+  done <span style="color: #96CBFE;">&lt;-</span> results[[3]]
+}
+</pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org14b4f05">
+<h2 id="org14b4f05">How to call R from python</h2>
+<div class="outline-text-2" id="text-org14b4f05">
+</div></section>
+<section id="slide-orgb45d82d">
+<h3 id="orgb45d82d"><a href="https://bitbucket.org/rpy2/rpy2">rpy2</a></h3>
+<ul>
+<li>Python package for calling R</li>
+<li><code class="src src-shell">pip install rpy2</code></li>
+
+</ul>
+</section>
+<section id="slide-org66ff68e">
+<h4 id="org66ff68e">Running code</h4>
+<div class="org-src-container">
+
+<pre  class="src src-python"><span style="color: #4c83ff;">from</span> rpy2 <span style="color: #4c83ff;">import</span> robjects <span style="color: #4c83ff;">as</span> ro
+
+<span style="color: #ff69b4;">x</span> = ro.r.r(<span style="color: #61CE3C;">"rnorm(5)"</span>)
+<span style="color: #8B8989; font-style: italic;">#</span><span style="color: #8B8989; font-style: italic;">x = ro.r.rnorm(5)</span>
+<span style="color: #4c83ff;">print</span>(x, <span style="color: #4c83ff;">type</span>(x))
+</pre>
+</div>
+
+<pre class="example">
+[1]  0.7602822 -0.7154573  0.9686439  1.3646179  0.2378504
+ &lt;class 'rpy2.robjects.vectors.FloatVector'&gt;
+
+</pre>
+
+</section>
+<section id="slide-orgb58af7d">
+<h4 id="orgb58af7d">Getting/sending objects</h4>
+<div class="org-src-container">
+
+<pre  class="src src-python"><span style="color: #4c83ff;">from</span> rpy2 <span style="color: #4c83ff;">import</span> robjects <span style="color: #4c83ff;">as</span> ro
+
+ro.r(<span style="color: #61CE3C;">"x &lt;- rbinom(5, 4, 0.4)"</span>)
+<span style="color: #ff69b4;">x</span> = <span style="color: #4c83ff;">list</span>(ro.r[<span style="color: #61CE3C;">"x"</span>])
+
+<span style="color: #4c83ff;">print</span>(x, <span style="color: #4c83ff;">type</span>(x))
+</pre>
+</div>
+
+<pre class="example">
+[4, 1, 2, 1, 2] &lt;class 'list'&gt;
+
+</pre>
+
+</section>
+<section id="slide-org4d99a53">
+<h4 id="org4d99a53">Interface with Pandas / Numpy</h4>
+<div class="org-src-container">
+
+<pre  class="src src-python"><span style="color: #4c83ff;">import</span> pandas <span style="color: #4c83ff;">as</span> pd
+<span style="color: #4c83ff;">import</span> numpy <span style="color: #4c83ff;">as</span> np
+
+<span style="color: #4c83ff;">import</span> rpy2.robjects <span style="color: #4c83ff;">as</span> ro
+
+<span style="color: #4c83ff;">from</span> rpy2.robjects <span style="color: #4c83ff;">import</span> pandas2ri
+pandas2ri.activate()
+
+<span style="color: #4c83ff;">import</span> rpy2.robjects.numpy2ri
+rpy2.robjects.numpy2ri.activate()
+
+<span style="color: #8B8989; font-style: italic;"># </span><span style="color: #8B8989; font-style: italic;">Implicit conversion automatically</span>
+<span style="color: #ff69b4;">pandas_df</span> = ro.r.(<span style="color: #61CE3C;">"iris"</span>) <span style="color: #8B8989; font-style: italic;"># </span><span style="color: #8B8989; font-style: italic;">R df -&gt; pandas</span>
+<span style="color: #4c83ff;">print</span>(ro.r.summary(pandas_df)) <span style="color: #8B8989; font-style: italic;"># </span><span style="color: #8B8989; font-style: italic;">pandas -&gt; R df</span>
+
+<span style="color: #8B8989; font-style: italic;"># </span><span style="color: #8B8989; font-style: italic;">Can be explicit</span>
+<span style="color: #ff69b4;">r_df</span> = pandas2ri.py2ri(pandas_df) <span style="color: #8B8989; font-style: italic;"># </span><span style="color: #8B8989; font-style: italic;">pandas -&gt; R df</span>
+<span style="color: #ff69b4;">pandas_df</span> = pandas2ri.ri2py(r_df) <span style="color: #8B8989; font-style: italic;"># </span><span style="color: #8B8989; font-style: italic;">R df -&gt; pandas</span>
+</pre>
+</div>
+</section>
+<section id="slide-org4232478">
+<h4 id="org4232478">R Packages</h4>
+<div class="org-src-container">
+
+<pre  class="src src-python"><span style="color: #4c83ff;">import</span> numpy <span style="color: #4c83ff;">as</span> np
+<span style="color: #4c83ff;">from</span> rpy2.robjects.packages <span style="color: #4c83ff;">import</span> importr
+<span style="color: #4c83ff;">import</span> rpy2.robjects.numpy2ri
+rpy2.robjects.numpy2ri.activate()
+
+<span style="color: #ff69b4;">kernlab</span> = importr(<span style="color: #61CE3C;">"kernlab"</span>)
+
+<span style="color: #ff69b4;">mat_a</span> = np.random.normal(size = (100, 200))
+<span style="color: #ff69b4;">mat_b</span> = np.random.normal(size = (100, 200))
+
+<span style="color: #ff69b4;">test</span> = kernlab.kmmd(mat_a, mat_b)
+</pre>
+</div>
+</section>
+<section id="slide-orgdecc3ef">
+<h4 id="orgdecc3ef">Example: Use ggplot2 from python</h4>
+<div class="org-src-container">
+
+<pre  class="src src-python"><span style="color: #4c83ff;">import</span> pandas <span style="color: #4c83ff;">as</span> pd
+<span style="color: #4c83ff;">from</span> sklearn <span style="color: #4c83ff;">import</span> datasets
+
+<span style="color: #4c83ff;">import</span> rpy2.robjects.lib.ggplot2 <span style="color: #4c83ff;">as</span> ggplot2
+<span style="color: #4c83ff;">from</span> rpy2.robjects.packages <span style="color: #4c83ff;">import</span> importr
+<span style="color: #4c83ff;">from</span> rpy2.robjects <span style="color: #4c83ff;">import</span> pandas2ri
+pandas2ri.activate()
+
+<span style="color: #ff69b4;">ggplot2</span> = importr(<span style="color: #61CE3C;">"ggplot2"</span>)
+
+<span style="color: #ff69b4;">boston_data</span> = datasets.load_boston()
+<span style="color: #ff69b4;">boston_df</span> = pd.DataFrame(boston_data.data, columns=boston_data.feature_names)
+
+<span style="color: #ff69b4;">figure</span> = ggplot2.ggplot(boston_df) + \
+         ggplot2.aes_string(x=<span style="color: #61CE3C;">'TAX'</span>, y=<span style="color: #61CE3C;">'LSTAT'</span>) + \
+         ggplot2.geom_hex() + \
+         ggplot2.theme_minimal(base_size=14)
+
+figure.plot()
+ggplot2.ggsave(<span style="color: #61CE3C;">"output-file.png"</span>, figure)
+</pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-orgf95b607">
+<h2 id="orgf95b607">Somewhat wilder ideas</h2>
+<dl>
+<dt><a href="https://www.rforge.net/Rserve/">Rserve</a></dt><dd>talk to R using TCP/IP</dd>
+<dt><a href="http://jupyter.org/">Jupyter Notebooks</a></dt><dd>R "magic" (uses rpy2 under hood)</dd>
+<dt><a href="http://beakernotebook.com/getting-started?linux&amp;scroll">Beaker Notebooks</a></dt><dd>Jupyter for many langauges</dd>
+
+</dl>
+</section>
+</section>
+<section>
+<section id="slide-org2273926">
+<h2 id="org2273926">Takeaways</h2>
+<ul>
+<li>Take the best of both languages</li>
+<li>Python in R : reticulate</li>
+<li>R in Python : rpy2</li>
+
+</ul>
+</section>
+</section>
+</div>
+</div>
+<script src="http://cdn.jsdelivr.net/reveal.js/3.0.0/lib/js/head.min.js"></script>
+<script src="http://cdn.jsdelivr.net/reveal.js/3.0.0/js/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: 'c',
+rollingLinks: false,
+keyboard: true,
+overview: true,
+minScale: 1.00,
+maxScale: 2.50,
+
+theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+transition: Reveal.getQueryHash().transition || 'None', // default/cube/page/concave/zoom/linear/fade/none
+transitionSpeed: 'default',
+multiplex: {
+    secret: '', // null if client
+    id: '', // id, obtained from socket.io server
+    url: '' // Location of socket.io server
+},
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'http://cdn.jsdelivr.net/reveal.js/3.0.0/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+ { src: 'http://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'http://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'http://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+ { src: 'http://cdn.jsdelivr.net/reveal.js/3.0.0/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+});
+</script>
+</body>
+</html>
