@@ -1,0 +1,250 @@
+#+PROPERTY: header-args :eval no-export
+
+#+OPTIONS: num:nil toc:nil
+#+REVEAL_TRANS: None
+#+REVEAL_THEME: black
+#+REVEAL_ROOT: http://cdn.jsdelivr.net/reveal.js/3.0.0/
+#+REVEAL_MIN_SCALE: 1.0
+#+REVEAL_MAX_SCALE: 2.5
+#+OPTIONS: reveal_title_slide:"%t<br>%a<br>%d"
+#+TITLE: *Using Python and R Together*
+#+AUTHOR: Taylor Pospisil
+#+DATE: Pittsburgh useR 10/21/2017
+#+EMAIL: tpospisi@andrew.cmu.edu
+
+* Python
+  + General purpose (scripting) language
+  + Broadly used for "data science": =sklearn=, =numpy=, =pandas=
+* Why would I want this?
+** Why use Python from R?
+   + Glue together existing code
+   + Packages: =NLTK=, =scrapy=
+   + R's just too slow
+   + Data structures
+** Why use R from Python
+   + Glue together existing code
+   + Packages: almost *every* statistical method has an R package (or
+     should!)
+   + Sometimes you just want =ggplot2=
+
+* However, there are downsides
+  + Limits collaboration
+  + More moving parts
+  + Little things: zero-indexed vs one-indexed
+
+* Boring Solution
+  Just call them on the command-line
+
+  #+BEGIN_SRC R :exports code
+    system("python do-something.py input.csv output.csv")
+  #+END_SRC
+
+  #+BEGIN_SRC python :exports code
+    from subprocess import call
+    call(["Rscript", "do-something.R", "input.csv", "output.csv"])
+  #+END_SRC
+
+
+  Use txt, csv, [[https://github.com/wesm/feather][feather]], [[http://bioconductor.org/packages/release/bioc/html/rhdf5.html][hdf5]], [[https://cran.r-project.org/web/packages/RProtoBuf/index.html][protobufs]], ...
+
+* How to call python from R
+** [[https://github.com/rstudio/reticulate][reticulate]]
+   + R package for calling python
+   + src_r[:exports code]{install.packages("reticulate")}
+   + RStudio integration (if you're into that sort of thing)
+
+*** Running code
+    #+BEGIN_SRC R :exports both :results output
+      library(reticulate)
+
+      py_run_file("some-python-file.py")
+
+      env <- py_run_string("x = 10")
+
+      print(env$x)
+    #+END_SRC
+
+    #+RESULTS:
+    : [1] 10
+*** Import packages
+    #+BEGIN_SRC R :exports both :results output
+      library(reticulate)
+
+      scipy_stats <- import("scipy.stats")
+      print(head(names(scipy_stats)))
+
+      scipy_stats$alpha$pdf(1.2, 3.4)
+    #+END_SRC
+
+    #+RESULTS:
+    : [1] "absolute_import" "alpha"           "anderson"        "anderson_ksamp"
+    : [5] "anglit"          "ansari"
+    : [1] 0.01028433
+
+*** Getting/sending objects
+    Usually automatic conversion of R types to python types
+    #+BEGIN_SRC R :exports code
+      library(reticulate)
+
+      builtins <- import_builtins()
+
+      dict(key = value) # not great, build in python
+      tuple(4, 3)
+
+      # Beware: need actual ints
+      builtins$range(2, 3)
+      builtins$range(2L, 3L)
+
+      # Beware: one-element vectors
+      builtins$sum(c(4))
+      builtins$sum(list(4))
+    #+END_SRC
+*** Python Classes
+    #+BEGIN_SRC python :exports code
+      class Adder(object):
+          def __init__(self, a, b):
+              self.a = a
+              self.b = b
+          def add(self):
+              return self.a + self.b
+    #+END_SRC
+
+    #+BEGIN_SRC R :exports code
+      library(reticulate)
+
+      py_run_file("class_file.py")
+
+      env <- py_run_string("x = Adder(4, 5)")
+
+      env$x$a
+      env$x$b
+      env$x$add()
+    #+END_SRC
+
+*** Numpy / Pandas interface
+    + Numpy ::
+      + Arrays and matrices automatically convert
+      + Column-major (R) vs row-major (numpy)
+    + Pandas ::
+      + [[https://github.com/posterior/treecat/issues/24][in progress?]]
+      + for now: src_python[:exports code]{pandas.DataFrame.as_matrix}
+*** The python 2/3 question
+    Either works; you just need to specify
+    #+BEGIN_SRC R
+    library(reticulate)
+    use_python("/usr/local/bin/python") # or whatever
+    #+END_SRC
+*** Example: OpenAI gym
+    #+BEGIN_SRC R :exports code
+      library(reticulate)
+
+      gym <- import("gym")
+      env <- gym$make("CartPole-v0")
+
+      env$reset()
+      done <- FALSE
+      while (!done) {
+        env$render()
+        action <- env$action_space$sample()
+        results <- env$step(action)
+        done <- results[[3]]
+      }
+    #+END_SRC
+
+* How to call R from python
+** [[https://bitbucket.org/rpy2/rpy2][rpy2]]
+   + Python package for calling R
+   + src_shell[:exports code]{pip install rpy2}
+*** Running code
+    #+BEGIN_SRC python :exports both :results output
+      from rpy2 import robjects as ro
+
+      x = ro.r.r("rnorm(5)")
+      #x = ro.r.rnorm(5)
+      print(x, type(x))
+    #+END_SRC
+
+    #+RESULTS:
+    : [1]  0.7602822 -0.7154573  0.9686439  1.3646179  0.2378504
+    :  <class 'rpy2.robjects.vectors.FloatVector'>
+
+*** Getting/sending objects
+    #+BEGIN_SRC python :exports both :results output
+      from rpy2 import robjects as ro
+
+      ro.r("x <- rbinom(5, 4, 0.4)")
+      x = list(ro.r["x"])
+
+      print(x, type(x))
+    #+END_SRC
+
+    #+RESULTS:
+    : [4, 1, 2, 1, 2] <class 'list'>
+
+*** Interface with Pandas / Numpy
+    #+BEGIN_SRC python :exports code :results none
+      import pandas as pd
+      import numpy as np
+
+      import rpy2.robjects as ro
+
+      from rpy2.robjects import pandas2ri
+      pandas2ri.activate()
+
+      import rpy2.robjects.numpy2ri
+      rpy2.robjects.numpy2ri.activate()
+
+      # Implicit conversion automatically
+      pandas_df = ro.r.("iris") # R df -> pandas
+      print(ro.r.summary(pandas_df)) # pandas -> R df
+
+      # Can be explicit
+      r_df = pandas2ri.py2ri(pandas_df) # pandas -> R df
+      pandas_df = pandas2ri.ri2py(r_df) # R df -> pandas
+    #+END_SRC
+*** R Packages
+    #+BEGIN_SRC python :exports code :results none
+      import numpy as np
+      from rpy2.robjects.packages import importr
+      import rpy2.robjects.numpy2ri
+      rpy2.robjects.numpy2ri.activate()
+
+      kernlab = importr("kernlab")
+
+      mat_a = np.random.normal(size = (100, 200))
+      mat_b = np.random.normal(size = (100, 200))
+
+      test = kernlab.kmmd(mat_a, mat_b)
+    #+END_SRC
+*** Example: Use ggplot2 from python
+    #+BEGIN_SRC python :exports code :results none
+      import pandas as pd
+      from sklearn import datasets
+
+      import rpy2.robjects.lib.ggplot2 as ggplot2
+      from rpy2.robjects.packages import importr
+      from rpy2.robjects import pandas2ri
+      pandas2ri.activate()
+
+      ggplot2 = importr("ggplot2")
+
+      boston_data = datasets.load_boston()
+      boston_df = pd.DataFrame(boston_data.data, columns=boston_data.feature_names)
+
+      figure = ggplot2.ggplot(boston_df) + \
+               ggplot2.aes_string(x='TAX', y='LSTAT') + \
+               ggplot2.geom_hex() + \
+               ggplot2.theme_minimal(base_size=14)
+
+      figure.plot()
+      ggplot2.ggsave("output-file.png", figure)
+    #+END_SRC
+
+* Somewhat wilder ideas
+  + [[https://www.rforge.net/Rserve/][Rserve]] :: talk to R using TCP/IP
+  + [[http://jupyter.org/][Jupyter Notebooks]] :: R "magic" (uses rpy2 under hood)
+  + [[http://beakernotebook.com/getting-started?linux&scroll][Beaker Notebooks]] :: Jupyter for many langauges
+* Takeaways
+  + Take the best of both languages
+  + Python in R : reticulate
+  + R in Python : rpy2
