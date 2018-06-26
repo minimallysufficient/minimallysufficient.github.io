@@ -1,0 +1,255 @@
+---
+date: 2018-02-16
+tags: 
+- 
+- 
+- 
+- 
+- dummy-tags-should-be-replaced
+author: 
+layout: post
+title: What is the chance of an earthquake?
+excerpt: The USGS estimates 0.7 plus or minus 0.1 chance of a 6.7+ earthquake in the Bay Area before 2030. What does that mean?
+categories: 
+- probability philosophy HOS
+---
+<p>
+Our <a href="http://stat.cmu.edu/~lrichard/history-of-stats/history-of-stats.html">History of Stats reading group</a> recently restarted. The group reads
+somewhat older statistics papers with the aim of generating
+discussions full of philosophical insight, ill-informed pontificating,
+and spurious argumentation.
+</p>
+
+<p>
+To kick things off right I presented <a href="https://www.stat.berkeley.edu/~stark/Preprints/611.pdf">"What is the Chance of an
+Earthquake"</a> by Stark and Freedman. The paper considers a 1999 US
+Geological Survey report which estimates that the chance of a 6.7+
+magnitude earthquake before 2030 in the Bay Area is 0.7 &plusmn; 0.1. The
+central question of the paper: what exactly does this mean?
+</p>
+
+<div id="outline-container-orgf75d4ed" class="outline-2">
+<h2 id="orgf75d4ed">Probability is just math</h2>
+<div class="outline-text-2" id="text-orgf75d4ed">
+<p>
+To start things off we first want to figure out exactly what
+probabilities are. As we'll come to see, this is the easiest aspect
+of the problem.
+</p>
+
+<p>
+In the theoretical world probabilities are just functions that
+satisfy some axiomization of probability like Kolmogorov's axioms
+which you learn in Probability 101. In some sense these don't really
+even have anything in particular to do with probability; they're
+just rules for manipulating functions with certain properties.
+</p>
+
+<p>
+You can use these rules to build up a quite impressive scaffolding
+of probability results. This is just what probabilists have been
+spending all of their time doing. Regardless of what we conclude
+about probabilities in the following sections the Central Limit
+Theorem will remain "true".
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgb5aa495" class="outline-2">
+<h2 id="orgb5aa495">Connection with the real world</h2>
+<div class="outline-text-2" id="text-orgb5aa495">
+<p>
+Of course, while probability proofs might pay the salary of some of
+my colleagues I'm probably going to have to ply my trade in the real
+world. And unfortunately here things are not so clear. There's a
+couple different schools of thought (and some aren't discussed
+here).
+</p>
+</div>
+
+<div id="outline-container-orgebd0b93" class="outline-3">
+<h3 id="orgebd0b93">Probabilities are symmetries</h3>
+<div class="outline-text-3" id="text-orgebd0b93">
+<p>
+This is your standard undergraduate sample space idea. We have some
+set \(\Omega\) of equally likely outcomes (samples) and we can get
+probabilities by counting possibilities in this space. The standard
+example is rolling dice where each possible roll is an equally
+likely sample; the symmetry of the die leads to nice symmetries in
+sample space.
+</p>
+
+<p>
+This is weird since there's no obvious symmetries in earthquakes.
+You could say it can either happen or not, but it would be a
+mistake to then assume that this implies 50-50 odds. This also
+seems weird in continuous cases as uniform distributions are not
+transformation invariant so you can't be uniform over ever
+parameterization (consider the distribution of \(X^{3}\) when \(X\) is
+uniformly distributed).
+</p>
+</div>
+</div>
+
+<div id="outline-container-org581151b" class="outline-3">
+<h3 id="org581151b">Probabilities are relative frequencies</h3>
+<div class="outline-text-3" id="text-org581151b">
+<p>
+Alternatively we can turn to the frequentist interpretation:
+probability is the limit of the relative frequency after repeated
+trials. The standard example here is coin flips: after a large
+number of flips of a fair coin the proportion of heads to tails
+will be roughly even. Likewise if the coin has probability \(p\) of
+heads then the proportion will be \(p\).
+</p>
+
+<p>
+This is weird since we're never going to be repeating 2000-2030
+again. Does this apply if we have 2030-2060, 2060-2090? What does
+it mean to "repeat" an event?
+</p>
+
+<p>
+Even weirder still is the fact that this definition seems circular.
+After all, after \(N\) flips the count of heads isn't necessarily
+going to be \(Np\); instead it's going to concentrate around \(Np\)
+with high probability. But then what does probability mean in this
+context?
+</p>
+</div>
+
+<div id="outline-container-org4f34ad1" class="outline-4">
+<h4 id="org4f34ad1">Calibration</h4>
+<div class="outline-text-4" id="text-org4f34ad1">
+<p>
+A very closely related interpretation of probabilities is just that
+they're calibrated. I'll let Nate Silver say it:
+</p>
+
+<blockquote>
+<p>
+“One of the most important tests of a forecast — I would argue
+that it is the single most important one — is called calibration.
+Out of all the times you said there was a 40 percent chance of
+rain, how often did rain actually occur? If over the long run, it
+really did rain about 40 percent of the time, that means your
+forecasts were well calibrated.” <a href="https://en.wikipedia.org/wiki/The_Signal_and_the_Noise">Signal and Noise</a>
+</p>
+</blockquote>
+
+<p>
+This seems like a desirable trait, especially in weather
+prediction. I seem to recall someone saying the goal of a true
+statistician is to die with less than &alpha; percent of their analyses
+being proven false; surely they were big fans of calibration.
+</p>
+
+<p>
+But I do find calibration lacking; it should be noted that
+calibration doesn't imply accuracy. Any marginal distribution has
+correct calibration: without looking outside I can predict the
+current weather with correct calibration by merely predicting the
+long-term frequencies of rain. But I could achieve 100% accuracy
+by simply looking outside. So while calibration seems be a
+desirable trait, it doesn't seem to be the only desirable trait.
+</p>
+
+<p>
+Also what does it mean for this to be "repeated"? Does it only
+matter if we have correct coverage on earthquakes or earthquakes +
+hot dog sales?
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3840f99" class="outline-3">
+<h3 id="org3840f99">Probabilities are strength of beliefs</h3>
+<div class="outline-text-3" id="text-org3840f99">
+<p>
+We now get to the Bayesian or more generally subjectivist view:
+probabilities aren't properties of the real world; instead they're
+properties of your knowledge of the real world.
+</p>
+
+<p>
+This is weird because it doesn't seem to interact very strongly
+with the real world. Do real probabilities even matter? Why do we
+care about anyone else's estimate?
+</p>
+</div>
+
+<div id="outline-container-orgf86ea8a" class="outline-4">
+<h4 id="orgf86ea8a">Betting</h4>
+<div class="outline-text-4" id="text-orgf86ea8a">
+<p>
+Alternatively connected with subjective interpretations are
+probabilities are odds at which you're indifferent to different
+sides of a wager. If we were to bet on some event you would
+obviously bet with me if I gave you large enough odds. And you
+wouldn't bet with me if I gave you small enough odds. Somewhere in
+the middle is an amount at which you would be indifferent between
+betting and not betting and this corresponds to your subjective
+probability of this event.
+</p>
+
+<p>
+Some minor problems with this view are that (1) people don't hold
+coherent beliefs and (2) bets might not reflect true beliefs as
+payoffs might be entangled with the outcome.
+</p>
+
+<p>
+To convince yourself of (1) just consider someone asking you a
+bunch of questions about your beliefs on World Cup predictions.
+What's the probability that France will win given that Brazil
+makes it out of their group? Is that consistent with your
+probability that Switzerland winning their group? And hundred more
+questions like that. Are you certain that you wouldn't slip up? If
+so go read about the <a href="https://en.wikipedia.org/wiki/Conjunction_fallacy">Conjunction Fallacy</a> and reconsider.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org7a396db" class="outline-3">
+<h3 id="org7a396db">Probabilities are what our model says</h3>
+<div class="outline-text-3" id="text-org7a396db">
+<p>
+We finally reach the favored interpretation of the paper:
+probabilities are self-contained but may show some correspondence
+with the real world.
+</p>
+
+<p>
+The earthquake model relies upon a melange of empirical
+observations, physical models, educated guesses, and who knows what
+else. But it's possible that at the end of the day it tells us
+something about the probability of an earthquake. Like Box's quote:
+"all models are wrong, but some are useful".
+</p>
+
+<p>
+But how do we check these models? Especially for earthquakes; it's
+not like we're going to observe very many high-magnitude
+earthquakes in the Bay Area to check our model. It seems like this
+holds for epidemiology, climatology, and economic models as well.
+And how do we interpret these probabilities? It seems like it's
+targeting the frequentist interpretation so did we really escape
+any of our difficulties with that view?
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga52ab9a" class="outline-2">
+<h2 id="orga52ab9a">Uncertainty about probability</h2>
+<div class="outline-text-2" id="text-orga52ab9a">
+<p>
+In the end I think we ended up more confused than we entered; always
+a sign of a good paper for History of Stats. We're planning on
+reading several more papers in the following weeks to delve more
+deeply into probabilities.
+</p>
+</div>
+</div>
