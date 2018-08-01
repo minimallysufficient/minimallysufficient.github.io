@@ -1,0 +1,62 @@
+#+OPTIONS: toc:nil num:nil todo:nil
+#+LAYOUT: post
+#+DATE: 2018-08-01
+#+TITLE: JSM 2018 Review
+#+DESCRIPTION: I attended JSM 2018 in Vancouver, Canada.
+#+CATEGORIES: jsm, conference
+
+I'm currently sitting in the airport after attending the Joint
+Statistical Meetings (JSM). It was actually my first JSM; as my PhD
+starts finishing up I figured I should attend at least once. I'm glad
+I went although I doubt I'll go again.
+
+The conference was located in Vancouver which was delightful. My only
+complaint with the city was the accumulation of Canadian coins (but
+not pennies!). There were heat advisories while we were there with
+temperatures rising to a sweltering 28 degrees Celsius. Although I do
+feel it got quite a bit higher in our airflow-challenged AirBnB.
+
+The talks were decent although I'm generally less than enthused about
+attending lectures in person. I'd much rather they be filmed so I can
+watch at 1.5 speed and pause/resume. A few highlights:
+
++ "Theory vs Practice" in which a panel of some big names in stats
+  discussed the current state of play with respect to statistical
+  theory and statistical practice. While things are potentially
+  changing, the consensus was that an academic statistician without
+  theorems will have a hard time. Made me quite glad I'm going into
+  industry.
++ My Google supervisor Dennis Sun mentioned my internship project
+  Meterstick in his talk.
++ Chris Genovese plugged [[https://www.gnu.org/software/emacs/][emacs]] and [[https://orgmode.org/][org-mode]] in his talk on
+  reproducability.
++ I saw Hadley Wickham edit his [[http://adv-r.had.co.nz/][book]] live during his talk on
+  reproducability. He also showed a R script for automating managing a
+  shared electrical bill. I'm inspired to automate my own menial
+  tasks.
++ Cynthia Rudin on interpretable machine learning. Showed the NN tool
+  [[https://arxiv.org/abs/1806.10574][This looks like that]]
+
+For my part I gave a poster on my ABC work during the opening mixer.
+There was a surprising number of people who came by. It was a quite
+strange experience trying to explain mostly my entire thesis on a
+single poster. It's a bit reassuring to explain my research to
+non-statisticians and realize how much I've learned. Now doing so with
+statisticians feels even better.
+
+Of course, JSM isn't all about, or even mostly about, the talks. The
+main benefit was socializing. As not a particularly social person, I
+felt I didn't get the full advantage of this aspect of the conference.
+Most of my time was spent with people from my cohort: we could have
+done that in Pittsburgh. But it was fun exploring a new city with my
+friends and meeting the occasional new person.
+
+If there was one thing I'd do differently it would be to sign up for
+the Career Service. While I wasn't 100% excited for many of the
+companies at JSM, it would have been nice to get a big dose of
+interview practice before starting my job search. And who knows, maybe
+I'd end up with an offer in the process.
+
+All in all it was a good experience. I'd recommend any grad student
+attend at least once. Especially if it's in a good location and you
+have funding. Speaking of which, it is in Denver next year...
