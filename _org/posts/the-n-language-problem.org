@@ -1,0 +1,82 @@
+#+OPTIONS: toc:nil num:nil todo:nil
+#+LAYOUT: post
+#+DATE: 2018-08-14
+#+TITLE: The N Language Problem
+#+DESCRIPTION:
+#+CATEGORIES: computing R julia
+
+The Julia [[https://julialang.org/blog/2018/08/one-point-zero][1.0 release]] is here, it's really finally here! But for all
+my Julia enthusiasm, I generally don't use it for my academic work.
+And I don't expect that will change soon (although I'd love for that
+to happen). The reason why is what I call the "N language problem".
+
+First we should discuss the two language problem. A motivation behind
+Julia was solving this problem: you prototype in a slow high level
+language before writing production code in a performant low level
+language. This approach jointly minimizes programmer time and
+computational time, but clearly it's sub-optimal to write the code
+twice. Julia's goal is that [[https://julialang.org/blog/2012/02/why-we-created-julia][we can be greedy]] and get both ease of
+development and performance.
+
+But that's not the whole picture. Somewhat orthogonal to two language
+problem is the N language problem: you want your code to be used by
+the community. And if you want the statistics community to use your
+code it had better be an R package. Or if you want scientists to use
+your code it had better be a python package (or /*gasp/* a Matlab
+"package?"). Or javascript, or go, or Java, or whatever language.
+
+In a fantasy world everyone switches to Julia and it rules as the one
+True language. This seems unworkable and even perhaps undesirable.
+There are reasons why we have so many languages in the first place. So
+what are we to do?
+
+I encountered this problem while working on my latest project on
+random forests for conditional density estimation. My statistical
+collaborators mostly just use R. But our application area is astronomy
+and for them if it's not in python then it doesn't exist. While I
+could write two versions, that seems unsustainable especially if we
+want to include more application areas with their own languages (i.e.
+I shudder at the thought of writing a Matlab port). My solution was
+writing a C++ library and then wrappers for both R and python.
+
+This is, effectively, just embracing the two language paradigm.
+Importantly though, it does so in a way that solves the N language
+problem.
+
+For example, Rcpp is a great tool, but it's easy to end up with a "one
+language" solution. Having so much power to work with R's internal
+data structures diminishes the ability to port to another language.
+You're not coding in C++, you're coding in Rcpp and that's going to
+cause problems when you want to port to a new language.
+
+What you have to do is write in such a way that you're agnostic to R's
+data structures. So none of Rcpp's syntactic sugar and no R-specific
+types. That way when you switch to python you can use the same code
+with just some new wrapper code.
+
+There's still the pain point of writing in C++. But if it lets you
+avoid writing significant code in several other languages you still
+come out ahead. I wrote the C++ code for the R version of RFCDE and
+got the python version for free.
+
+Ideally you would end up replacing C++ with something like Julia. I
+know I would have loved to write RFCDE in Julia rather than C++. But
+we're not there yet. But it would be great to see some progress
+towards that goal.
+
+The N language problem is only going to get worse, at least in the
+statistics/data science field. The best thing you can say about the R
+language is that it has nearly every statistical method ever invented
+implemented by some package on CRAN. And that most statisticians use
+it. But as a language, it leaves a lot to be desired. And good luck
+convincing other fields to adopt it.
+
+But with the lock-in implicitly created by CRAN, there's almost no
+other choice. If all of those methods had been implemented in C we
+could use them in almost any language we wanted. But also if they had
+to be implemented in C we probably wouldn't have nearly as many
+packages as we do.
+
+So what we need is a new "low-level" wrappable language. I hope it's
+Julia, but I'd jump ship in a heartbeat if I found something that
+could solve this problem better.
