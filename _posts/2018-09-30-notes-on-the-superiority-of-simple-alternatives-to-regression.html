@@ -1,0 +1,158 @@
+---
+date: 2018-09-30
+tags: 
+- 
+- dummy-tags-should-be-replaced
+author: 
+layout: post
+title: Notes on "The Superiority of Simple Alternatives to Regression for Social Science Prediction"
+excerpt: I discuss an interesting paper about how you might not want to use regression.
+categories: 
+- HoS
+- statistics
+featured: false
+---
+<p>
+I led a discussion in our History of Stats group on a very provocative
+paper: <a href="https://www.jstor.org/stable/3701356">The superiority of simple alternatives to regression for social
+science predictions</a> by Dana and Dawes (2004) (thanks to <a href="http://civilstat.com/">Jerzy</a> for
+pointing it out and video-chatting in). We had an excellent time
+discussing the paper and I even thought we came up with some genuine
+statistical wisdom (although you'll have to read to the end to find
+it).
+</p>
+
+<p>
+The main idea of the paper is that for most social science
+applications you're better off not using any of the (actually not that
+fancy) regression machinery that statisticians have worked out and
+instead should do something simple like set your coefficients based
+upon univariate correlation or even just set coefficients to +1/-1
+depending on whether you think it's a positive/negative effect. And
+they claim that this will have superior generalization error,
+prescribing
+</p>
+
+<blockquote>
+<p>
+Regression coefficients should not be used for predictions unless
+error is likely to be extremely small by social science standards or
+sample sizes will be larger than 100 observations to predictors. In
+other words, regression coefficients should almost never be used for
+social science predictions. Simple alternatives will usually yield
+better predictions
+</p>
+</blockquote>
+
+<div id="outline-container-org48c42db" class="outline-2">
+<h2 id="org48c42db">Why this might be good advice</h2>
+<div class="outline-text-2" id="text-org48c42db">
+<p>
+Let's first examine why this might be good advice. As with many
+things it's the context that's important: you have very little data
+and it's very noisy.
+</p>
+
+<p>
+In some respects this paper shouldn't be surprising: it's just the
+standard bias-variance trade-off. These simpler methods have are
+biased but have extremely small variance (zero in fact if you set
+all of your coefficients to 1). When we have little data there's
+greater room to trade off bias since the variance will be so large.
+OLS is the <a href="https://en.wikipedia.org/wiki/Gauss%E2%80%93Markov_theorem#Statement">best linear unbiased</a> estimator, but biased estimators can
+definitely beat it. You can think of these models as extreme
+regularizers.
+</p>
+
+<p>
+If I had a single criticism of the paper is that it doesn't make
+this point. It seems like it unfairly criticizes regression
+techniques without understanding why; just a blanket claim of
+regression is too "complicated" and doesn't actually perform well. A
+more nuanced explanation would prove more useful than a blanket
+prescription.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org7340757" class="outline-2">
+<h2 id="org7340757">Why this might not be good advice</h2>
+<div class="outline-text-2" id="text-org7340757">
+<p>
+Now let's get into some reasons why this might not be good advice.
+</p>
+
+<p>
+Firstly, and I had shown great restraint for not throwing out the
+paper once I figured this out, THE UNIT WEIGHTS APPROACH DIDN'T EVEN
+LOOK AT THE DATA!!!! Now some of the alternative methods like
+correlation weights use the data, but the most you can say for the
+unit weights is that the data can maybe pick the sign of the weights
+(but in practice they had "experts" pick the sign). Say all you want
+about bias-variance trade-off, but generally I think that trying to
+approach a true model is desirable.
+</p>
+
+<p>
+One point that was made in our discussion was that why care about
+having a true model if it predicts better. But even as a fairly
+strong advocate of judging models based upon prediction it felt
+somewhat awkward to accept such an arbitrary method of "fitting" a
+model. Some of my reluctance is based upon the inability to do
+inference in such a model. But most is based upon my Bayesian
+instincts that once I see data I should update my beliefs. And as I
+get more data I should always be looking to fit a more complex model
+(assuming that all models are eventually proven wrong by the data).
+</p>
+
+<p>
+Finally, there's some other concerns regarding their simulations
+that are a little weird like how they validate with model that was
+included in the data. I'm reminded of the JSM talk on Theory vs
+Practice regarding how much we should really trust simulations.
+Overall I'd like to see a replication with more extensive
+simulations which would better explain what's going on. If I were
+less busy I might do so myself.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1d6a06c" class="outline-2">
+<h2 id="org1d6a06c">Takeaway wisdom</h2>
+<div class="outline-text-2" id="text-org1d6a06c">
+<p>
+So what are to we to do with these results? Does the statistics
+profession have anything to offer social scientists in this case? I
+think the answer is yes; but what we have to offer is not
+necessarily what the social scientists want. This is where my nugget
+of wisdom comes in&#x2026;
+</p>
+
+<p>
+Consider the traditional separation of data in training, validation,
+and test data.
+</p>
+
+<ul class="org-ul">
+<li>A modeler's primary job is to evaluate the model. So in a low
+data setting you have to put all of your available data into the
+test set. This leaves no data to train a model and certainly not
+to tune a model.</li>
+
+<li>A modeler's secondary job is to fit the model. So as you start
+getting more data you can put it into the training set to fit
+something. As you get more data you can fit more complex models.</li>
+
+<li>Finally, a modeler's tertiary job is to tune the model. So you
+now you have enough data to evaluate and fit your model and you
+start fine-tuning it.</li>
+</ul>
+
+<p>
+So within this framework we can easily respond to this paper: with
+so little data you weren't justified in fitting a regression
+anyways; at most you could evaluate some ad-hoc method. At the very
+least that seems like some decent advice.
+</p>
+</div>
+</div>
