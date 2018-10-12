@@ -1,0 +1,123 @@
+---
+date: 2018-10-12
+tags: 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- dummy-tags-should-be-replaced
+author: 
+layout: post
+title: notes on [[https://projecteuclid.org/euclid.ss/1177009939][bayesian experimental design: A Review]]
+excerpt: I discuss the main ideas of Bayesian experimental design.
+categories: 
+- statistics
+featured: false
+title: Notes on Bayesian Experimental Design
+title: notes on bayesian experimental design: A Review
+---
+<p>
+This semester I've been taking an experimental design class.
+Experimental design is the specification of all aspects of an
+experiment:
+</p>
+
+<ul class="org-ul">
+<li>which treatments to study</li>
+<li>choosing blocking factors</li>
+<li>choosing how to randomize</li>
+<li>specifying experimental units</li>
+<li>choosing treatment allocation</li>
+</ul>
+
+<p>
+But how do we select those values? This is important because you can
+improve estimation of particular quantities by carefully designing
+aspects of the experiment.
+</p>
+
+<p>
+As one of the final tasks of the course we were to give a talk about a
+relevant paper. As a fervent Bayesian, I decided to look at <a href="https://projecteuclid.org/euclid.ss/1177009939">Bayesian
+Experimental Design: A Review</a> by Chaloner and Verdinelli (1995).
+</p>
+
+<p>
+The main idea of the Bayesian approach to experimental design (and to
+Bayesian inference in general) is that we should take advantage of
+prior information when avaiable.
+</p>
+
+<p>
+Consider the following setup:
+</p>
+
+<ul class="org-ul">
+<li>We have some set of potential designs \(\eta\)</li>
+<li>For each design \(\eta\) we would observe data \(y\) based upon the design
+as well as some unknown parameters \(\theta\).</li>
+<li>We then make some decision \(d\) based upon \(y\) observations.</li>
+<li>Finally we'll have some measure of utility \(U(d, \theta, \eta, y)\) which
+depends upon all of these quantities.</li>
+</ul>
+
+<p>
+Now that we have a utility the most natural thing to do from a
+decision-theory perspective is to optimize the expected utility.
+</p>
+
+<p>
+\[ \int_{y} \int_{\theta} U(d, \theta, \eta, y) p(\theta \mid y, \eta) p(y \mid \eta) d\theta dy \]
+</p>
+
+<p>
+So our best decision holding everything else fixed is whatever \(d\)
+maximizes this expression. Likewise, the best design is the whatever
+\(\eta\) maximizes this expression (when paired with the optimal \(d\) for
+that particular \(\eta\)).
+</p>
+
+<p>
+An important note is that the utility function should be chosen to
+suit the goal of the experiment. For instance, there's specific
+utility functions for experiments designed to simply obtain
+information about the unknown parameters vs experiments designed to
+perform a particular test vs fit a model which predicts well. This is
+more satisfying than some of the classical designs taught in the class
+which did not seem tailored towards specific purposes so much as
+satisfying generally desireable criterion.
+</p>
+
+<p>
+You'll note that I mention nothing about actually calculating the
+expected utility. This seems to be a major limitation in using
+Bayesian experimental design more broadly. It would be interesting if
+there were good software for flexibly designing Bayesian experiments;
+as it is, there seems to only be focus on linear models where you can
+calculate the expected utility in closed form.
+</p>
+
+<p>
+And that's basically all you need to know. One thing that I love about
+Bayesian methods is that they're conceptually concise. Once you know a
+few basic ideas you can apply them a wide array of problems. This is
+in contrast to the traditional experimental design literature which
+gave the impression of lacking cohesion. Although before I chalk up
+another victory for the Bayesian school I should probably consider
+that the vast majority of current scientific designs use the
+traditional methods. So perhaps there's a beauty/practicality
+tradeoff to consider.
+</p>
