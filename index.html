@@ -1,18 +1,4 @@
 ---
-layout: default
+layout: none
 ---
-
-<div class="home">
-
-  <ul class="entries">
-    {% for post in site.posts limit:5 %}
-      <a href="{{ post.url }}">
-        <h2>{{ post.title }}</h2>
-      </a>
-      <div>{{ post.excerpt }}</div>
-    {% endfor %}
-  </ul>
-
-  <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
-
-</div>
+{{ site.posts.first }}
