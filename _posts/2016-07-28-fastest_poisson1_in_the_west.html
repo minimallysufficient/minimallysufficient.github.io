@@ -20,15 +20,15 @@ tags:
 - 
 - 
 - 
-- 
 - dummy-tags-should-be-replaced
 author: 
 layout: post
 title: The Fastest Poisson(1) in the West
-excerpt:  
+excerpt: How quickly can I generate a Poisson(1) random variable?
 categories: 
--
-commentissueid: 25
+- computing
+- julia
+featured: false
 ---
 <p>
 I was optimizing some <a href="http://www.unofficialgoogledatascience.com/2015/08/an-introduction-to-poisson-bootstrap_26.html">Poisson bootstrap</a> code this week.
@@ -45,9 +45,9 @@ case. Because the library Poisson RNG has to handle various cases of
 Let's find out.
 </p>
 
-<div id="outline-container-orgheadline1" class="outline-2">
-<h2 id="orgheadline1">The Competition</h2>
-<div class="outline-text-2" id="text-orgheadline1">
+<div id="outline-container-orgcae1de2" class="outline-2">
+<h2 id="orgcae1de2">The Competition</h2>
+<div class="outline-text-2" id="text-orgcae1de2">
 <p>
 Let's start off by scoping out the competition. I'll use julia just
 because I don't stand a chance with R since I'm actually competing
@@ -57,7 +57,6 @@ uses RMath library. Let's see how it does.
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-julia"><span style="color: #4c83ff;">using</span> Distributions
 <span style="color: #4c83ff;">using</span> BenchmarkTools
 
@@ -152,7 +151,6 @@ initialization of the Poisson distribution.
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-julia"><span style="color: #4c83ff;">const</span> dist = Poisson(1)
 <span style="color: #4c83ff;">function</span> <span style="color: #ff1493;">baseline_no_initialization</span>()
     <span style="color: #4c83ff;">return</span> rand(dist)
@@ -232,16 +230,15 @@ our machetes and press forward.
 </div>
 </div>
 
-<div id="outline-container-orgheadline2" class="outline-2">
-<h2 id="orgheadline2">The First Attempt: What did you expect?</h2>
-<div class="outline-text-2" id="text-orgheadline2">
+<div id="outline-container-org2323269" class="outline-2">
+<h2 id="org2323269">The First Attempt: What did you expect?</h2>
+<div class="outline-text-2" id="text-org2323269">
 <p>
 So let's try to do this ourselves. We'll start off with the obvious
 approach: we draw a uniform random variable and invert the cdf. 
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-julia"><span style="color: #4c83ff;">function</span> <span style="color: #ff1493;">inverse_cdf</span>()
     <span style="color: #4c83ff;">return</span> quantile(dist, rand())
 <span style="color: #4c83ff;">end</span>
@@ -317,7 +314,6 @@ Let's write our own version.
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-julia"><span style="color: #4c83ff;">function</span> <span style="color: #ff1493;">loop_version</span>()
     ii = 0
     u = rand()
@@ -426,9 +422,9 @@ far too much post left for me to have left it at that.
 </div>
 </div>
 
-<div id="outline-container-orgheadline3" class="outline-2">
-<h2 id="orgheadline3">The Second Attempt: Success</h2>
-<div class="outline-text-2" id="text-orgheadline3">
+<div id="outline-container-org5dc47a9" class="outline-2">
+<h2 id="org5dc47a9">The Second Attempt: Success</h2>
+<div class="outline-text-2" id="text-org5dc47a9">
 <p>
 Well, it's pretty obvious what's going wrong in the previous
 example: we're calculating the ccdf function far too often. It
@@ -445,7 +441,6 @@ exponent so I'm pretty safe.
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-julia"><span style="color: #919191;">@generated</span> <span style="color: #4c83ff;">function</span> loop_cached_version()
     N = 100
     ccdfs = [[ccdf(Poisson(1), ii) <span style="color: #4c83ff;">for</span> ii <span style="color: #4c83ff;">in</span> 0:N]; 1.0]
@@ -533,9 +528,9 @@ I'm pretty pleased with that benchmark.
 </div>
 </div>
 
-<div id="outline-container-orgheadline4" class="outline-2">
-<h2 id="orgheadline4">Final Attempt: The Alias Method</h2>
-<div class="outline-text-2" id="text-orgheadline4">
+<div id="outline-container-org4d8e25b" class="outline-2">
+<h2 id="org4d8e25b">Final Attempt: The Alias Method</h2>
+<div class="outline-text-2" id="text-org4d8e25b">
 <p>
 Another approach is to use the Alias method. It turns the linear
 time loop into a constant time array lookup. Here's a quick
@@ -543,7 +538,6 @@ implementation based on skimming the <a href="https://en.wikipedia.org/wiki/Alia
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-julia"><span style="color: #919191;">@generated</span> <span style="color: #4c83ff;">function</span> alias()
     <span style="color: #8B8989; font-style: italic;">## </span><span style="color: #8B8989; font-style: italic;">Hacky table generation; you could optimize this better</span>
     N = 100
@@ -643,9 +637,9 @@ entries and index with the first byte and compare with the rest.
 </div>
 </div>
 
-<div id="outline-container-orgheadline5" class="outline-2">
-<h2 id="orgheadline5">Further Directions</h2>
-<div class="outline-text-2" id="text-orgheadline5">
+<div id="outline-container-org55bfa80" class="outline-2">
+<h2 id="org55bfa80">Further Directions</h2>
+<div class="outline-text-2" id="text-org55bfa80">
 <p>
 Having mentioned working with bits directly brings up another topic.
 One problem with all of these method is that it's rather wasteful
@@ -661,7 +655,6 @@ this:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-julia"><span style="color: #8B8989; font-style: italic;">## </span><span style="color: #8B8989; font-style: italic;">This can be tuned for optimal performance</span>
 _optimal_buffer_length = ??
 
@@ -702,9 +695,9 @@ usual costs of your usual method.
 </div>
 </div>
 
-<div id="outline-container-orgheadline6" class="outline-2">
-<h2 id="orgheadline6">Conclusion</h2>
-<div class="outline-text-2" id="text-orgheadline6">
+<div id="outline-container-orgc25821b" class="outline-2">
+<h2 id="orgc25821b">Conclusion</h2>
+<div class="outline-text-2" id="text-orgc25821b">
 <p>
 So it seems like you can do a great deal better than the regular
 Poisson implementation, at least if you can specialize.

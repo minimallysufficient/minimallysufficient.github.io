@@ -2,8 +2,9 @@
 #+LAYOUT: post
 #+DATE: 2018-08-14
 #+TITLE: The N Language Problem
-#+DESCRIPTION:
-#+CATEGORIES: computing R julia
+#+DESCRIPTION: The two-language problem is annoying; but once you write your code you end up facing the N language problem.
+#+CATEGORIES: computing, R, julia
+#+FEATURED: true
 
 The Julia [[https://julialang.org/blog/2018/08/one-point-zero][1.0 release]] is here, it's really finally here! But for all
 my Julia enthusiasm, I generally don't use it for my academic work.

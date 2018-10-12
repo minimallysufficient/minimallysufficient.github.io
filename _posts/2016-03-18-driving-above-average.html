@@ -6,114 +6,13 @@ tags:
 - 
 - 
 - 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
 - dummy-tags-should-be-replaced
 author: 
 layout: post
 title: Driving Above Average
-excerpt:  
+excerpt: Everyone thinks they're an above average driver. Can that actually be true?
 categories: 
--
-commentissueid: 21
+- statistics
 ---
 <p>
 At lunch my friend stated that "Most people are so arrogant; they
@@ -137,7 +36,6 @@ other driver. This results in the following qqplot.
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-R">nDrivers <span style="color: #96CBFE;">&lt;-</span> 1000
 nObservations <span style="color: #96CBFE;">&lt;-</span> 100
 
@@ -165,6 +63,7 @@ abline(a = 0, b = 1)
 </p>
 </div>
 
+
 <p>
 The qqplot is nice and straight: generally drivers in this setup are
 accurately summarizing their true rank. In this simulation on 49.3% of
@@ -188,7 +87,6 @@ following graph
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-R"><span style="color: #4c83ff;">for</span>(ii <span style="color: #4c83ff;">in</span> 1:nDrivers) {
     weights <span style="color: #96CBFE;">&lt;-</span> ifelse(scores[-ii] &lt; 0.5, 5, 1)
     obs <span style="color: #96CBFE;">&lt;-</span> sample(scores[-ii], nObservations, <span style="color: #afd8af;">FALSE</span>, weights)

@@ -2,8 +2,9 @@
 #+LAYOUT: post
 #+DATE: 2015-01-24
 #+TITLE: The Normative Power of RStudio
-#+DESCRIPTION:  
-#+CATEGORIES:   
+#+DESCRIPTION: RStudio has a lot of power to shape users' workflows. Are they being responsible with this power?
+#+CATEGORIES: computing, R
+#+FEATURED: true
 
 #+HTML_MATHJAX: align:"center"
 #+OPTIONS: toc:nil num:nil todo:nil
@@ -16,7 +17,7 @@ good habits. They've already done wonders for reproducibility with
 their integration with knitr. If they adopted a few more tweaks, they
 could set future waves of R users off on the right track.
 
-* DONE Knitr and Reproducibility
+* Knitr and Reproducibility
   For instance, their integration with knitr is the greatest step
   taken towards reproducibility in statistics. Read this[http://arxiv.org/abs/1402.18][paper]] for
   some examples of how switching to RMarkdown has improved
@@ -40,7 +41,7 @@ could set future waves of R users off on the right track.
   the file students will do it and in the process they'll ingrain a
   habit of reproducibility.
   
-* DONE The Script Window
+* The Script Window
   But not everything is done as well as the knitr integration. For
   instance, a design decision to emphasize the script window would be
   brilliant. Before widespread adoption of RStudio I often would find
@@ -58,7 +59,7 @@ could set future waves of R users off on the right track.
   needed to get students started. It would make good work-flow habits the
   default.
 
-* DONE Workspaces
+* Workspaces
   Another aspect that could be improved on is RStudio's handling of
   workspaces. Workspaces save your current working environment: the
   functions, data frames, variables, and other objects that you're
@@ -89,7 +90,7 @@ could set future waves of R users off on the right track.
   Users who find a purpose for workspaces and turn them on, but the
   vast majority can safely and happily ignore this "feature".
   
-* DONE Build System
+* Build System
   Speaking of temporary files, this leads to a stylistic issue. I had
   a hard time understanding students' code for their final projects
   because they'd write everything in a single script.
@@ -118,7 +119,7 @@ could set future waves of R users off on the right track.
   for projects. However, more could be done to introduce newcomers to
   these tools. 
   
-* DONE Footnotes
+* Footnotes
 [fn:emacs] I'm a bit of an emacs snob.
 
 [fn:notepad] It was a dark time.

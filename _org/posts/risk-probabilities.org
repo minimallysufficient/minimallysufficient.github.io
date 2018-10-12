@@ -2,16 +2,17 @@
 #+LAYOUT: post
 #+DATE: 2015-01-01
 #+TITLE: Risk (board game) Probabilities
-#+DESCRIPTION:  
-#+CATEGORIES:  
+#+DESCRIPTION: I compute the probability of victory in a Risk battle.
+#+CATEGORIES: julia, probability, games
+#+FEATURED: false
 
-* DONE Setup
+* Setup
   I was playing Risk over the holidays and it occurred to me that I can
   calculate my odds of victory when attacking a territory. Sad to say,
   it didn't help me win, but it provided me the excuse to do some fun
   calculations on my graph paper while waiting for my next turn.
   
-** DONE A quick review of the rules
+** A quick review of the rules
    Battles in risk are resolved as follows :
 
    1. The attacker chooses up to max(number of attacking armies, 3) dice to roll.
@@ -28,7 +29,7 @@
       
    So if the attacker rolls a 5, 3, and 2 while the defender rolls a 5
    and 2 then both the attacker and defender lose one army.
-** DONE Some Simplifications
+** Some Simplifications
    I'm going to assume that everyone always rolls as many dice as
    possible. This is reasonable; rolling as many dice as possible
    seems to be the optimal strategy, but I haven't tried proving this.
@@ -40,7 +41,7 @@
    this decision-making process. I decided to sidestep this
    complexity.
 
-* DONE Solution using Markov Chains
+* Solution using Markov Chains
   A Markov chain is the first approach that came to my mind as I've
   done similar calculations for games like Monopoly and Chutes and
   Ladders. Somebody else thought of it too; when doing a little
@@ -68,7 +69,7 @@
   in such a way that it's easy to take powers analytically, but I'm
   skeptical.
     
-* DONE Solution by Recursion
+* Solution by Recursion
   Here's a simpler approach.
   
   First let's denote $p_{A, D}$ to be the probability that the attacker
@@ -98,7 +99,7 @@
   here. Instead we can just keep applying the recursion until we hit an
   absorbing state.
 
-* DONE Julia Implementation
+* Julia Implementation
   Julia code implementing the recursion can be found in this [[https://gist.github.com/minimallysufficient/96a45cd32d642cb820e4][gist]].
   
   The naive approach of writing a top-down recursive function will
@@ -108,8 +109,8 @@
   duplication we should build up a table of results from the bottom
   up, starting with the base cases.
   
-* DONE Exercises for the Reader
-** DONE Expected Value
+* Exercises for the Reader
+** Expected Value
    Instead of the probability that the attacker will win, it would be
    very helpful to know the expected number of armies the attacker
    will retain at the end of the battle.
@@ -117,7 +118,7 @@
    How can the recursion be altered to allow for the computation of
    this expectation?
    
-** DONE Distribution
+** Distribution
    We might instead be interested in the distribution of $F_{A, D}$, the
    number of armies that the attacker will have at the end of the
    battle starting with $A$ attacking armies and $D$ defending armies.
@@ -128,7 +129,7 @@
    How can the recursion be altered to allow for the computation of
    this distribution?
    
-* DONE Footnotes
+* Footnotes
 [fn:1] If you are only calculating battles which could conceivably
 occur in a normal Risk game, you should be fine. If you want to know
 how a 1000 vs 1000 battle will turn out, you'll need another approach.

@@ -2,8 +2,9 @@
 #+LAYOUT: post
 #+DATE: 2015-08-25
 #+TITLE: Flatland and Spherical Geometry
-#+DESCRIPTION:  
-#+CATEGORIES:  
+#+DESCRIPTION: Some interesting facts about planes and spheres and even higher dimensions.
+#+CATEGORIES: math
+#+FEATURED: false
 
 Before passing along my copy[fn:copy] of Flatland to my brother (as he
 needs it for a class), I reread it on an airplane. It turns out that

@@ -35,80 +35,20 @@ tags:
 - 
 - 
 - 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
 - dummy-tags-should-be-replaced
 author: 
 layout: post
 title: Organizing data analyses with Rake
-excerpt:  
+excerpt: For serious data analysis organization I use rake.
 categories: 
--
-commentissueid: 22
+- computing
+- data analysis
+featured: true
 ---
 
-<div id="outline-container-orgheadline1" class="outline-2">
-<h2 id="orgheadline1">Organizing a data analysis is hard</h2>
-<div class="outline-text-2" id="text-orgheadline1">
+<div id="outline-container-org8f86f6e" class="outline-2">
+<h2 id="org8f86f6e">Organizing a data analysis is hard</h2>
+<div class="outline-text-2" id="text-org8f86f6e">
 <p>
 Organizing data analysis is hard. Here's a couple reasons it gets
 tricky:
@@ -134,9 +74,9 @@ should use a tool called rake.
 </div>
 </div>
 
-<div id="outline-container-orgheadline2" class="outline-2">
-<h2 id="orgheadline2">What is Rake?</h2>
-<div class="outline-text-2" id="text-orgheadline2">
+<div id="outline-container-orga2bc3e8" class="outline-2">
+<h2 id="orga2bc3e8">What is Rake?</h2>
+<div class="outline-text-2" id="text-orga2bc3e8">
 <p>
 Rake is a build utility; build utilities were originally designed to
 automate the process of compiling code from source. You can
@@ -174,9 +114,9 @@ couple minutes (or hours depending) later to look at the results.
 </div>
 </div>
 
-<div id="outline-container-orgheadline3" class="outline-2">
-<h2 id="orgheadline3">An example</h2>
-<div class="outline-text-2" id="text-orgheadline3">
+<div id="outline-container-org62ed4a6" class="outline-2">
+<h2 id="org62ed4a6">An example</h2>
+<div class="outline-text-2" id="text-org62ed4a6">
 <p>
 To see how rake works, it's best to look at an example. Let's work
 with <a href="https://www.ssa.gov/oact/babynames/limits.html">baby name data from the SSA</a>. The SSA, by virtue of issuing
@@ -193,16 +133,15 @@ So let's walk through an example Rakefile.
 </p>
 </div>
 
-<div id="outline-container-orgheadline4" class="outline-3">
-<h3 id="orgheadline4">Step 1</h3>
-<div class="outline-text-3" id="text-orgheadline4">
+<div id="outline-container-orgdc8a40f" class="outline-3">
+<h3 id="orgdc8a40f">Step 1</h3>
+<div class="outline-text-3" id="text-orgdc8a40f">
 <p>
 Our first step is downloading the data from the SSA's website. We
 can achieve this with the following entry in our Rakefile.
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-ruby">file <span style="color: #61CE3C;">"data/raw/names.zip"</span> =&gt; [] <span style="color: #4c83ff;">do</span> |t|
   mkdir_p <span style="color: #61CE3C;">"data/raw"</span>
   sh <span style="color: #61CE3C;">"wget https://www.ssa.gov/oact/babynames/names.zip -O data/raw/names.zip"</span>
@@ -212,7 +151,7 @@ can achieve this with the following entry in our Rakefile.
 
 <p>
 The <i>file</i> at the start indicates that I'm denoting a file task
-(we'll get to the other types). /"names.zip"/ is the file that I'm
+(we'll get to the other types). <i>"names.zip"</i> is the file that I'm
 creating, the "<i>=&gt; []</i>" syntax is used to express dependencies
 (more on that later). The code included within the <i>do-end</i> block
 is the action I take to create my file, namely make the directory
@@ -232,9 +171,9 @@ repeat unnecessary work.
 </div>
 </div>
 
-<div id="outline-container-orgheadline5" class="outline-3">
-<h3 id="orgheadline5">Step 2</h3>
-<div class="outline-text-3" id="text-orgheadline5">
+<div id="outline-container-orgf331bea" class="outline-3">
+<h3 id="orgf331bea">Step 2</h3>
+<div class="outline-text-3" id="text-orgf331bea">
 <p>
 The zip file that I've downloaded contains a bunch of text files of
 the form /yob****.txt" which contain the names data for a certain
@@ -242,7 +181,6 @@ year. To extract these I can make a task
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-ruby">directory <span style="color: #61CE3C;">"data/processed"</span>
 
 yob_files = <span style="color: #afd8af;">FileList</span>[(1880..2014).map{|year| <span style="color: #61CE3C;">"data/processed/yob</span><span style="color: #ff69b4;">#{year}</span><span style="color: #61CE3C;">.txt"</span>}]
@@ -285,16 +223,15 @@ timestamp of the zipped file.
 </div>
 </div>
 
-<div id="outline-container-orgheadline6" class="outline-3">
-<h3 id="orgheadline6">Step 3</h3>
-<div class="outline-text-3" id="text-orgheadline6">
+<div id="outline-container-org5b0e1bc" class="outline-3">
+<h3 id="org5b0e1bc">Step 3</h3>
+<div class="outline-text-3" id="text-org5b0e1bc">
 <p>
 Working with all of the txt files is going to be painful. So our
 next step is consolidate them into a single csv file.
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-ruby">file <span style="color: #61CE3C;">"data/single-file.csv"</span> =&gt; [*yob_files, <span style="color: #61CE3C;">"code/make-single-file.R"</span>] <span style="color: #4c83ff;">do</span> |t|
   sh <span style="color: #61CE3C;">"Rscript code/make-single-file.R --outfile </span><span style="color: #ff69b4;">#{t.name}</span><span style="color: #61CE3C;"> --yob_files </span><span style="color: #ff69b4;">#{yob_files}</span><span style="color: #61CE3C;">"</span>
 <span style="color: #4c83ff;">end</span>
@@ -315,15 +252,14 @@ number of txt files is variable.
 </div>
 </div>
 
-<div id="outline-container-orgheadline7" class="outline-3">
-<h3 id="orgheadline7">Step 4</h3>
-<div class="outline-text-3" id="text-orgheadline7">
+<div id="outline-container-orgf3132c9" class="outline-3">
+<h3 id="orgf3132c9">Step 4</h3>
+<div class="outline-text-3" id="text-orgf3132c9">
 <p>
 Now for the final product. We want to make some graphs.
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-ruby"><span style="color: #4c83ff;">def</span> <span style="color: #ff1493;">make_plot</span>(name, sex, outfile)
   dir = directory outfile.pathmap(<span style="color: #61CE3C;">"%d"</span>)
   file outfile =&gt; [<span style="color: #61CE3C;">"code/plot-name-by-year.R"</span>, <span style="color: #61CE3C;">"data/single-file.csv"</span>, dir] <span style="color: #4c83ff;">do</span> |t|
@@ -351,16 +287,15 @@ up considerably.
 </div>
 </div>
 
-<div id="outline-container-orgheadline8" class="outline-3">
-<h3 id="orgheadline8">End Result</h3>
-<div class="outline-text-3" id="text-orgheadline8">
+<div id="outline-container-org1102253" class="outline-3">
+<h3 id="org1102253">End Result</h3>
+<div class="outline-text-3" id="text-org1102253">
 <p>
 Anybody can replicate our figures just by downloading our source
 code and running the following command.
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-sh">rake make_plots
 </pre>
 </div>
@@ -372,9 +307,9 @@ the figures (in parallel) automatically. It's great.
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline9" class="outline-2">
-<h2 id="orgheadline9">A word of caution</h2>
-<div class="outline-text-2" id="text-orgheadline9">
+<div id="outline-container-org6aff982" class="outline-2">
+<h2 id="org6aff982">A word of caution</h2>
+<div class="outline-text-2" id="text-org6aff982">
 <p>
 If you've read this far down, you're probably interested in using
 rake in your own work. Let me warn you about something.

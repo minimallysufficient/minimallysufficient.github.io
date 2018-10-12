@@ -39,76 +39,23 @@ tags:
 - 
 - 
 - 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
 - dummy-tags-should-be-replaced
 author: 
 layout: post
 title: Time Tracking with TagTime
-excerpt:  
+excerpt: How to track your time with TagTime
 categories: 
--
-commentissueid: 5
+- statistics
+featured: false
 ---
 <p>
 This semester I'll experimenting with an app called TagTime to track
 how I spend my time.
 </p>
 
-<div id="outline-container-orgheadline1" class="outline-2">
-<h2 id="orgheadline1">Overview</h2>
-<div class="outline-text-2" id="text-orgheadline1">
+<div id="outline-container-org6dc718d" class="outline-2">
+<h2 id="org6dc718d">Overview</h2>
+<div class="outline-text-2" id="text-org6dc718d">
 <p>
 See <a href="http://www.messymatter.com/tagtime/">this post</a> from the creators<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup> for more details, but
 essentially the TagTime app provides an easy way for me to track how
@@ -121,9 +68,9 @@ project, <i>hw</i> for homework, etc.
 </div>
 </div>
 
-<div id="outline-container-orgheadline2" class="outline-2">
-<h2 id="orgheadline2">Purpose</h2>
-<div class="outline-text-2" id="text-orgheadline2">
+<div id="outline-container-orge454878" class="outline-2">
+<h2 id="orge454878">Purpose</h2>
+<div class="outline-text-2" id="text-orge454878">
 <p>
 As a graduate student, I have a lot of flexibility and independence in
 how I spend my time. While I greatly enjoy the freedom this brings, I
@@ -148,17 +95,17 @@ time rather than a fine-grained record.
 </div>
 </div>
 
-<div id="outline-container-orgheadline3" class="outline-2">
-<h2 id="orgheadline3">Statistical Background</h2>
-<div class="outline-text-2" id="text-orgheadline3">
+<div id="outline-container-org872daeb" class="outline-2">
+<h2 id="org872daeb">Statistical Background</h2>
+<div class="outline-text-2" id="text-org872daeb">
 <p>
 Beyond the benefits to my productivity, I also greatly enjoy this
 tool because it appeals to my inner (and outer) stats geek.
 </p>
 </div>
-<div id="outline-container-orgheadline4" class="outline-3">
-<h3 id="orgheadline4">Consistency</h3>
-<div class="outline-text-3" id="text-orgheadline4">
+<div id="outline-container-org7917cb1" class="outline-3">
+<h3 id="org7917cb1">Consistency</h3>
+<div class="outline-text-3" id="text-org7917cb1">
 <p>
 The times between pings are drawn iid from an exponential
 distribution with a known rate. Thus the pings follow a Poisson
@@ -175,9 +122,9 @@ estimate of the fraction of time I spend on each activity.
 </div>
 </div>
 
-<div id="outline-container-orgheadline5" class="outline-3">
-<h3 id="orgheadline5">Confidence Intervals</h3>
-<div class="outline-text-3" id="text-orgheadline5">
+<div id="outline-container-org30b4961" class="outline-3">
+<h3 id="org30b4961">Confidence Intervals</h3>
+<div class="outline-text-3" id="text-org30b4961">
 <p>
 The result above is nice, because it allows me to decide how to
 characterize uncertainty in my estimates. Since I'm fitting a
@@ -192,9 +139,9 @@ times I observe a certain tag, with variance \(\hat{p}(1 -
 </div>
 </div>
 
-<div id="outline-container-orgheadline6" class="outline-3">
-<h3 id="orgheadline6">Memoryless Property</h3>
-<div class="outline-text-3" id="text-orgheadline6">
+<div id="outline-container-org93a0c77" class="outline-3">
+<h3 id="org93a0c77">Memoryless Property</h3>
+<div class="outline-text-3" id="text-org93a0c77">
 <p>
 Another cool aspect is that the exponential distribution is
 memoryless. In mathematical terms,
@@ -214,9 +161,9 @@ ping <sup><a id="fnr.4" class="footref" href="#fn.4">4</a></sup>.
 </div>
 </div>
 
-<div id="outline-container-orgheadline7" class="outline-2">
-<h2 id="orgheadline7">Future Musings</h2>
-<div class="outline-text-2" id="text-orgheadline7">
+<div id="outline-container-org74d5fb1" class="outline-2">
+<h2 id="org74d5fb1">Future Musings</h2>
+<div class="outline-text-2" id="text-org74d5fb1">
 <p>
 I'd like to think about how to incorporate known lengths of time into
 my estimates. For example, I know exactly how long my lectures and
@@ -231,7 +178,7 @@ little uncertainty.
 
 <div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
 These are the same brilliant minds that created
-<a href="http://www.beeminder.com/">Beeminder</a> which you should check out
+<a href="http://www.beeminder.com">Beeminder</a> which you should check out
 </p></div></div>
 
 <div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">

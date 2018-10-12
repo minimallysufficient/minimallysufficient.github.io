@@ -2,8 +2,9 @@
 #+LAYOUT: post
 #+DATE: 2015-03-21
 #+TITLE: March Madness Prediction
-#+DESCRIPTION:  
-#+CATEGORIES:  
+#+DESCRIPTION: I apply a Bradley-Terry model to the NCAA basketball tournament.
+#+CATEGORIES: sports, statistics
+#+FEATURED: false
 
 I generally don't invest much time exploring the connections between
 statistics and sports [fn:late]. But I though I'd take advantage of

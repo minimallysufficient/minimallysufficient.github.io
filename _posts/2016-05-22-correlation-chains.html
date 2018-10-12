@@ -8,21 +8,26 @@ tags:
 - 
 - 
 - 
--
+- 
+- 
+- 
+- 
+- 
 - 
 - dummy-tags-should-be-replaced
 author: 
 layout: post
 title: Correlation Chains
+excerpt: I investigate SMBC's novel correlation-chain methodology.
 categories: 
 - statistics
-- comics
-excerpt: I investigate SMBC's novel correlation-chain methodology.
+- humor
+featured: false
 ---
 
-<div id="outline-container-orgheadline1" class="outline-2">
-<h2 id="orgheadline1">Correlation Chains</h2>
-<div class="outline-text-2" id="text-orgheadline1">
+<div id="outline-container-org19cace5" class="outline-2">
+<h2 id="org19cace5">Correlation Chains</h2>
+<div class="outline-text-2" id="text-org19cace5">
 <p>
 SMBC had a interesting <a href="http://www.smbc-comics.com/index.php?id=4106">comic</a> recently on correlation chains. It
 suggests the new "Funtime Activity" of creating correlation chains.
@@ -45,9 +50,9 @@ SMBC.
 </p>
 </div>
 
-<div id="outline-container-orgheadline2" class="outline-3">
-<h3 id="orgheadline2">Intuition</h3>
-<div class="outline-text-3" id="text-orgheadline2">
+<div id="outline-container-org424880d" class="outline-3">
+<h3 id="org424880d">Intuition</h3>
+<div class="outline-text-3" id="text-org424880d">
 <p>
 On a intuitive level, correlation chaining seems plausible. The
 hand-wavy idea of correlation is that I can more or less replace one
@@ -69,13 +74,23 @@ a while</i> are quite restrictive.
 </div>
 </div>
 
-<div id="outline-container-orgheadline3" class="outline-3">
-<h3 id="orgheadline3">Example</h3>
-<div class="outline-text-3" id="text-orgheadline3">
+<div id="outline-container-org2e5686e" class="outline-3">
+<h3 id="org2e5686e">Example</h3>
+<div class="outline-text-3" id="text-org2e5686e">
 <p>
 Just to provide a concrete example, consider the following
 correlation chain.
 </p>
+
+<div class="LaTeX">
+\begin{eqnarray*}
+  X_{1} &=& [1, 2, -3] \\
+  X_{2} &=& [3, -1, -2] \\
+  X_{3} &=& [2, -3, 1] \\
+  X_{4} &=& [-1, -2, 3]
+\end{eqnarray*}
+
+</div>
 
 <p>
 You can check that 
@@ -103,9 +118,9 @@ hints at how restrictive our conditions are going to have to be.
 </div>
 </div>
 
-<div id="outline-container-orgheadline4" class="outline-2">
-<h2 id="orgheadline4">Nerdy Details</h2>
-<div class="outline-text-2" id="text-orgheadline4">
+<div id="outline-container-orgf902fba" class="outline-2">
+<h2 id="orgf902fba">Nerdy Details</h2>
+<div class="outline-text-2" id="text-orgf902fba">
 <p>
 What exactly can we say about correlation chains? Of particular
 interest is the the worst-case and average-case number of links we
@@ -115,14 +130,23 @@ correlation and how to sample variables with a specific correlation.
 </p>
 </div>
 
-<div id="outline-container-orgheadline5" class="outline-3">
-<h3 id="orgheadline5">Correlation is just cosines</h3>
-<div class="outline-text-3" id="text-orgheadline5">
+<div id="outline-container-org6638e43" class="outline-3">
+<h3 id="org6638e43">Correlation is just cosines</h3>
+<div class="outline-text-3" id="text-org6638e43">
 <p>
 The first thing that we need to notice is that correlation is just
 the cosine of the angle between two vectors. To see this, let's
 just look at the formula for correlation.
 </p>
+
+<div class="LaTeX">
+\begin{eqnarray*}
+  \operatorname{Cor}[X, Y] &=& \frac{<x - \bar{x}, y - \bar{y}>}{|x -\bar{x}||y - \bar{y}|} \\
+             &=& \frac{|x - \bar{X}||y - \bar{y}|\cos{\theta}}{|x -\bar{x}||y - \bar{y}|} \\
+             &=& cos(\theta)
+\end{eqnarray*}
+
+</div>
 
 <p>
 So now let's think about that special case I started with. If you
@@ -134,9 +158,9 @@ you'll notice that this is just a rotation of &pi; / 3.
 </div>
 </div>
 
-<div id="outline-container-orgheadline6" class="outline-3">
-<h3 id="orgheadline6">How many links can we make in the worst case?</h3>
-<div class="outline-text-3" id="text-orgheadline6">
+<div id="outline-container-org1b5d4d4" class="outline-3">
+<h3 id="org1b5d4d4">How many links can we make in the worst case?</h3>
+<div class="outline-text-3" id="text-org1b5d4d4">
 <p>
 So how can we minimize the correlation between vectors \(A\) and \(C\)?
 It's exactly the case when vector \(C\) is rotated exactly
@@ -172,9 +196,9 @@ least 0.8. For 1000 links, you need correlations of at least
 </div>
 </div>
 
-<div id="outline-container-orgheadline7" class="outline-3">
-<h3 id="orgheadline7">How to sample vectors with a given correlation</h3>
-<div class="outline-text-3" id="text-orgheadline7">
+<div id="outline-container-org0950769" class="outline-3">
+<h3 id="org0950769">How to sample vectors with a given correlation</h3>
+<div class="outline-text-3" id="text-org0950769">
 <p>
 I don't particularly want to do the math for the average-case, so
 the remainder of our results will rely upon simulations. To do this
@@ -224,7 +248,6 @@ If you want to verify that this works, try the following R code:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-R"><span style="color: #ff1493;">sample_correlated</span> <span style="color: #96CBFE;">&lt;-</span> <span style="color: #4c83ff;">function</span>(x, cor) {
     n <span style="color: #96CBFE;">&lt;-</span> length(x)
     x <span style="color: #96CBFE;">&lt;-</span> scale(x) 
@@ -234,7 +257,7 @@ If you want to verify that this works, try the following R code:
     P <span style="color: #96CBFE;">&lt;-</span> tcrossprod(Q)
 
     y <span style="color: #96CBFE;">&lt;-</span> rnorm(n)
-    y <span style="color: #96CBFE;">&lt;-</span> (diag(n)-P) %*% y
+    y <span style="color: #96CBFE;">&lt;-</span> (diag(n)-P) <span style="color: #96CBFE;">%*%</span> y
     y <span style="color: #96CBFE;">&lt;-</span> scale(y)
     y <span style="color: #96CBFE;">&lt;-</span> sqrt(1 - cor^2) * y + cor * x
 
@@ -245,9 +268,9 @@ If you want to verify that this works, try the following R code:
 </div>
 </div>
 
-<div id="outline-container-orgheadline8" class="outline-3">
-<h3 id="orgheadline8">Simulating a correlation chain</h3>
-<div class="outline-text-3" id="text-orgheadline8">
+<div id="outline-container-orga783ccd" class="outline-3">
+<h3 id="orga783ccd">Simulating a correlation chain</h3>
+<div class="outline-text-3" id="text-orga783ccd">
 <p>
 Once we've simulated a single variable, we can start simulating the
 entire correlation chain. Here's a figure of an example chain where
@@ -270,9 +293,9 @@ the number of the worst-case.
 </div>
 </div>
 
-<div id="outline-container-orgheadline9" class="outline-3">
-<h3 id="orgheadline9">Average number of links until the first anticorrelated variable</h3>
-<div class="outline-text-3" id="text-orgheadline9">
+<div id="outline-container-org6a23964" class="outline-3">
+<h3 id="org6a23964">Average number of links until the first anticorrelated variable</h3>
+<div class="outline-text-3" id="text-org6a23964">
 <p>
 Now that we can sample from this distribution, let's see how long
 it's going to take us on average to get to an anticorrelated
@@ -295,9 +318,9 @@ n dimensions I have a even more.
 </div>
 </div>
 
-<div id="outline-container-orgheadline10" class="outline-2">
-<h2 id="orgheadline10">Takeaway</h2>
-<div class="outline-text-2" id="text-orgheadline10">
+<div id="outline-container-org30a5a29" class="outline-2">
+<h2 id="org30a5a29">Takeaway</h2>
+<div class="outline-text-2" id="text-org30a5a29">
 <p>
 So the ability to use correlation chains depends heavily upon the
 strength of the relationships and the number of links. If we have
@@ -307,9 +330,9 @@ endpoint is positively correlated.
 </p>
 </div>
 
-<div id="outline-container-orgheadline11" class="outline-3">
-<h3 id="orgheadline11">What does this mean for the correlation chain in the SMBC comic?</h3>
-<div class="outline-text-3" id="text-orgheadline11">
+<div id="outline-container-orga8d86b6" class="outline-3">
+<h3 id="orga8d86b6">What does this mean for the correlation chain in the SMBC comic?</h3>
+<div class="outline-text-3" id="text-orga8d86b6">
 <p>
 Unfortunately, it doesn't look good. Lets look at the chain.
 </p>
@@ -343,10 +366,9 @@ feel confident about our conclusions.
 </div>
 </div>
 
-
-<div id="outline-container-orgheadline12" class="outline-3">
-<h3 id="orgheadline12">Correlation is not causation</h3>
-<div class="outline-text-3" id="text-orgheadline12">
+<div id="outline-container-org610c6f4" class="outline-3">
+<h3 id="org610c6f4">Correlation is not causation</h3>
+<div class="outline-text-3" id="text-org610c6f4">
 <p>
 I would be remiss if I didn't add a final parting caveat. Everything
 above just deals with correlation; this is quite different from

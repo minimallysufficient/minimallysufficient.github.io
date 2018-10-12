@@ -2,8 +2,9 @@
 #+LAYOUT: post
 #+DATE: 2016-07-28
 #+TITLE: The Fastest Poisson(1) in the West
-#+DESCRIPTION:  
-#+CATEGORIES:  
+#+DESCRIPTION: How quickly can I generate a Poisson(1) random variable?
+#+CATEGORIES: computing, julia
+#+FEATURED: false
 
 I was optimizing some [[http://www.unofficialgoogledatascience.com/2015/08/an-introduction-to-poisson-bootstrap_26.html][Poisson bootstrap]] code this week.
 Unsurprisingly, it turns out that most of the time was spent drawing

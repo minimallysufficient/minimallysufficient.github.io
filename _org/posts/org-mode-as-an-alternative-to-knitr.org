@@ -2,8 +2,9 @@
 #+LAYOUT: post
 #+DATE: 2015-10-24
 #+TITLE: Org-mode as an alternative to knitr
-#+DESCRIPTION:  
-#+CATEGORIES:  
+#+DESCRIPTION: Org-mode is a compelling alternative to reproducible analysis tools like knitr.
+#+CATEGORIES: computing, emacs
+#+FEATURED: true
 
 Using ski ratings, I would classify knitr as a Blue Square. It's great
 for beginners and experts alike, balancing excitement and
@@ -64,7 +65,6 @@ editor: it's really an environment for reproducible research.
        | 2 | 7 | 6 |
        | 9 | 5 | 1 |
        | 4 | 3 | 8 |
-  
    #+END_SRC
    
    You have easy creation of tables: no longer do you have to mess

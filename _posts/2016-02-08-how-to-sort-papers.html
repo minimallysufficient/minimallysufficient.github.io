@@ -24,91 +24,14 @@ tags:
 - 
 - 
 - 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
 - dummy-tags-should-be-replaced
 author: 
 layout: post
 title: How to sort papers
-excerpt:  
+excerpt: There is one "correct" way to sort students' homeworks and exams.
 categories: 
--
-commentissueid: 19
+- phd
+featured: false
 ---
 <p>
 Part of my duties for the department involves TAing for a large
@@ -135,9 +58,9 @@ Through a good amount of trial and error I've come to find that the
 best algorithm is radix sort. I'll now share my wisdom.
 </p>
 
-<div id="outline-container-orgheadline1" class="outline-2">
-<h2 id="orgheadline1">Radix Sort</h2>
-<div class="outline-text-2" id="text-orgheadline1">
+<div id="outline-container-org97f5b89" class="outline-2">
+<h2 id="org97f5b89">Radix Sort</h2>
+<div class="outline-text-2" id="text-org97f5b89">
 <p>
 Radix sort is a comparison-free divide-and-conquer algorithm for
 sorting. The implementation is very simple.
@@ -155,12 +78,13 @@ pile. Now pick up the piles in order and everything is sorted.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline6" class="outline-2">
-<h2 id="orgheadline6">Advantages</h2>
-<div class="outline-text-2" id="text-orgheadline6">
-</div><div id="outline-container-orgheadline2" class="outline-3">
-<h3 id="orgheadline2">Semi-anytime</h3>
-<div class="outline-text-3" id="text-orgheadline2">
+<div id="outline-container-org9950e8a" class="outline-2">
+<h2 id="org9950e8a">Advantages</h2>
+<div class="outline-text-2" id="text-org9950e8a">
+</div>
+<div id="outline-container-org833bc0b" class="outline-3">
+<h3 id="org833bc0b">Semi-anytime</h3>
+<div class="outline-text-3" id="text-org833bc0b">
 <p>
 An anytime algorithm is one that will always return a valid
 solution even if its interrupted. I say the radix sort is
@@ -178,9 +102,9 @@ angry.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline3" class="outline-3">
-<h3 id="orgheadline3">Minimizes comparison</h3>
-<div class="outline-text-3" id="text-orgheadline3">
+<div id="outline-container-orgd48ce84" class="outline-3">
+<h3 id="orgd48ce84">Minimizes comparison</h3>
+<div class="outline-text-3" id="text-orgd48ce84">
 <p>
 I find it hard to remember the order of the alphabet. Typically I
 have to resort to (mentally) singing the nursery rhyme to keep it
@@ -190,9 +114,9 @@ to label the piles so I don't have to remember anything.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline4" class="outline-3">
-<h3 id="orgheadline4">Parallelizable</h3>
-<div class="outline-text-3" id="text-orgheadline4">
+<div id="outline-container-orgd5b03ea" class="outline-3">
+<h3 id="orgd5b03ea">Parallelizable</h3>
+<div class="outline-text-3" id="text-orgd5b03ea">
 <p>
 The entire process can be done in parallel which can greatly speed
 up the grading process if you have multiple workers. Workers are
@@ -202,9 +126,9 @@ a fun project for small children.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline5" class="outline-3">
-<h3 id="orgheadline5">Psychologically gratifying</h3>
-<div class="outline-text-3" id="text-orgheadline5">
+<div id="outline-container-org948439b" class="outline-3">
+<h3 id="org948439b">Psychologically gratifying</h3>
+<div class="outline-text-3" id="text-org948439b">
 <p>
 Each pile sorted gives a sense of achievement. This is important to
 maintain morale. I also find tackling piles in decreasing size
@@ -213,12 +137,13 @@ enhances this effect as the task becomes progressively easier.
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline9" class="outline-2">
-<h2 id="orgheadline9">Disadvantages</h2>
-<div class="outline-text-2" id="text-orgheadline9">
-</div><div id="outline-container-orgheadline7" class="outline-3">
-<h3 id="orgheadline7">Space requirements</h3>
-<div class="outline-text-3" id="text-orgheadline7">
+<div id="outline-container-org7e90829" class="outline-2">
+<h2 id="org7e90829">Disadvantages</h2>
+<div class="outline-text-2" id="text-org7e90829">
+</div>
+<div id="outline-container-org9780d4c" class="outline-3">
+<h3 id="org9780d4c">Space requirements</h3>
+<div class="outline-text-3" id="text-org9780d4c">
 <p>
 You need enough space to make your piles. Thus, radix sort doesn't
 work well in small offices, seminars, or airplanes.
@@ -231,9 +156,9 @@ of sorting.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline8" class="outline-3">
-<h3 id="orgheadline8">Name distributions aren't optimal</h3>
-<div class="outline-text-3" id="text-orgheadline8">
+<div id="outline-container-org24bf6bf" class="outline-3">
+<h3 id="org24bf6bf">Name distributions aren't optimal</h3>
+<div class="outline-text-3" id="text-org24bf6bf">
 <p>
 Radix sort works best when the piles are roughly the same size.
 Unfortunately, the distribution of the letters in last names is not
@@ -243,9 +168,9 @@ while some are small or even empty (U and X).
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline10" class="outline-2">
-<h2 id="orgheadline10">For when I have tenure</h2>
-<div class="outline-text-2" id="text-orgheadline10">
+<div id="outline-container-org1a0c1bd" class="outline-2">
+<h2 id="org1a0c1bd">For when I have tenure</h2>
+<div class="outline-text-2" id="text-org1a0c1bd">
 <p>
 For fun I'd like to implement <a href="https://en.wikipedia.org/wiki/Spaghetti_sort">spaghetti sort</a>. On the first day of
 class I would give every student a rod whose length corresponds to

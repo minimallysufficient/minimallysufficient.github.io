@@ -37,76 +37,21 @@ tags:
 - 
 - 
 - 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
 - dummy-tags-should-be-replaced
 author: 
 layout: post
 title: Risk (board game) Probabilities
-excerpt:  
+excerpt: I compute the probability of victory in a Risk battle.
 categories: 
--
-commentissueid: 4
+- julia
+- probability
+- games
+featured: false
 ---
 
-<div id="outline-container-orgheadline1" class="outline-2">
-<h2 id="orgheadline1">Setup</h2>
-<div class="outline-text-2" id="text-orgheadline1">
+<div id="outline-container-org0481574" class="outline-2">
+<h2 id="org0481574">Setup</h2>
+<div class="outline-text-2" id="text-org0481574">
 <p>
 I was playing Risk over the holidays and it occurred to me that I can
 calculate my odds of victory when attacking a territory. Sad to say,
@@ -115,9 +60,9 @@ calculations on my graph paper while waiting for my next turn.
 </p>
 </div>
 
-<div id="outline-container-orgheadline2" class="outline-3">
-<h3 id="orgheadline2">A quick review of the rules</h3>
-<div class="outline-text-3" id="text-orgheadline2">
+<div id="outline-container-org2e7a43e" class="outline-3">
+<h3 id="org2e7a43e">A quick review of the rules</h3>
+<div class="outline-text-3" id="text-org2e7a43e">
 <p>
 Battles in risk are resolved as follows :
 </p>
@@ -142,9 +87,9 @@ and 2 then both the attacker and defender lose one army.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline3" class="outline-3">
-<h3 id="orgheadline3">Some Simplifications</h3>
-<div class="outline-text-3" id="text-orgheadline3">
+<div id="outline-container-org661f5f7" class="outline-3">
+<h3 id="org661f5f7">Some Simplifications</h3>
+<div class="outline-text-3" id="text-org661f5f7">
 <p>
 I'm going to assume that everyone always rolls as many dice as
 possible. This is reasonable; rolling as many dice as possible
@@ -163,9 +108,9 @@ complexity.
 </div>
 </div>
 
-<div id="outline-container-orgheadline4" class="outline-2">
-<h2 id="orgheadline4">Solution using Markov Chains</h2>
-<div class="outline-text-2" id="text-orgheadline4">
+<div id="outline-container-org0e1f98a" class="outline-2">
+<h2 id="org0e1f98a">Solution using Markov Chains</h2>
+<div class="outline-text-2" id="text-org0e1f98a">
 <p>
 A Markov chain is the first approach that came to my mind as I've
 done similar calculations for games like Monopoly and Chutes and
@@ -203,9 +148,9 @@ skeptical.
 </div>
 </div>
 
-<div id="outline-container-orgheadline5" class="outline-2">
-<h2 id="orgheadline5">Solution by Recursion</h2>
-<div class="outline-text-2" id="text-orgheadline5">
+<div id="outline-container-org896c6a3" class="outline-2">
+<h2 id="org896c6a3">Solution by Recursion</h2>
+<div class="outline-text-2" id="text-org896c6a3">
 <p>
 Here's a simpler approach.
 </p>
@@ -257,9 +202,9 @@ absorbing state.
 </div>
 </div>
 
-<div id="outline-container-orgheadline6" class="outline-2">
-<h2 id="orgheadline6">Julia Implementation</h2>
-<div class="outline-text-2" id="text-orgheadline6">
+<div id="outline-container-org5c4c5b7" class="outline-2">
+<h2 id="org5c4c5b7">Julia Implementation</h2>
+<div class="outline-text-2" id="text-org5c4c5b7">
 <p>
 Julia code implementing the recursion can be found in this <a href="https://gist.github.com/minimallysufficient/96a45cd32d642cb820e4">gist</a>.
 </p>
@@ -275,12 +220,13 @@ up, starting with the base cases.
 </div>
 </div>
 
-<div id="outline-container-orgheadline9" class="outline-2">
-<h2 id="orgheadline9">Exercises for the Reader</h2>
-<div class="outline-text-2" id="text-orgheadline9">
-</div><div id="outline-container-orgheadline7" class="outline-3">
-<h3 id="orgheadline7">Expected Value</h3>
-<div class="outline-text-3" id="text-orgheadline7">
+<div id="outline-container-org8821bdd" class="outline-2">
+<h2 id="org8821bdd">Exercises for the Reader</h2>
+<div class="outline-text-2" id="text-org8821bdd">
+</div>
+<div id="outline-container-orge116628" class="outline-3">
+<h3 id="orge116628">Expected Value</h3>
+<div class="outline-text-3" id="text-orge116628">
 <p>
 Instead of the probability that the attacker will win, it would be
 very helpful to know the expected number of armies the attacker
@@ -294,9 +240,9 @@ this expectation?
 </div>
 </div>
 
-<div id="outline-container-orgheadline8" class="outline-3">
-<h3 id="orgheadline8">Distribution</h3>
-<div class="outline-text-3" id="text-orgheadline8">
+<div id="outline-container-org54f554c" class="outline-3">
+<h3 id="org54f554c">Distribution</h3>
+<div class="outline-text-3" id="text-org54f554c">
 <p>
 We might instead be interested in the distribution of \(F_{A, D}\), the
 number of armies that the attacker will have at the end of the

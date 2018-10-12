@@ -8,118 +8,19 @@ tags:
 - 
 - 
 - 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
 - dummy-tags-should-be-replaced
 author: 
 layout: post
 title: Data Splitting
-excerpt:  
+excerpt: An easy way to perform inference after model selection.
 categories: 
--
-commentissueid: 3
+- statistics
+featured: true
 ---
 
-<div id="outline-container-orgheadline1" class="outline-2">
-<h2 id="orgheadline1">A quick review of p-values</h2>
-<div class="outline-text-2" id="text-orgheadline1">
+<div id="outline-container-org6bf69db" class="outline-2">
+<h2 id="org6bf69db">A quick review of p-values</h2>
+<div class="outline-text-2" id="text-org6bf69db">
 <p>
 Feel free to skip to the next section if you're already familiar
 with p-values.
@@ -173,9 +74,9 @@ at some unknown rate.
 </div>
 </div>
 
-<div id="outline-container-orgheadline2" class="outline-2">
-<h2 id="orgheadline2">Why inference after model selection is bad</h2>
-<div class="outline-text-2" id="text-orgheadline2">
+<div id="outline-container-orgb919dc5" class="outline-2">
+<h2 id="orgb919dc5">Why inference after model selection is bad</h2>
+<div class="outline-text-2" id="text-orgb919dc5">
 <p>
 Generally when we're doing model selection we're picking out the
 explanatory variables which are most correlated <sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup> with
@@ -201,9 +102,9 @@ our promise of a type-I-error rate of \(\alpha\).
 </div>
 </div>
 
-<div id="outline-container-orgheadline3" class="outline-2">
-<h2 id="orgheadline3">Data splitting to the rescue</h2>
-<div class="outline-text-2" id="text-orgheadline3">
+<div id="outline-container-orgb96605c" class="outline-2">
+<h2 id="orgb96605c">Data splitting to the rescue</h2>
+<div class="outline-text-2" id="text-orgb96605c">
 <p>
 This conclusion is unsettling; it appears that we can either do
 model selection or inference, but not both.
@@ -228,9 +129,9 @@ variable selection process.
 </div>
 </div>
 
-<div id="outline-container-orgheadline4" class="outline-2">
-<h2 id="orgheadline4">A simulation</h2>
-<div class="outline-text-2" id="text-orgheadline4">
+<div id="outline-container-orgda13bdf" class="outline-2">
+<h2 id="orgda13bdf">A simulation</h2>
+<div class="outline-text-2" id="text-orgda13bdf">
 <p>
 To see the extent of the problem we'll run a simulation of linear
 regression after model selection. We'll fit the following model
@@ -267,9 +168,9 @@ selection; these are highly concentrated around 0.
 </div>
 </div>
 
-<div id="outline-container-orgheadline5" class="outline-2">
-<h2 id="orgheadline5">Human decision-making</h2>
-<div class="outline-text-2" id="text-orgheadline5">
+<div id="outline-container-orga7469a7" class="outline-2">
+<h2 id="orga7469a7">Human decision-making</h2>
+<div class="outline-text-2" id="text-orga7469a7">
 <p>
 Presumably the most common method of model selection doesn't rely
 upon an automated method. Instead a human analyst tries out a bunch

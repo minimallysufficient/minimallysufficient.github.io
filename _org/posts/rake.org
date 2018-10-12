@@ -2,8 +2,8 @@
 #+LAYOUT: post
 #+DATE: 2016-04-02
 #+TITLE: Organizing data analyses with Rake
-#+DESCRIPTION:  
-#+CATEGORIES:  
+#+DESCRIPTION: For serious data analysis organization I use rake.
+#+CATEGORIES: computing, data analysis
 
 * Organizing a data analysis is hard
   Organizing data analysis is hard. Here's a couple reasons it gets

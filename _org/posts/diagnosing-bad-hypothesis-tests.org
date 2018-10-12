@@ -4,6 +4,7 @@
 #+TITLE: Diagnosing Bad Hypothesis Tests
 #+DESCRIPTION: I find a strange plot of p-values from a hypothesis test and investigate.
 #+CATEGORIES: statistics
+#+FEATURED: false
 
 Let's suppose you see the following histogram of p-values: what do you
 think is going on?

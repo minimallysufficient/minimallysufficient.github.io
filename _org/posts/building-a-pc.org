@@ -4,6 +4,7 @@
 #+TITLE: Building a PC
 #+DESCRIPTION: I recently bought a desktop computer. As a first-time PC build I can highly recommend the process.
 #+CATEGORIES: computing
+#+FEATURED: true
 
 I recently bought a desktop computer. As a first-time PC build I can
 highly recommend the process.

@@ -3,7 +3,8 @@
 #+DATE: 2018-02-16
 #+TITLE: What is the chance of an earthquake?
 #+DESCRIPTION: The USGS estimates 0.7 plus or minus 0.1 chance of a 6.7+ earthquake in the Bay Area before 2030. What does that mean?
-#+CATEGORIES: probability philosophy HOS
+#+CATEGORIES: probability, statistics, HoS
+#+FEATURED: true
 
 Our [[http://stat.cmu.edu/~lrichard/history-of-stats/history-of-stats.html][History of Stats reading group]] recently restarted. The group reads
 somewhat older statistics papers with the aim of generating

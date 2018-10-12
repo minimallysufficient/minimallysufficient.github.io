@@ -3,7 +3,8 @@
 #+DATE: 2018-08-21
 #+TITLE: Well-calibrated predictions are not enough
 #+DESCRIPTION: Calibration is an important idea in statistical prediction. However, it's not the only thing.
-#+CATEGORIES: prediction
+#+CATEGORIES: statistics
+#+FEATURED: true
 
 Calibration is an important idea in statistical prediction. I'll let
 Nate Silver explain

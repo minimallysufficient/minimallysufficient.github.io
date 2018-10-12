@@ -42,63 +42,15 @@ tags:
 - 
 - 
 - 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
 - dummy-tags-should-be-replaced
 author: 
 layout: post
 title: The Unix Philosophy and Data Analysis Projects
-excerpt:  
+excerpt: The Unix Philosophy applies to data analysis too.
 categories: 
--
-commentissueid: 9
+- computing
+- data analysis
+featured: true
 ---
 <p>
 At the halfway point of my ADA project I've been doing some reflection
@@ -123,9 +75,9 @@ text streams, because that is a universal interface.  &#x2013; Doug McIlroy
 Let's break this down.
 </p>
 
-<div id="outline-container-orgheadline1" class="outline-2">
-<h2 id="orgheadline1">Write programs that do one thing and do it well</h2>
-<div class="outline-text-2" id="text-orgheadline1">
+<div id="outline-container-org2439c57" class="outline-2">
+<h2 id="org2439c57">Write programs that do one thing and do it well</h2>
+<div class="outline-text-2" id="text-org2439c57">
 <p>
 The pitfall to avoid here is the monolithic script file. I see this
 as a TA in my students' projects, they have their entire project in
@@ -188,9 +140,9 @@ separately, so the language doesn't matter.</li>
 </div>
 </div>
 
-<div id="outline-container-orgheadline2" class="outline-2">
-<h2 id="orgheadline2">Write programs to work together</h2>
-<div class="outline-text-2" id="text-orgheadline2">
+<div id="outline-container-org47aad90" class="outline-2">
+<h2 id="org47aad90">Write programs to work together</h2>
+<div class="outline-text-2" id="text-org47aad90">
 <p>
 One objection to the above organizational scheme is that it's an
 ordeal to keep everything up-to-date. Suppose you changed the data
@@ -218,7 +170,6 @@ files and the commands to create the file. So if I want to create
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-ruby">file <span style="color: #61CE3C;">"figs/histogram.png"</span> =&gt; [<span style="color: #61CE3C;">"code/plot-histogram.R"</span>, <span style="color: #61CE3C;">"data/data-file.csv"</span>] <span style="color: #4c83ff;">do</span>
   sh <span style="color: #61CE3C;">"Rscript code/plot-histogram.R data/data-file.csv figs/histogram.png"</span>
 <span style="color: #4c83ff;">end</span>
@@ -262,9 +213,9 @@ reproducible.
 </div>
 </div>
 
-<div id="outline-container-orgheadline3" class="outline-2">
-<h2 id="orgheadline3">Write programs to handle text streams, because that is a universal interface</h2>
-<div class="outline-text-2" id="text-orgheadline3">
+<div id="outline-container-orgee6042c" class="outline-2">
+<h2 id="orgee6042c">Write programs to handle text streams, because that is a universal interface</h2>
+<div class="outline-text-2" id="text-orgee6042c">
 <p>
 If we're going to have programs working together we need to have
 some way of sharing data. I'm not going to advocate a UNIX piping
@@ -307,9 +258,9 @@ the project without lugging around my real laptop.
 </div>
 </div>
 
-<div id="outline-container-orgheadline4" class="outline-2">
-<h2 id="orgheadline4">Summary</h2>
-<div class="outline-text-2" id="text-orgheadline4">
+<div id="outline-container-orgd03d249" class="outline-2">
+<h2 id="orgd03d249">Summary</h2>
+<div class="outline-text-2" id="text-orgd03d249">
 <p>
 If I had to concisely summary the benefit of this organizational
 choice it's that it allows me to focus exclusively on a well-defined
@@ -350,7 +301,6 @@ example in R I can structure things like this
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-R">fname <span style="color: #96CBFE;">&lt;-</span> <span style="color: #61CE3C;">"perm.csv"</span>
 
 perm <span style="color: #96CBFE;">&lt;-</span> sample(1:100)

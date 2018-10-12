@@ -2,8 +2,9 @@
 #+LAYOUT: post
 #+DATE: 2015-11-21
 #+TITLE: Using a Chromebook as a Primary Computing Device
-#+DESCRIPTION:  
-#+CATEGORIES:  
+#+DESCRIPTION: Chromebooks are remarkably useful machines for how underpowered they are.
+#+CATEGORIES: computing
+#+FEATURED: true
 
 I'm writing this post using my Chromebook. It's easily the least
 powerful computer I've ever owned, but I like it the best. Let me

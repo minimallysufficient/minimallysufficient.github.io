@@ -1,7 +1,7 @@
 #+OPTIONS: toc:nil num:nil todo:nil
 #+LAYOUT: post
 #+DATE: 2018-10-12
-#+TITLE: Notes on Bayesian Experimental Design
+#+TITLE: Bayesian Experimental Design
 #+DESCRIPTION: I discuss the main ideas of Bayesian experimental design.
 #+CATEGORIES: statistics
 #+FEATURED: false

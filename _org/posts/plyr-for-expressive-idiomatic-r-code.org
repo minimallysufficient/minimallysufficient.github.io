@@ -2,21 +2,21 @@
 #+LAYOUT: post
 #+DATE: 2015-11-27
 #+TITLE: Using plyr for expressive, idiomatic R code
-#+DESCRIPTION:  
-#+CATEGORIES:  
+#+DESCRIPTION: A long-time skeptic comes around to actually liking plyr.
+#+CATEGORIES: R, computing
+#+FEATURED: false
 
 When I first encountered the /plyr/ package for R, I thought it was
 needless frippery. There was nothing that a well-written loop or
 subset couldn't do. Then I read Hadley Wickham's [[http://www.jstatsoft.org/article/view/v040i01/v40i01.pdf][Split-Apply-Combine]]
 paper, taught /plyr/ as a TA, and tried it out in my own code. I've
-been converted, it's a great tool for expressive R code. It's best to
-see this by example.
+been converted, it's a great tool for expressive R code.
 
 * A simple example 
-  For my ADA work I'm working with power spectra from a large number
-  of recordings of neural activity in mice brains. When I'm doing my
-  analysis the first part of my code is loading the data. My first
-  approach is below.
+  It's best to see this by example. For my ADA work I'm working with
+  power spectra from a large number of recordings of neural activity
+  in mice brains. When I'm doing my analysis the first part of my code
+  is loading the data. My first approach is below.
 
   #+BEGIN_SRC R
     dfs <- list()

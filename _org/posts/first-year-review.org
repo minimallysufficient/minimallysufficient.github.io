@@ -2,8 +2,9 @@
 #+LAYOUT: post
 #+DATE: 2015-08-26
 #+TITLE: Notes on the First Year of Grad School
-#+DESCRIPTION:  
-#+CATEGORIES:  
+#+DESCRIPTION: I recently finished my first year of grad school; here's how it went.
+#+CATEGORIES: phd
+#+FEATURED: true
 
 #+HTML_MATHJAX: align:"center"
 #+OPTIONS: toc:nil num:nil

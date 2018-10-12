@@ -2,8 +2,9 @@
 #+LAYOUT: post
 #+DATE: 2016-08-23
 #+TITLE: Apparently I've gotten better
-#+DESCRIPTION:  
-#+CATEGORIES:  
+#+DESCRIPTION: I found the first Julia program I ever wrote; how does it look three years later?
+#+CATEGORIES: julia, computing
+#+FEATURED: false
 
 I was organizing my hard drive and came across one of the first julia
 programs I ever wrote. It turns out this actually was quite a while

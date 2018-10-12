@@ -36,78 +36,19 @@ tags:
 - 
 - 
 - 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
 - dummy-tags-should-be-replaced
 author: 
 layout: post
 title: Reservoir Sampling
-excerpt:  
+excerpt: How do you sample from a stream of unknown length?
 categories: 
--
-commentissueid: 10
+- statistics
+featured: false
 ---
 
-<div id="outline-container-orgheadline1" class="outline-2">
-<h2 id="orgheadline1">Introduction</h2>
-<div class="outline-text-2" id="text-orgheadline1">
+<div id="outline-container-org9cfa17b" class="outline-2">
+<h2 id="org9cfa17b">Introduction</h2>
+<div class="outline-text-2" id="text-org9cfa17b">
 <p>
 We want to get a random sample of size \(n\) from a population of size
 \(N\). The thing is, we don't know \(N\).
@@ -127,9 +68,9 @@ each tweet once.
 </div>
 </div>
 
-<div id="outline-container-orgheadline2" class="outline-2">
-<h2 id="orgheadline2">Reservoir Sampling</h2>
-<div class="outline-text-2" id="text-orgheadline2">
+<div id="outline-container-org11ae3b7" class="outline-2">
+<h2 id="org11ae3b7">Reservoir Sampling</h2>
+<div class="outline-text-2" id="text-org11ae3b7">
 <p>
 A simple solution is to maintain a reservoir, a collection of \(n\)
 items, which contains your sample at any given time. When you
@@ -154,9 +95,9 @@ inclusion \(\frac{n}{i}\) for the i<sup>th</sup> element. We then select with
 equal probabilities one of the elements of the reservoir to discard.
 </p>
 </div>
-<div id="outline-container-orgheadline3" class="outline-3">
-<h3 id="orgheadline3">Quick proof of correctness</h3>
-<div class="outline-text-3" id="text-orgheadline3">
+<div id="outline-container-org742c21c" class="outline-3">
+<h3 id="org742c21c">Quick proof of correctness</h3>
+<div class="outline-text-3" id="text-org742c21c">
 <p>
 Now we should show that we've actually achieved the goal; if we have
 a random sample we would should have the probability of inclusion,
@@ -224,11 +165,10 @@ Problem solved.
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline4" class="outline-3">
-<h3 id="orgheadline4">Julia Implementation</h3>
-<div class="outline-text-3" id="text-orgheadline4">
+<div id="outline-container-org8f74a88" class="outline-3">
+<h3 id="org8f74a88">Julia Implementation</h3>
+<div class="outline-text-3" id="text-org8f74a88">
 <div class="org-src-container">
-
 <pre class="src src-julia"><span style="color: #4c83ff;">function</span> <span style="color: #ff1493;">reservoir_sample</span>(source, n<span style="color: #d3d3d3; background-color: #000000;">::</span><span style="color: #afd8af;">Int</span>)
     state = start(source)
 
@@ -265,9 +205,9 @@ Problem solved.
 </div>
 </div>
 
-<div id="outline-container-orgheadline5" class="outline-3">
-<h3 id="orgheadline5">A note on the second-order probabilities</h3>
-<div class="outline-text-3" id="text-orgheadline5">
+<div id="outline-container-org25e8663" class="outline-3">
+<h3 id="org25e8663">A note on the second-order probabilities</h3>
+<div class="outline-text-3" id="text-org25e8663">
 <p>
 One subtlety that might escape the notice of non-statisticians is
 that we not only care about the probability of inclusion of a

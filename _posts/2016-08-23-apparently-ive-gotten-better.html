@@ -17,15 +17,15 @@ tags:
 - 
 - 
 - 
-- 
 - dummy-tags-should-be-replaced
 author: 
 layout: post
 title: Apparently I've gotten better
-excerpt:  
+excerpt: I found the first Julia program I ever wrote; how does it look three years later?
 categories: 
--
-commentissueid: 26
+- julia
+- computing
+featured: false
 ---
 <p>
 I was organizing my hard drive and came across one of the first julia
@@ -35,15 +35,14 @@ reading the code and then rewriting it with the benefit of three more
 years of experience.
 </p>
 
-<div id="outline-container-orgheadline1" class="outline-2">
-<h2 id="orgheadline1">Old Code</h2>
-<div class="outline-text-2" id="text-orgheadline1">
+<div id="outline-container-org7f92d18" class="outline-2">
+<h2 id="org7f92d18">Old Code</h2>
+<div class="outline-text-2" id="text-org7f92d18">
 <p>
 So here's the code:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-julia">old_version = <span style="color: #4c83ff;">function</span>(n)
 
     field = trues(n)
@@ -100,16 +99,15 @@ complicated than I should have; see the new code below.</li>
 </div>
 </div>
 
-<div id="outline-container-orgheadline2" class="outline-2">
-<h2 id="orgheadline2">New Code</h2>
-<div class="outline-text-2" id="text-orgheadline2">
+<div id="outline-container-orgb51302a" class="outline-2">
+<h2 id="orgb51302a">New Code</h2>
+<div class="outline-text-2" id="text-orgb51302a">
 <p>
 Ok, presumably I've learned a few things over the past couple years.
 I should be able to do better. So I rewrote it.
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-julia"><span style="color: #4c83ff;">function</span> <span style="color: #ff1493;">new_version</span>(searchMax)
     mask = primesmask(searchMax)
 
@@ -142,9 +140,9 @@ as it may be.
 </div>
 </div>
 
-<div id="outline-container-orgheadline3" class="outline-2">
-<h2 id="orgheadline3">Conclusion</h2>
-<div class="outline-text-2" id="text-orgheadline3">
+<div id="outline-container-org8abdcd2" class="outline-2">
+<h2 id="org8abdcd2">Conclusion</h2>
+<div class="outline-text-2" id="text-org8abdcd2">
 <p>
 This raises the question, what if I come back to this code in three
 more years? Will I have the same reaction as I did to my previous

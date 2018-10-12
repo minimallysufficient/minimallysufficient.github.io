@@ -2,8 +2,9 @@
 #+LAYOUT: post
 #+DATE: 2015-08-01
 #+TITLE: Reservoir Sampling
-#+DESCRIPTION:  
-#+CATEGORIES:  
+#+DESCRIPTION: How do you sample from a stream of unknown length?
+#+CATEGORIES: statistics
+#+FEATURED: false
 
 * Introduction
   We want to get a random sample of size $n$ from a population of size

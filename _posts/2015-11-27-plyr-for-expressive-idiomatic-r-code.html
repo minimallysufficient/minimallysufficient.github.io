@@ -30,104 +30,35 @@ tags:
 - 
 - 
 - 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
 - dummy-tags-should-be-replaced
 author: 
 layout: post
 title: Using plyr for expressive, idiomatic R code
-excerpt:  
+excerpt: A long-time skeptic comes around to actually liking plyr.
 categories: 
--
-commentissueid: 16
+- R
+- computing
+featured: false
 ---
 <p>
 When I first encountered the <i>plyr</i> package for R, I thought it was
 needless frippery. There was nothing that a well-written loop or
 subset couldn't do. Then I read Hadley Wickham's <a href="http://www.jstatsoft.org/article/view/v040i01/v40i01.pdf">Split-Apply-Combine</a>
 paper, taught <i>plyr</i> as a TA, and tried it out in my own code. I've
-been converted, it's a great tool for expressive R code. It's best to
-see this by example.
+been converted, it's a great tool for expressive R code.
 </p>
 
-<div id="outline-container-orgheadline1" class="outline-2">
-<h2 id="orgheadline1">A simple example</h2>
-<div class="outline-text-2" id="text-orgheadline1">
+<div id="outline-container-orgfea4866" class="outline-2">
+<h2 id="orgfea4866">A simple example</h2>
+<div class="outline-text-2" id="text-orgfea4866">
 <p>
-For my ADA work I'm working with power spectra from a large number
-of recordings of neural activity in mice brains. When I'm doing my
-analysis the first part of my code is loading the data. My first
-approach is below.
+It's best to see this by example. For my ADA work I'm working with
+power spectra from a large number of recordings of neural activity
+in mice brains. When I'm doing my analysis the first part of my code
+is loading the data. My first approach is below.
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-R">dfs <span style="color: #96CBFE;">&lt;-</span> list()
 
 <span style="color: #4c83ff;">for</span>(ii <span style="color: #4c83ff;">in</span> seq_along(files)) {
@@ -154,7 +85,6 @@ Here's the corresponding <i>plyr</i> version
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-R">inputs <span style="color: #96CBFE;">&lt;-</span> data.frame(file = files, mouse = mice, label = labels)
 
 df <span style="color: #96CBFE;">&lt;-</span> mdply(inputs, <span style="color: #4c83ff;">function</span>(file, mouse, label) {
@@ -170,9 +100,9 @@ for the for loop.
 </div>
 </div>
 
-<div id="outline-container-orgheadline2" class="outline-2">
-<h2 id="orgheadline2">A more complicated example</h2>
-<div class="outline-text-2" id="text-orgheadline2">
+<div id="outline-container-org85b28d1" class="outline-2">
+<h2 id="org85b28d1">A more complicated example</h2>
+<div class="outline-text-2" id="text-org85b28d1">
 <p>
 Now, once I've loaded the spectra as a dataframe, I need to
 aggregate them, first within mice, and then between label.
@@ -183,7 +113,6 @@ The resulting R code is a little messy.
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-R"><span style="color: #ff1493;">average_specs</span> <span style="color: #96CBFE;">&lt;-</span> <span style="color: #4c83ff;">function</span>(df) {
     freqs <span style="color: #96CBFE;">&lt;-</span> unique(df$frequency)
     avepower <span style="color: #96CBFE;">&lt;-</span> rep(<span style="color: #afd8af;">NA</span>, length(freqs))
@@ -238,7 +167,6 @@ look at the <i>plyr</i> version.
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-R"><span style="color: #ff1493;">average_specs</span> <span style="color: #96CBFE;">&lt;-</span> <span style="color: #4c83ff;">function</span>(df) {
     df <span style="color: #96CBFE;">&lt;-</span> ddply(df, .(frequency), summarize, power <span style="color: #96CBFE;">&lt;-</span> mean(power))
     <span style="color: #4c83ff;">return</span>(df)
@@ -262,15 +190,14 @@ statistics such as standard deviations.
 </div>
 </div>
 
-<div id="outline-container-orgheadline3" class="outline-2">
-<h2 id="orgheadline3">Icing on the cake</h2>
-<div class="outline-text-2" id="text-orgheadline3">
+<div id="outline-container-org41c12e6" class="outline-2">
+<h2 id="org41c12e6">Icing on the cake</h2>
+<div class="outline-text-2" id="text-org41c12e6">
 <p>
 Now that I've gotten the summary statistics I like to plot them.
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-R"><span style="color: #4c83ff;">for</span>(label <span style="color: #4c83ff;">in</span> uniqLabels) {
     outfile <span style="color: #96CBFE;">&lt;-</span> paste0(outdir, <span style="color: #61CE3C;">"/"</span>, label, <span style="color: #61CE3C;">".pdf"</span>)
 
@@ -287,7 +214,6 @@ The <i>plyr</i> version is very similar.
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-R">d_ply(df, .(label), <span style="color: #4c83ff;">function</span>(df) {
     label <span style="color: #96CBFE;">&lt;-</span> df$label[1]
     outfile <span style="color: #96CBFE;">&lt;-</span> paste0(outdir, <span style="color: #61CE3C;">"/"</span>, label, <span style="color: #61CE3C;">".pdf"</span>)
@@ -305,7 +231,6 @@ locations individually?
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-R"><span style="color: #4c83ff;">for</span>(label <span style="color: #4c83ff;">in</span> uniqLabels) {
     <span style="color: #4c83ff;">for</span>(location <span style="color: #4c83ff;">in</span> uniqLocations) {
         select <span style="color: #96CBFE;">&lt;-</span> df$label == label &amp; df$location == location
@@ -331,7 +256,6 @@ By contrast, <i>plyr</i> handles this very gracefully.
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-R">d_ply(df, .(label, location), <span style="color: #4c83ff;">function</span>(df) {
     label <span style="color: #96CBFE;">&lt;-</span> df$label[1]
     location <span style="color: #96CBFE;">&lt;-</span> df$location[1]
@@ -345,9 +269,9 @@ By contrast, <i>plyr</i> handles this very gracefully.
 </div>
 </div>
 
-<div id="outline-container-orgheadline4" class="outline-2">
-<h2 id="orgheadline4">Conclusion</h2>
-<div class="outline-text-2" id="text-orgheadline4">
+<div id="outline-container-org2fec862" class="outline-2">
+<h2 id="org2fec862">Conclusion</h2>
+<div class="outline-text-2" id="text-org2fec862">
 <p>
 Experimenting with <i>plyr</i> is a manifestation of my effort to write
 more idiomatic R. Like the examples above, I find that most of the R

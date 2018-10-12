@@ -2,8 +2,9 @@
 #+LAYOUT: post
 #+DATE: 2018-08-01
 #+TITLE: JSM 2018 Review
-#+DESCRIPTION: I attended JSM 2018 in Vancouver, Canada.
+#+DESCRIPTION: I attended JSM 2018 in Vancouver, Canada; here's what I thought.
 #+CATEGORIES: jsm, conference
+#+FEATURED: false
 
 I'm currently sitting in the airport after attending the Joint
 Statistical Meetings (JSM). It was actually my first JSM; as my PhD

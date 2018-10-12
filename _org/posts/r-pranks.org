@@ -2,8 +2,9 @@
 #+LAYOUT: post
 #+DATE: 2016-08-25
 #+TITLE: R pranks
-#+DESCRIPTION:  
-#+CATEGORIES:  
+#+DESCRIPTION: I show how you can pull pranks with some subtle alterations to their R environment.
+#+CATEGORIES: R, humor
+#+FEATURED: true
 
 One of the more fun features of R is that you can redefine pretty much
 anything. While this isn't particularly useful in itself, it can give

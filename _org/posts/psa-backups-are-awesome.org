@@ -1,9 +1,10 @@
+#+OPTIONS: toc:nil num:nil todo:nil
+#+LAYOUT: post
 #+TITLE: PSA Backups are Awesome
 #+DATE: 2017-06-29
 #+DESCRIPTION: Protecting yourself from data loss is fairly straightforward.
-#+LAYOUT: post
 #+CATEGORIES: computing
-#+OPTIONS: toc:nil num:nil todo:nil
+#+FEATURED: false
 
 Last summer I accidentally left my [[http://minimallysufficient.github.io/2015/11/21/using-a-chromebook-as-a-primary-computing-device.html][Chromebook]] power cord on the wrong
 side of the country and had to wait a few weeks to get it back. Since

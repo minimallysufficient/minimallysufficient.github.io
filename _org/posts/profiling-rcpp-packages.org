@@ -3,7 +3,8 @@
 #+DATE: 2018-02-16
 #+TITLE: Profiling Rcpp packages
 #+DESCRIPTION: Notes on profiling Rcpp code
-#+CATEGORIES: R programming Cpp
+#+CATEGORIES: R, programming, C++
+#+FEATURED: false
 
 Lately I've been working with C++ code. [[http://wiki.c2.com/?MakeItWorkMakeItRightMakeItFast][I've got it to work, I've got
 it right]] and now I need to make it fast. And the first step of

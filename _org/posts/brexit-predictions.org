@@ -2,8 +2,9 @@
 #+LAYOUT: post
 #+DATE: 2016-06-26
 #+TITLE: Failure? of Brexit Predictions
-#+DESCRIPTION:  
-#+CATEGORIES:  
+#+DESCRIPTION: It seems like nobody predicted Brexit. How should we update our beliefs on the effectiveness of predictors.
+#+CATEGORIES: statistics
+#+FEATURED: false
 
 I generally don't follow the news. Thus, when I was asked this week
 how I thought Britain's vote to exit the European Union (aka Brexit)
@@ -79,7 +80,6 @@ numbers. The measure that I typically see for these types of
 comparisons is the Brier score.
 
 $$ \begin{equation} \text{Score} = \frac{1}{N} \sum_{t=1}^{N} (p_{t} - X_{t})^{2} $$
-
 
 where $p_{t}$ is your probability estimate and $X_{t}$ is an indicator for
 the event. The Brier score is an example of a proper scoring rule such

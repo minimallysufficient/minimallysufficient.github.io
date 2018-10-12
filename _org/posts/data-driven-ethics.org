@@ -2,8 +2,9 @@
 #+LAYOUT: post
 #+DATE: 2017-04-01
 #+TITLE: Data-Driven Ethics
-#+DESCRIPTION:
-#+CATEGORIES:
+#+DESCRIPTION: Computational ethics courses should really be named "ethics for programmers". But what if they weren't...
+#+CATEGORIES: humor
+#+FEATURED: false
 
 Last fall I saw a flyer for a class on computational ethics. Upon
 inspection it appears the class was poorly named; unlike computational

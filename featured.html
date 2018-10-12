@@ -1,18 +1,18 @@
 ---
 layout: default
-title: Archive
+title: Featured
 ---
 
 <div class="home">
   <ul class="entries">
     {% for post in site.posts %}
-    <a href="{{ post.url }}">
-      {% if post.featured %}
-      <h3> ⭐ {{ post.title }} ⭐ </h3>
-      {% else %}
-      <h3> {{ post.title }} </h3>
-      {% endif %}
-      </a>
+    {% if post.featured %}
+    <a href="{{ post.url }}"> <h3> {{ post.title }}</h3> </a>
+    {{ post.excerpt }} <br />
+    {% if forloop.last == false %}
+    <br />
+    {% endif %}
+    {% endif %}
     {% endfor %}
   </ul>
 
