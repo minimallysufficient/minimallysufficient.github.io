@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="index, follow">
 <title>Non-Transitive Bradley Terry Models | Minimally Sufficient</title>
 <meta name="keywords" content="">
 <meta name="description" content="One thing that has always bugged me about Bradley Terry models is that
@@ -14,16 +14,16 @@ strength \(\gamma_{i}\) and when competing the probability of victory for entity
 \[exp(\gamma_{a}) / exp(\gamma_{a}) &#43; exp(\gamma_{b})\]
 or to make it clearer logit(γa - γb).">
 <meta name="author" content="Taylor Pospisil">
-<link rel="canonical" href="//localhost:1313/posts/non-transitive-bradley-terry/">
-<link crossorigin="anonymous" href="//localhost:1313/assets/css/stylesheet.45e028aa8ce0961349adf411b013ee39406be2c0bc80d4ea3fc04555f7f4611a.css" integrity="sha256-ReAoqozglhNJrfQRsBPuOUBr4sC8gNTqP8BFVff0YRo=" rel="preload stylesheet" as="style">
-<link rel="icon" href="//localhost:1313/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="//localhost:1313/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="//localhost:1313/favicon-32x32.png">
-<link rel="apple-touch-icon" href="//localhost:1313/apple-touch-icon.png">
-<link rel="mask-icon" href="//localhost:1313/safari-pinned-tab.svg">
+<link rel="canonical" href="/posts/non-transitive-bradley-terry/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.45e028aa8ce0961349adf411b013ee39406be2c0bc80d4ea3fc04555f7f4611a.css" integrity="sha256-ReAoqozglhNJrfQRsBPuOUBr4sC8gNTqP8BFVff0YRo=" rel="preload stylesheet" as="style">
+<link rel="icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="mask-icon" href="/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="//localhost:1313/posts/non-transitive-bradley-terry/">
+<link rel="alternate" hreflang="en" href="/posts/non-transitive-bradley-terry/">
 <noscript>
     <style>
         #theme-toggle,
@@ -72,7 +72,79 @@ or to make it clearer logit(γa - γb).">
     }
   };
 </script>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><meta property="og:url" content="/posts/non-transitive-bradley-terry/">
+  <meta property="og:site_name" content="Minimally Sufficient">
+  <meta property="og:title" content="Non-Transitive Bradley Terry Models">
+  <meta property="og:description" content="One thing that has always bugged me about Bradley Terry models is that it doesn’t model rock-paper-scissors.
+To recap the Bradley Terry model posits that each entity has a strength \(\gamma_{i}\) and when competing the probability of victory for entity a over entity b is
+\[exp(\gamma_{a}) / exp(\gamma_{a}) &#43; exp(\gamma_{b})\]
+or to make it clearer logit(γa - γb).">
+  <meta property="og:locale" content="en-us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Non-Transitive Bradley Terry Models">
+<meta name="twitter:description" content="One thing that has always bugged me about Bradley Terry models is that
+it doesn&rsquo;t model rock-paper-scissors.
+To recap the Bradley Terry model posits that each entity has a
+strength \(\gamma_{i}\) and when competing the probability of victory for entity a over entity b is
+\[exp(\gamma_{a}) / exp(\gamma_{a}) &#43; exp(\gamma_{b})\]
+or to make it clearer logit(γa - γb).">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "",
+      "item": "/posts/"
+    }
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Non-Transitive Bradley Terry Models",
+      "item": "/posts/non-transitive-bradley-terry/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Non-Transitive Bradley Terry Models",
+  "name": "Non-Transitive Bradley Terry Models",
+  "description": "One thing that has always bugged me about Bradley Terry models is that it doesn\u0026rsquo;t model rock-paper-scissors.\nTo recap the Bradley Terry model posits that each entity has a strength \\(\\gamma_{i}\\) and when competing the probability of victory for entity a over entity b is\n\\[exp(\\gamma_{a}) / exp(\\gamma_{a}) + exp(\\gamma_{b})\\]\nor to make it clearer logit(γa - γb).\n",
+  "keywords": [
+    
+  ],
+  "articleBody": "One thing that has always bugged me about Bradley Terry models is that it doesn’t model rock-paper-scissors.\nTo recap the Bradley Terry model posits that each entity has a strength \\(\\gamma_{i}\\) and when competing the probability of victory for entity a over entity b is\n\\[exp(\\gamma_{a}) / exp(\\gamma_{a}) + exp(\\gamma_{b})\\]\nor to make it clearer logit(γa - γb).\nThere’s a couple different approaches in the literature. This one augments each entity with a 2d vector vi and defines the probability as\nlogit(norm(v_b - v_a) - norm(v_a - v_b) + γa - γb)\nThis vector difference then provides the intransitivity.\nI want to do a little better: in particular I’m not a huge fan of this difficult to interpret this difference of norms. You also don’t get a lot of pooling: since you have to fit this vector for each entity you won’t do well with sparse observations.\nSo what can we do instead? There is a natural clustering suggested by this rock-paper-scissors example so let’s use it. We augment each entity with a latent cluster Zi and a matrix Ac1, c2 of the advantage an entity of class c1 would have over an entity of class c2. Then the probability becomes\nlogit(AZa, Zb + γa - γb)\nThis is perhaps equivalent to this paper although I can’t quite tell as it’s confusingly written. I think they additionally put a DP on the γ terms which doesn’t make a ton of sense to me although they justify it by pointing that with match data certain entities are just statistically indistinguishable.]\nSo let’s now try it on a simulated rock-paper-scissors-like data. First let’s see what a standard Bradley Terry Model performs.\n# TOOD: Plot a heatmap of win probabilities for rock-paper-scissors For a “real” example we can use the Weedle’s cave data set from Kaggle which captures battle outcomes between different pokemon. Now those of you born in the 90s will know1 that Pokemon have types and these types exhibit rock-paper-scissors like advantages: electric is super effective against water which is super effective against fire and so on.\nData set: https://www.kaggle.com/datasets/terminus7/pokemon-challenge/data\nusing AlgebraOfGraphics, CairoMakie using Turing, Turing.RandomMeasures using DataFrames using CSV using MCMCChains struct MatchData lo_ids::Vector{Int} hi_ids::Vector{Int} lo_wins::Vector{Int} matches::Vector{Int} n_entities::Int n_pairs::Int end function simulated_data() strengths = [1,1,1,2,2,2,3,3,3] class = [1,2,3,1,2,3,1,2,3] class_strengths = zeros(3, 3) class_strengths[1,2] = 3 class_strengths[2,1] = -3 class_strengths[1,3] = -3 class_strengths[3,1] = 3 class_strengths[2,3] = 3 class_strengths[3,2] = -3 lo_ids = Int[] hi_ids = Int[] lo_wins = Int[] matches = Int[] for lo in 1:9, hi in (lo+1):9 push!(lo_ids, lo) push!(hi_ids, hi) logit_p = strengths[lo] - strengths[hi] + class_strengths[class[lo], class[hi]] p = 1 / (1 + exp(-logit_p)) push!(matches, 20) push!(lo_wins, rand(Binomial(20, p))) end return MatchData(lo_ids, hi_ids, lo_wins, matches, 9, 9*4) end function prep_match_data(df) pairs = Dict{Tuple{Int, Int}, Tuple{Int, Int}}() for row in eachrow(df) lo, hi = minmax(row[\"First_pokemon\"], row[\"Second_pokemon\"]) lo_wins = lo == row[\"Winner\"] if haskey(pairs, (lo, hi)) pairs[lo, hi] = pairs[lo, hi] .+ (lo_wins, 1) else pairs[lo, hi] = (lo_wins, 1) end end lo_ids = zeros(Int, length(pairs)) hi_ids = zeros(Int, length(pairs)) lo_wins = zeros(Int, length(pairs)) matches = zeros(Int, length(pairs)) for (ii, (key, val)) in enumerate(pairs) lo_ids[ii] = key[1] hi_ids[ii] = key[2] lo_wins[ii] = val[1] matches[ii] = val[2] end n_pairs = length(pairs) n_entities = maximum(hi_ids) return MatchData(lo_ids, hi_ids, lo_wins, matches, n_entities, n_pairs) end @model function BradleyTerryDP(match_data) # Dirichlet Process for infinite mixture of clusters α = 1.0 # Concentration parameter rpm = DirichletProcess(α) H = Normal(0, 1) # Base distribution for cluster effects n_entities = match_data.n_entities # Individual strengths # β = tzeros(n_entities) β ~ filldist(Normal(0, 1), n_entities) # Cluster assignments and strengths cluster = tzeros(Int, n_entities) max_clusters = 30 cluster_effects = tzeros(max_clusters, max_clusters) for ii in 1:n_entities K = maximum(cluster) nk = Vector{Int}(map(k -\u003e sum(cluster .== k), 1:K)) cluster[ii] ~ ChineseRestaurantProcess(rpm, nk) if cluster[ii] \u003e K cluster_effects[K + 1, K + 1] = 0.0 for k in 1:K cluster_effects[k, K + 1] ~ Normal(0, 1) cluster_effects[K + 1, k] = -cluster_effects[k, K + 1] # enforce antisymmetry end end end # Likelihood for ii in 1:match_data.n_pairs lo = match_data.lo_ids[ii] hi = match_data.hi_ids[ii] logit_p = β[lo] - β[hi] + cluster_effects[cluster[lo], cluster[hi]] p_lo_win = 1.0 / (1.0 + exp(-logit_p)) match_data.lo_wins[ii] ~ Binomial(match_data.matches[ii], p_lo_win) end end sim_data = simulated_data() model = BradleyTerryDP(sim_data) #df = DataFrame(CSV.File(\"assets/non-transitive-bradley-terry/combats.csv\")) #match_data = prep_match_data(df) #model = BradleyTerryDP(match_data) # TODO: figure out what these paramters mean #chain = sample(model, Gibbs(PG(20, :cluster), NUTS(500, 0.65, :cluster_effects), NUTS(500, 0.65, :β)), n_iterations) n_iterations = 1000 chain = sample(model, Gibbs(:cluster =\u003e PG(100), :cluster_effects =\u003e HMC(0.01, 4), :β =\u003e HMC(0.01, 4)), n_iterations) # char_df = DataFrame(CSV.File(\"assets/non-transitive-bradley-terry/pokemon.csv\")) # cluster_type = DataFrame(:cluster =\u003e chain[44, namesingroup(chain, :cluster), :].value.data[:], # :type =\u003e char_df[!, \"Type 1\"]) # cluster_counts = combine(groupby(cluster_type, [:cluster, :type]), nrow =\u003e :count) # plt = data(cluster_counts) * mapping(:cluster =\u003e nonnumeric, :type =\u003e nonnumeric, :count) * visual(Heatmap) # draw(plt) *\nsadly I know this only second-hand as my parents thought books were better than gameboys: look at the ruin that brought me ↩︎\n",
+  "wordCount" : "814",
+  "inLanguage": "en",
+  "datePublished": "0001-01-01T00:00:00Z",
+  "dateModified": "0001-01-01T00:00:00Z",
+  "author":[{
+    "@type": "Person",
+    "name": "Taylor Pospisil"
+  }],
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/posts/non-transitive-bradley-terry/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Minimally Sufficient",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/favicon.ico"
+    }
+  }
+}
+</script>
 </head>
 
 <body class="" id="top">
@@ -90,7 +162,7 @@ or to make it clearer logit(γa - γb).">
 <header class="header">
     <nav class="nav">
         <div class="logo">
-            <a href="//localhost:1313/" accesskey="h" title="Minimally Sufficient (Alt + H)">Minimally Sufficient</a>
+            <a href="/" accesskey="h" title="Minimally Sufficient (Alt + H)">Minimally Sufficient</a>
             <div class="logo-switches">
                 <button id="theme-toggle" accesskey="t" title="(Alt + T)">
                     <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
@@ -116,17 +188,17 @@ or to make it clearer logit(γa - γb).">
         </div>
         <ul id="menu">
             <li>
-                <a href="//localhost:1313/posts/" title="Posts">
+                <a href="/posts/" title="Posts">
                     <span>Posts</span>
                 </a>
             </li>
             <li>
-                <a href="//localhost:1313/ephemera/" title="Ephemera">
+                <a href="/ephemera/" title="Ephemera">
                     <span>Ephemera</span>
                 </a>
             </li>
             <li>
-                <a href="//localhost:1313/about/" title="About">
+                <a href="/about/" title="About">
                     <span>About</span>
                 </a>
             </li>
