@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Non-Transitive Bradley Terry Models | Minimally Sufficient</title>
+<meta name="keywords" content="">
+<meta name="description" content="One thing that has always bugged me about Bradley Terry models is that
+it doesn&rsquo;t model rock-paper-scissors.
+To recap the Bradley Terry model posits that each entity has a
+strength \(\gamma_{i}\) and when competing the probability of victory for entity a over entity b is
+\[exp(\gamma_{a}) / exp(\gamma_{a}) &#43; exp(\gamma_{b})\]
+or to make it clearer logit(γa - γb).">
+<meta name="author" content="Taylor Pospisil">
+<link rel="canonical" href="//localhost:1313/posts/non-transitive-bradley-terry/">
+<link crossorigin="anonymous" href="//localhost:1313/assets/css/stylesheet.45e028aa8ce0961349adf411b013ee39406be2c0bc80d4ea3fc04555f7f4611a.css" integrity="sha256-ReAoqozglhNJrfQRsBPuOUBr4sC8gNTqP8BFVff0YRo=" rel="preload stylesheet" as="style">
+<link rel="icon" href="//localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="//localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="//localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="//localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="//localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="//localhost:1313/posts/non-transitive-bradley-terry/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    },
+    svg: {
+      fontCache: 'global'
+    }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="//localhost:1313/" accesskey="h" title="Minimally Sufficient (Alt + H)">Minimally Sufficient</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="//localhost:1313/posts/" title="Posts">
+                    <span>Posts</span>
+                </a>
+            </li>
+            <li>
+                <a href="//localhost:1313/ephemera/" title="Ephemera">
+                    <span>Ephemera</span>
+                </a>
+            </li>
+            <li>
+                <a href="//localhost:1313/about/" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Non-Transitive Bradley Terry Models
+    </h1>
+    <div class="post-meta">
+
+</div>
+  </header> 
+  <div class="post-content"><p>One thing that has always bugged me about Bradley Terry models is that
+it doesn&rsquo;t model rock-paper-scissors.</p>
+<p>To recap the Bradley Terry model posits that each entity has a
+strength \(\gamma_{i}\) and when competing the probability of victory for entity a over entity b is</p>
+<p>\[exp(\gamma_{a}) / exp(\gamma_{a}) + exp(\gamma_{b})\]</p>
+<p>or to make it clearer logit(γ<!-- raw HTML omitted -->a<!-- raw HTML omitted --> - γ<!-- raw HTML omitted -->b<!-- raw HTML omitted -->).</p>
+<p>There&rsquo;s a couple different approaches in the literature. <a href="https://www.cs.cornell.edu/~shuochen/pubs/wsdm16_chen.pdf">This one</a>
+augments each entity with a 2d vector v<!-- raw HTML omitted -->i<!-- raw HTML omitted --> and defines the
+probability as</p>
+<p>logit(norm(v_b - v_a) - norm(v_a - v_b) + γ<!-- raw HTML omitted -->a<!-- raw HTML omitted --> - γ<!-- raw HTML omitted -->b<!-- raw HTML omitted -->)</p>
+<p>This vector difference then provides the intransitivity.</p>
+<p>I want to do a little better: in particular I&rsquo;m not a huge fan of this
+difficult to interpret this difference of norms. You also don&rsquo;t get a
+lot of pooling: since you have to fit this vector for each entity you
+won&rsquo;t do well with sparse observations.</p>
+<p>So what can we do instead? There is a natural clustering suggested by
+this rock-paper-scissors example so let&rsquo;s use it. We augment each
+entity with a latent cluster Z<!-- raw HTML omitted -->i<!-- raw HTML omitted --> and a matrix A<!-- raw HTML omitted -->c<!-- raw HTML omitted -->1<!-- raw HTML omitted -->, c<!-- raw HTML omitted -->2<!-- raw HTML omitted --><!-- raw HTML omitted --> of the
+advantage an entity of class c<!-- raw HTML omitted -->1<!-- raw HTML omitted --> would have over an entity of class c<!-- raw HTML omitted -->2<!-- raw HTML omitted -->.
+Then the probability becomes</p>
+<p>logit(A<!-- raw HTML omitted -->Z<!-- raw HTML omitted -->a<!-- raw HTML omitted -->, Z<!-- raw HTML omitted -->b<!-- raw HTML omitted --><!-- raw HTML omitted --> + γ<!-- raw HTML omitted -->a<!-- raw HTML omitted --> - γ<!-- raw HTML omitted -->b<!-- raw HTML omitted -->)</p>
+<p>This is perhaps equivalent to <a href="https://www.tandfonline.com/doi/full/10.1080/10618600.2023.2177299#d1e1968">this paper</a> although I can&rsquo;t quite tell
+as it&rsquo;s confusingly written. I think they additionally put a DP on the
+γ terms which doesn&rsquo;t make a ton of sense to me although they justify
+it by pointing that with match data certain entities are just
+statistically indistinguishable.]</p>
+<p>So let&rsquo;s now try it on a simulated rock-paper-scissors-like data.
+First let&rsquo;s see what a standard Bradley Terry Model performs.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#75715e"># TOOD: Plot a heatmap of win probabilities for rock-paper-scissors</span>
+</span></span></code></pre></div><p>For a &ldquo;real&rdquo; example we can use the Weedle&rsquo;s cave data set from Kaggle
+which captures battle outcomes between different pokemon. Now those of
+you born in the 90s will know<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> that Pokemon have types and these types exhibit
+rock-paper-scissors like advantages: electric is super effective
+against water which is super effective against fire and so on.</p>
+<p>Data set: <a href="https://www.kaggle.com/datasets/terminus7/pokemon-challenge/data">https://www.kaggle.com/datasets/terminus7/pokemon-challenge/data</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-julia" data-lang="julia"><span style="display:flex;"><span><span style="color:#66d9ef">using</span> AlgebraOfGraphics, CairoMakie
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> Turing, Turing<span style="color:#f92672">.</span>RandomMeasures
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> DataFrames
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> CSV
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> MCMCChains
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#66d9ef">MatchData</span>
+</span></span><span style="display:flex;"><span>    lo_ids<span style="color:#f92672">::</span><span style="color:#66d9ef">Vector</span>{<span style="color:#66d9ef">Int</span>}
+</span></span><span style="display:flex;"><span>    hi_ids<span style="color:#f92672">::</span><span style="color:#66d9ef">Vector</span>{<span style="color:#66d9ef">Int</span>}
+</span></span><span style="display:flex;"><span>    lo_wins<span style="color:#f92672">::</span><span style="color:#66d9ef">Vector</span>{<span style="color:#66d9ef">Int</span>}
+</span></span><span style="display:flex;"><span>    matches<span style="color:#f92672">::</span><span style="color:#66d9ef">Vector</span>{<span style="color:#66d9ef">Int</span>}
+</span></span><span style="display:flex;"><span>    n_entities<span style="color:#f92672">::</span><span style="color:#66d9ef">Int</span>
+</span></span><span style="display:flex;"><span>    n_pairs<span style="color:#f92672">::</span><span style="color:#66d9ef">Int</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> simulated_data()
+</span></span><span style="display:flex;"><span>    strengths <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">3</span>]
+</span></span><span style="display:flex;"><span>    class <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    class_strengths <span style="color:#f92672">=</span> zeros(<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">3</span>)
+</span></span><span style="display:flex;"><span>    class_strengths[<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>] <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>    class_strengths[<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>    class_strengths[<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">3</span>] <span style="color:#f92672">=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>    class_strengths[<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>    class_strengths[<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>] <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>    class_strengths[<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">2</span>] <span style="color:#f92672">=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    lo_ids <span style="color:#f92672">=</span> <span style="color:#66d9ef">Int</span>[]
+</span></span><span style="display:flex;"><span>    hi_ids <span style="color:#f92672">=</span> <span style="color:#66d9ef">Int</span>[]
+</span></span><span style="display:flex;"><span>    lo_wins <span style="color:#f92672">=</span> <span style="color:#66d9ef">Int</span>[]
+</span></span><span style="display:flex;"><span>    matches <span style="color:#f92672">=</span> <span style="color:#66d9ef">Int</span>[]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> lo <span style="color:#66d9ef">in</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">9</span>, hi <span style="color:#66d9ef">in</span> (lo<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">:</span><span style="color:#ae81ff">9</span>
+</span></span><span style="display:flex;"><span>        push!(lo_ids, lo)
+</span></span><span style="display:flex;"><span>        push!(hi_ids, hi)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        logit_p <span style="color:#f92672">=</span> strengths[lo] <span style="color:#f92672">-</span> strengths[hi] <span style="color:#f92672">+</span> class_strengths[class[lo], class[hi]]
+</span></span><span style="display:flex;"><span>        p <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">/</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">+</span> exp(<span style="color:#f92672">-</span>logit_p))
+</span></span><span style="display:flex;"><span>        push!(matches, <span style="color:#ae81ff">20</span>)
+</span></span><span style="display:flex;"><span>        push!(lo_wins, rand(Binomial(<span style="color:#ae81ff">20</span>, p)))
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> MatchData(lo_ids, hi_ids, lo_wins, matches, <span style="color:#ae81ff">9</span>, <span style="color:#ae81ff">9</span><span style="color:#f92672">*</span><span style="color:#ae81ff">4</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> prep_match_data(df)
+</span></span><span style="display:flex;"><span>    pairs <span style="color:#f92672">=</span> <span style="color:#66d9ef">Dict</span>{<span style="color:#66d9ef">Tuple</span>{<span style="color:#66d9ef">Int</span>, <span style="color:#66d9ef">Int</span>}, <span style="color:#66d9ef">Tuple</span>{<span style="color:#66d9ef">Int</span>, <span style="color:#66d9ef">Int</span>}}()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> row <span style="color:#66d9ef">in</span> eachrow(df)
+</span></span><span style="display:flex;"><span>        lo, hi <span style="color:#f92672">=</span> minmax(row[<span style="color:#e6db74">&#34;First_pokemon&#34;</span>], row[<span style="color:#e6db74">&#34;Second_pokemon&#34;</span>])
+</span></span><span style="display:flex;"><span>        lo_wins <span style="color:#f92672">=</span> lo <span style="color:#f92672">==</span> row[<span style="color:#e6db74">&#34;Winner&#34;</span>]
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> haskey(pairs, (lo, hi))
+</span></span><span style="display:flex;"><span>            pairs[lo, hi] <span style="color:#f92672">=</span> pairs[lo, hi] <span style="color:#f92672">.+</span> (lo_wins, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>            pairs[lo, hi] <span style="color:#f92672">=</span> (lo_wins, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    lo_ids <span style="color:#f92672">=</span> zeros(<span style="color:#66d9ef">Int</span>, length(pairs))
+</span></span><span style="display:flex;"><span>    hi_ids <span style="color:#f92672">=</span> zeros(<span style="color:#66d9ef">Int</span>, length(pairs))
+</span></span><span style="display:flex;"><span>    lo_wins <span style="color:#f92672">=</span> zeros(<span style="color:#66d9ef">Int</span>, length(pairs))
+</span></span><span style="display:flex;"><span>    matches <span style="color:#f92672">=</span> zeros(<span style="color:#66d9ef">Int</span>, length(pairs))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (ii, (key, val)) <span style="color:#66d9ef">in</span> enumerate(pairs)
+</span></span><span style="display:flex;"><span>        lo_ids[ii] <span style="color:#f92672">=</span> key[<span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>        hi_ids[ii] <span style="color:#f92672">=</span> key[<span style="color:#ae81ff">2</span>]
+</span></span><span style="display:flex;"><span>        lo_wins[ii] <span style="color:#f92672">=</span> val[<span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>        matches[ii] <span style="color:#f92672">=</span> val[<span style="color:#ae81ff">2</span>]
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    n_pairs <span style="color:#f92672">=</span> length(pairs)
+</span></span><span style="display:flex;"><span>    n_entities <span style="color:#f92672">=</span> maximum(hi_ids)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> MatchData(lo_ids, hi_ids, lo_wins, matches, n_entities, n_pairs)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@model</span> <span style="color:#66d9ef">function</span> BradleyTerryDP(match_data)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Dirichlet Process for infinite mixture of clusters</span>
+</span></span><span style="display:flex;"><span>    α <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.0</span>  <span style="color:#75715e"># Concentration parameter</span>
+</span></span><span style="display:flex;"><span>    rpm <span style="color:#f92672">=</span> DirichletProcess(α)
+</span></span><span style="display:flex;"><span>    H <span style="color:#f92672">=</span> Normal(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>)  <span style="color:#75715e"># Base distribution for cluster effects</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    n_entities <span style="color:#f92672">=</span> match_data<span style="color:#f92672">.</span>n_entities
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Individual strengths</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># β = tzeros(n_entities)</span>
+</span></span><span style="display:flex;"><span>    β <span style="color:#f92672">~</span> filldist(Normal(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>), n_entities)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Cluster assignments and strengths</span>
+</span></span><span style="display:flex;"><span>    cluster <span style="color:#f92672">=</span> tzeros(<span style="color:#66d9ef">Int</span>, n_entities)
+</span></span><span style="display:flex;"><span>    max_clusters <span style="color:#f92672">=</span> <span style="color:#ae81ff">30</span>
+</span></span><span style="display:flex;"><span>    cluster_effects <span style="color:#f92672">=</span> tzeros(max_clusters, max_clusters)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> ii <span style="color:#66d9ef">in</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>n_entities
+</span></span><span style="display:flex;"><span>        K <span style="color:#f92672">=</span> maximum(cluster)
+</span></span><span style="display:flex;"><span>        nk <span style="color:#f92672">=</span> <span style="color:#66d9ef">Vector</span>{<span style="color:#66d9ef">Int</span>}(map(k <span style="color:#f92672">-&gt;</span> sum(cluster <span style="color:#f92672">.==</span> k), <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>K))
+</span></span><span style="display:flex;"><span>        cluster[ii] <span style="color:#f92672">~</span> ChineseRestaurantProcess(rpm, nk)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> cluster[ii] <span style="color:#f92672">&gt;</span> K
+</span></span><span style="display:flex;"><span>            cluster_effects[K <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>, K <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.0</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">for</span> k <span style="color:#66d9ef">in</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>K
+</span></span><span style="display:flex;"><span>                cluster_effects[k, K <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">~</span> Normal(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>                cluster_effects[K <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>, k] <span style="color:#f92672">=</span> <span style="color:#f92672">-</span>cluster_effects[k, K <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>] <span style="color:#75715e"># enforce antisymmetry</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Likelihood</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> ii <span style="color:#66d9ef">in</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>match_data<span style="color:#f92672">.</span>n_pairs
+</span></span><span style="display:flex;"><span>        lo <span style="color:#f92672">=</span> match_data<span style="color:#f92672">.</span>lo_ids[ii]
+</span></span><span style="display:flex;"><span>        hi <span style="color:#f92672">=</span> match_data<span style="color:#f92672">.</span>hi_ids[ii]
+</span></span><span style="display:flex;"><span>        logit_p <span style="color:#f92672">=</span> β[lo] <span style="color:#f92672">-</span> β[hi] <span style="color:#f92672">+</span> cluster_effects[cluster[lo], cluster[hi]]
+</span></span><span style="display:flex;"><span>        p_lo_win <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.0</span> <span style="color:#f92672">/</span> (<span style="color:#ae81ff">1.0</span> <span style="color:#f92672">+</span> exp(<span style="color:#f92672">-</span>logit_p))
+</span></span><span style="display:flex;"><span>        match_data<span style="color:#f92672">.</span>lo_wins[ii] <span style="color:#f92672">~</span> Binomial(match_data<span style="color:#f92672">.</span>matches[ii], p_lo_win)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sim_data <span style="color:#f92672">=</span> simulated_data()
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> BradleyTerryDP(sim_data)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#df = DataFrame(CSV.File(&#34;assets/non-transitive-bradley-terry/combats.csv&#34;))</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#match_data = prep_match_data(df)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#model = BradleyTerryDP(match_data)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># TODO: figure out what these paramters mean</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#chain = sample(model, Gibbs(PG(20, :cluster), NUTS(500, 0.65, :cluster_effects), NUTS(500, 0.65, :β)), n_iterations)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>n_iterations <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000</span>
+</span></span><span style="display:flex;"><span>chain <span style="color:#f92672">=</span> sample(model, Gibbs(<span style="color:#e6db74">:cluster</span> <span style="color:#f92672">=&gt;</span> PG(<span style="color:#ae81ff">100</span>),
+</span></span><span style="display:flex;"><span>                            <span style="color:#e6db74">:cluster_effects</span> <span style="color:#f92672">=&gt;</span> HMC(<span style="color:#ae81ff">0.01</span>, <span style="color:#ae81ff">4</span>),
+</span></span><span style="display:flex;"><span>                            <span style="color:#e6db74">:β</span> <span style="color:#f92672">=&gt;</span> HMC(<span style="color:#ae81ff">0.01</span>, <span style="color:#ae81ff">4</span>)), n_iterations)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># char_df = DataFrame(CSV.File(&#34;assets/non-transitive-bradley-terry/pokemon.csv&#34;))</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># cluster_type = DataFrame(:cluster =&gt; chain[44, namesingroup(chain, :cluster), :].value.data[:],</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#                          :type =&gt; char_df[!, &#34;Type 1&#34;])</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># cluster_counts = combine(groupby(cluster_type, [:cluster, :type]), nrow =&gt; :count)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># plt = data(cluster_counts) * mapping(:cluster =&gt; nonnumeric, :type =&gt; nonnumeric, :count) * visual(Heatmap)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># draw(plt)</span>
+</span></span></code></pre></div><p>*</p>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p>sadly I know this only second-hand
+as my parents thought books were better than gameboys: look at the
+ruin that brought me&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>@2025 Minimally Sufficient</span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

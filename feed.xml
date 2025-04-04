@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Minimally Sufficient</title>
+    <link>//localhost:1313/</link>
+    <description>Recent content on Minimally Sufficient</description>
+    <generator>Hugo -- 0.145.0</generator>
+    <language>en-us</language>
+    <copyright>@2025 Minimally Sufficient</copyright>
+    <lastBuildDate>Wed, 26 Feb 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="//localhost:1313/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title></title>
+      <link>//localhost:1313/ephemera/stuck/</link>
+      <pubDate>Wed, 26 Feb 2025 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/ephemera/stuck/</guid>
+      <description>&lt;p&gt;I listened to Derek Thompson&amp;rsquo;s &lt;a href=&#34;https://www.theringer.com/podcasts/plain-english-with-derek-thompson/2025/02/25/how-progressives-froze-the-american-dream-live&#34;&gt;podcast&lt;/a&gt; with Atlantic editor Yoni
+Appelbaum on his upcoming book &lt;a href=&#34;https://www.amazon.com/Stuck-Privileged-Propertied-American-Opportunity/dp/0593449290&#34;&gt;Stuck: How the Privileged and the
+Propertied Broke the Engine of American Opportunity&lt;/a&gt;. The discussion
+was fascinating: positing that the decline in American mobility is the
+most important social change in the last fifty years &lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt; and that it&amp;rsquo;s the fault of the progressive movement.&lt;/p&gt;
+&lt;p&gt;I found it fascinating to learn how high mobility was in the past and
+in particular about &lt;a href=&#34;https://en.wikipedia.org/wiki/Moving_Day_(New_York_City)&#34;&gt;&amp;ldquo;moving day&amp;rdquo;&lt;/a&gt; as a day where all of the
+leases &lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt; came up and everyone moved all at once
+while Europeans came over and spectated . Apparently it still happens
+in &lt;a href=&#34;https://en.wikipedia.org/wiki/Moving_Day_(Quebec)&#34;&gt;Quebec&lt;/a&gt;; I should go gawk or maybe market my enthusiastic if
+slightly clumsy moving skills.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title></title>
+      <link>//localhost:1313/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/about/</guid>
+      <description>&lt;p&gt;I&amp;#39;m Taylor and I&amp;#39;m a statistics nerd.&lt;/p&gt;
+&lt;p&gt;
+I&amp;#39;m currently working at YouTube as a Staff Research Data Scientist.
+Prior to that I worked in search ads.&lt;/p&gt;
+&lt;p&gt;
+I went to school at Carnegie Mellon where I worked on conditional
+density estimation. I adapted random forests, neural networks, and
+nearest neighbors to esitmate conditional densities for applications
+in multimodal prediction and Approximate Bayesian Computation.&lt;/p&gt;
+&lt;p&gt;
+Prior to that I was indoctrinated in Bayesian Statistics at Duke for
+my undergrad.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Non-Transitive Bradley Terry Models</title>
+      <link>//localhost:1313/posts/non-transitive-bradley-terry/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/posts/non-transitive-bradley-terry/</guid>
+      <description>&lt;p&gt;One thing that has always bugged me about Bradley Terry models is that
+it doesn&amp;rsquo;t model rock-paper-scissors.&lt;/p&gt;
+&lt;p&gt;To recap the Bradley Terry model posits that each entity has a
+strength \(\gamma_{i}\) and when competing the probability of victory for entity a over entity b is&lt;/p&gt;
+&lt;p&gt;\[exp(\gamma_{a}) / exp(\gamma_{a}) + exp(\gamma_{b})\]&lt;/p&gt;
+&lt;p&gt;or to make it clearer logit(γ&lt;!-- raw HTML omitted --&gt;a&lt;!-- raw HTML omitted --&gt; - γ&lt;!-- raw HTML omitted --&gt;b&lt;!-- raw HTML omitted --&gt;).&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
